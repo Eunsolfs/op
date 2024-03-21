@@ -1,4 +1,4 @@
-//#include "stdafx.h"
+﻿//#include "stdafx.h"
 #include <algorithm>
 #include "./core/globalVar.h"
 #include "./core/helpfunc.h"
@@ -11,13 +11,11 @@
 
 #include "./keypad/winkeypad.h"
 #include "./mouse/opMouseDx.h"
-opBackground::opBackground() : _hwnd(0), _is_bind(0), _pbkdisplay(nullptr), _bkmouse(new opMouseWin), _keypad(new winkeypad)
-{
+opBackground::opBackground() : _hwnd(0), _is_bind(0), _pbkdisplay(nullptr), _bkmouse(new opMouseWin), _keypad(new winkeypad) {
 	_display_method = std::make_pair<wstring, wstring>(L"screen", L"");
 }
 
-opBackground::~opBackground()
-{
+opBackground::~opBackground() {
 	/*_hwnd = NULL;
 	_is_bind = 0;
 	_mode = 0;
@@ -32,15 +30,13 @@ opBackground::~opBackground()
 	SAFE_DELETE(_keypad);
 }
 
-long opBackground::BindWindow(long hwnd, const wstring &sdisplay, const wstring &smouse, const wstring &skeypad, long mode)
-{
+long opBackground::BindWindow(long hwnd, const wstring& sdisplay, const wstring& smouse, const wstring& skeypad, long mode) {
 	//step 1.避免重复绑定
 	UnBindWindow();
 
 	HWND hWnd = hwnd == 0 ? GetDesktopWindow() : HWND(hwnd);
 	//step 2.check hwnd
-	if (!::IsWindow(hWnd))
-	{
+	if (!::IsWindow(hWnd)) {
 		setlog("Invalid window handles");
 		return 0;
 	}
@@ -81,8 +77,7 @@ long opBackground::BindWindow(long hwnd, const wstring &sdisplay, const wstring 
 		display = RDT_GL_ES;
 	else if (sdisplay == L"opengl.fi")//glFinish
 		display = RDT_GL_FI;
-	else
-	{
+	else {
 		setlog(L"error display mode: %s", sdisplay.c_str());
 		return 0;
 	}
@@ -95,8 +90,7 @@ long opBackground::BindWindow(long hwnd, const wstring &sdisplay, const wstring 
 		mouse = INPUT_TYPE::IN_WINDOWS;
 	else if (smouse == L"dx")
 		mouse = INPUT_TYPE::IN_DX;
-	else
-	{
+	else {
 		setlog(L"error mouse mode: %s", smouse.c_str());
 		return 0;
 	}
@@ -107,8 +101,7 @@ long opBackground::BindWindow(long hwnd, const wstring &sdisplay, const wstring 
 		keypad = INPUT_TYPE::IN_NORMAL2;
 	else if (skeypad == L"windows")
 		keypad = INPUT_TYPE::IN_WINDOWS;
-	else
-	{
+	else {
 		setlog(L"error keypad mode: %s", sdisplay.c_str());
 		return 0;
 	}
@@ -123,8 +116,7 @@ long opBackground::BindWindow(long hwnd, const wstring &sdisplay, const wstring 
 	_bkmouse = createMouse(mouse);
 	_keypad = createKeypad(keypad);
 
-	if (!_pbkdisplay || !_bkmouse || !_keypad)
-	{
+	if (!_pbkdisplay || !_bkmouse || !_keypad) {
 		setlog("create instance error!");
 		UnBindWindow();
 		return 0;
@@ -132,8 +124,7 @@ long opBackground::BindWindow(long hwnd, const wstring &sdisplay, const wstring 
 	//step 6.try bind
 	if (_pbkdisplay->Bind(hWnd, display) != 1 ||
 		_bkmouse->Bind(hWnd, mouse) != 1 ||
-		_keypad->Bind(hWnd, keypad) != 1)
-	{
+		_keypad->Bind(hWnd, keypad) != 1) {
 		UnBindWindow();
 		return 0;
 	}
@@ -145,26 +136,22 @@ long opBackground::BindWindow(long hwnd, const wstring &sdisplay, const wstring 
 	return 1;
 }
 
-long opBackground::UnBindWindow()
-{
+long opBackground::UnBindWindow() {
 	//to do
 	//clear ....
 	_hwnd = NULL;
 	_is_bind = 0;
 	_mode = 0;
 
-	if (_pbkdisplay)
-	{
+	if (_pbkdisplay) {
 		_pbkdisplay->UnBind();
 		SAFE_DELETE(_pbkdisplay);
 	}
-	if (_bkmouse)
-	{
+	if (_bkmouse) {
 		_bkmouse->UnBind();
 		SAFE_DELETE(_bkmouse);
 	}
-	if (_keypad)
-	{
+	if (_keypad) {
 		_keypad->UnBind();
 		SAFE_DELETE(_keypad);
 	}
@@ -175,13 +162,11 @@ long opBackground::UnBindWindow()
 	return 1;
 }
 
-long opBackground::GetBindWindow()
-{
+long opBackground::GetBindWindow() {
 	return (long)_hwnd;
 }
 
-long opBackground::IsBind()
-{
+long opBackground::IsBind() {
 	return _pbkdisplay ? 1 : 0;
 }
 
@@ -192,8 +177,7 @@ long opBackground::IsBind()
 //	return r;
 //}
 
-long opBackground::GetDisplay()
-{
+long opBackground::GetDisplay() {
 	return _display;
 }
 
@@ -222,78 +206,65 @@ long opBackground::GetDisplay()
 //
 //}
 
-void opBackground::lock_data()
-{
-	if (_pbkdisplay)
-	{
+void opBackground::lock_data() {
+	if (_pbkdisplay) {
 		auto p = _pbkdisplay->get_mutex();
 		if (p)
 			p->lock();
 	}
 }
 
-void opBackground::unlock_data()
-{
-	if (_pbkdisplay)
-	{
+void opBackground::unlock_data() {
+	if (_pbkdisplay) {
 		auto p = _pbkdisplay->get_mutex();
 		if (p)
 			p->unlock();
 	}
 }
 
-long opBackground::get_height()
-{
-	auto &displayMethod = get_display_method();
-	if (displayMethod.first == L"pic")
-	{
+long opBackground::get_height() {
+	auto& displayMethod = get_display_method();
+	if (displayMethod.first == L"pic") {
 		return _pic.height;
 	}
-	else if (displayMethod.first == L"mem")
-	{
+	else if (displayMethod.first == L"mem") {
 		auto strPtr = displayMethod.second;
 #if OP64 == 1
-		auto ptr = (byte *)_wtoi64(strPtr.data());
+		auto ptr = (byte*)_wtoi64(strPtr.data());
 #else
-		auto ptr = (byte *)_wtoi(strPtr.data());
+		auto ptr = (byte*)_wtoi(strPtr.data());
 #endif //
 
-		auto bih = (BITMAPINFOHEADER *)(ptr + sizeof(BITMAPFILEHEADER));
+		auto bih = (BITMAPINFOHEADER*)(ptr + sizeof(BITMAPFILEHEADER));
 		return bih->biHeight < 0 ? -bih->biHeight : bih->biHeight;
 	}
-	else
-	{
+	else {
 		return _pbkdisplay ? _pbkdisplay->get_height() : 0;
 	}
 }
 
-long opBackground::get_width()
-{
-	auto &displayMethod = get_display_method();
-	if (displayMethod.first == L"pic")
-	{
+long opBackground::get_width() {
+	auto& displayMethod = get_display_method();
+	if (displayMethod.first == L"pic") {
 		return _pic.width;
 	}
-	else if (displayMethod.first == L"mem")
-	{
+	else if (displayMethod.first == L"mem") {
 		auto strPtr = displayMethod.second;
 #if OP64 == 1
-		auto ptr = (byte *)_wtoi64(strPtr.data());
+		auto ptr = (byte*)_wtoi64(strPtr.data());
 #else
-		auto ptr = (byte *)_wtoi(strPtr.data());
+		auto ptr = (byte*)_wtoi(strPtr.data());
 #endif //
 
-		auto bih = (BITMAPINFOHEADER *)(ptr + sizeof(BITMAPFILEHEADER));
+		auto bih = (BITMAPINFOHEADER*)(ptr + sizeof(BITMAPFILEHEADER));
 		return bih->biWidth;
 	}
-	else
-	{
+	else {
 		return _pbkdisplay ? _pbkdisplay->get_width() : 0;
 	}
 }
 
-long opBackground::RectConvert(long &x1, long &y1, long &x2, long &y2)
-{
+long opBackground::RectConvert(long& x1, long& y1, long& x2, long& y2) {
 
 	/*if (_pbkdisplay && (_display == RENDER_TYPE::NORMAL || _display == RENDER_TYPE::GDI)) {
 		x1 += _pbkdisplay->_client_x; y1 += _pbkdisplay->_client_y;
@@ -302,8 +273,7 @@ long opBackground::RectConvert(long &x1, long &y1, long &x2, long &y2)
 
 	x2 = std::min<long>(this->get_width(), x2);
 	y2 = std::min<long>(this->get_height(), y2);
-	if (x1 < 0 || y1 < 0 || x1 >= x2 || y1 >= y2)
-	{
+	if (x1 < 0 || y1 < 0 || x1 >= x2 || y1 >= y2) {
 		setlog(L"invalid rectangle:%d %d %d %d", x1, y1, x2, y2);
 		return 0;
 	}
@@ -325,20 +295,16 @@ long opBackground::RectConvert(long &x1, long &y1, long &x2, long &y2)
 	return 1;
 }
 
-long opBackground::get_image_type()
-{
+long opBackground::get_image_type() {
 
 	if (_display_method.first == L"pic")
 		return 0;
-	else if (_display_method.first == L"mem")
-	{
+	else if (_display_method.first == L"mem") {
 
 		return 1;
 	}
-	else
-	{
-		switch (GET_RENDER_TYPE(_display))
-		{
+	else {
+		switch (GET_RENDER_TYPE(_display)) {
 		case RENDER_TYPE::NORMAL:
 			return -2;
 		case RENDER_TYPE::GDI:
@@ -353,19 +319,15 @@ long opBackground::get_image_type()
 	}
 }
 
-bool opBackground::check_bind()
-{
+bool opBackground::check_bind() {
 	//已绑定
 	if (IsBind())
 		return true;
 	//显示模式非屏幕
-	if (get_display_method().first != L"screen")
-	{
-		if (get_display_method().first == L"pic")
-		{ //load pic first
+	if (get_display_method().first != L"screen") {
+		if (get_display_method().first == L"pic") { //load pic first
 			wstring fullpath;
-			if (Path2GlobalPath(get_display_method().second, _curr_path, fullpath))
-			{
+			if (Path2GlobalPath(get_display_method().second, _curr_path, fullpath)) {
 				_pic.read(fullpath.data());
 			}
 		}
@@ -376,41 +338,34 @@ bool opBackground::check_bind()
 	return BindWindow((long)::GetDesktopWindow(), L"normal", L"normal", L"normal", 0);
 }
 
-const std::pair<wstring, wstring> &opBackground::get_display_method() const
-{
+const std::pair<wstring, wstring>& opBackground::get_display_method() const {
 	return _display_method;
 }
 
-long opBackground::set_display_method(const wstring &method)
-{
-	if (method == L"screen")
-	{
+long opBackground::set_display_method(const wstring& method) {
+	if (method == L"screen") {
 		_display_method.first = method;
 		_display_method.second.clear();
 		return 1;
 	}
-	else
-	{
+	else {
 		auto idx = method.find(L"pic:");
-		if (idx != wstring::npos)
-		{
+		if (idx != wstring::npos) {
 			_display_method.first = L"pic";
 			_display_method.second = method.substr(idx + 4);
 			_pic.read(_display_method.second.data());
 			return 1;
 		}
 		idx = method.find(L"mem:");
-		if (idx != wstring::npos)
-		{
+		if (idx != wstring::npos) {
 			auto strPtr = method.substr(idx + 4);
 #if OP64 == 1
-			auto ptr = (byte *)_wtoi64(strPtr.data());
+			auto ptr = (byte*)_wtoi64(strPtr.data());
 #else
-			auto ptr = (byte *)_wtoi(strPtr.data());
+			auto ptr = (byte*)_wtoi(strPtr.data());
 #endif //
 
-			if (ptr == nullptr)
-			{
+			if (ptr == nullptr) {
 				return 0;
 			}
 			BITMAPFILEHEADER bfh = {0}; //bmp file header
@@ -421,8 +376,7 @@ long opBackground::set_display_method(const wstring &method)
 			if (bfh.bfType != static_cast<WORD>(0x4d42))
 				return 0;
 
-			if (bih.biHeight < 0)
-			{ //正常拷贝
+			if (bih.biHeight < 0) { //正常拷贝
 				int h = -bih.biHeight;
 				_pic.create(bih.biWidth, h);
 				/*setlog("mem w=%d h=%d chk=%d",
@@ -430,15 +384,13 @@ long opBackground::set_display_method(const wstring &method)
 					_pic.size() * 4 == bih.biSizeImage ? 1 : 0);*/
 				memcpy(_pic.pdata, ptr + sizeof(bfh) + sizeof(bih), _pic.size() * 4);
 			}
-			else
-			{ //倒过来拷贝
+			else { //倒过来拷贝
 				int h = bih.biHeight;
 				_pic.create(bih.biWidth, h);
-				for (int i = 0; i < h; i++)
-				{
+				for (int i = 0; i < h; i++) {
 					memcpy(_pic.ptr<uchar>(i),
-						   ptr + sizeof(bfh) + sizeof(bih) + (h - 1 - i) * bih.biWidth * 4,
-						   bih.biWidth * 4);
+						ptr + sizeof(bfh) + sizeof(bih) + (h - 1 - i) * bih.biWidth * 4,
+						bih.biWidth * 4);
 				}
 			}
 			_display_method.first = L"mem";
@@ -450,13 +402,11 @@ long opBackground::set_display_method(const wstring &method)
 	}
 }
 
-bool opBackground::requestCapture(int x1, int y1, int w, int h, Image &img)
-{
+bool opBackground::requestCapture(int x1, int y1, int w, int h, Image& img) {
 	wstring method = get_display_method().first;
 	if (method == L"screen")
 		return _pbkdisplay->requestCapture(x1, y1, w, h, img);
-	else if (method == L"pic" || method == L"mem")
-	{
+	else if (method == L"pic" || method == L"mem") {
 		img.create(w, h);
 		for (int i = 0; i < h; i++)
 			memcpy(img.ptr<uchar>(i), _pic.ptr<uchar>(i + y1) + x1 * 4, w * 4);
@@ -465,26 +415,21 @@ bool opBackground::requestCapture(int x1, int y1, int w, int h, Image &img)
 	return false;
 }
 
-IDisplay *opBackground::createDisplay(int mode)
-{
-	IDisplay *pDisplay = 0;
+IDisplay* opBackground::createDisplay(int mode) {
+	IDisplay* pDisplay = 0;
 
-	if (mode == RDT_NORMAL || GET_RENDER_TYPE(mode) == RENDER_TYPE::GDI)
-	{
+	if (mode == RDT_NORMAL || GET_RENDER_TYPE(mode) == RENDER_TYPE::GDI) {
 		pDisplay = new opGDI();
 	}
-	else if (mode == RDT_NORMAL_DXGI)
-	{
+	else if (mode == RDT_NORMAL_DXGI) {
 		pDisplay = new opDXGI();
 	}
 #ifdef _WIN32_WINNT_WIN11
-	else if (mode == RDT_NORMAL_WGC)
-	{
+	else if (mode == RDT_NORMAL_WGC) {
 		pDisplay = new opWGC();
 	}
 #endif
-	else if (GET_RENDER_TYPE(mode) == RENDER_TYPE::DX)
-	{
+	else if (GET_RENDER_TYPE(mode) == RENDER_TYPE::DX) {
 		pDisplay = new opDxGL;
 	}
 	else if (GET_RENDER_TYPE(mode) == RENDER_TYPE::OPENGL)
@@ -494,19 +439,16 @@ IDisplay *opBackground::createDisplay(int mode)
 	return pDisplay;
 }
 
-opMouseWin *opBackground::createMouse(int mode)
-{
+opMouseWin* opBackground::createMouse(int mode) {
 	if (mode == INPUT_TYPE::IN_NORMAL || mode == INPUT_TYPE::IN_WINDOWS)
 		return new opMouseWin();
-	else if (mode == INPUT_TYPE::IN_DX)
-	{
+	else if (mode == INPUT_TYPE::IN_DX) {
 		return new opMouseDx();
 	}
 	return nullptr;
 }
 
-bkkeypad *opBackground::createKeypad(int mode)
-{
+bkkeypad* opBackground::createKeypad(int mode) {
 	return new winkeypad();
 	//return 0;
 }

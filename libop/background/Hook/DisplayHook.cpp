@@ -1,4 +1,4 @@
-#include "DisplayHook.h"
+﻿#include "DisplayHook.h"
 #include <dxgi1_4.h>
 #include <d3d12.h>
 #include <d3d11.h>
@@ -66,13 +66,11 @@ int DisplayHook::setup(HWND hwnd_, int render_type_) {
 		render_type = kiero::RenderType::D3D10;
 		idx = 8; address = dx10_hkPresent;
 	}
-	else if (render_type_ == RDT_DX_D3D11)
-	{
+	else if (render_type_ == RDT_DX_D3D11) {
 		render_type = kiero::RenderType::D3D11;
 		idx = 8; address = dx11_hkPresent;
 	}
-	else if (render_type_ == RDT_DX_D3D12)
-	{
+	else if (render_type_ == RDT_DX_D3D12) {
 		render_type = kiero::RenderType::D3D12;
 		idx = 140; address = dx12_hkPresent;
 	}
@@ -84,11 +82,11 @@ int DisplayHook::setup(HWND hwnd_, int render_type_) {
 		render_type = kiero::RenderType::OpenGL;
 		idx = 0; address = gl_hkglBegin;
 	}
-	else if(render_type_==RDT_GL_ES){
+	else if (render_type_ == RDT_GL_ES) {
 		render_type = kiero::RenderType::OpenglES;
 		idx = 0; address = gl_hkeglSwapBuffers;
 	}
-	else if(render_type_==RDT_GL_FI){
+	else if (render_type_ == RDT_GL_FI) {
 		render_type = kiero::RenderType::OpenGL;
 		idx = 3; address = gl_hkglFinish;
 
@@ -100,7 +98,7 @@ int DisplayHook::setup(HWND hwnd_, int render_type_) {
 	if (ret != kiero::Status::Success) {
 		return ret;
 	}
-		
+
 
 	is_capture = kiero::bind(idx, &old_address, address);
 	return is_capture;
@@ -112,7 +110,7 @@ int DisplayHook::release() {
 	return 1;
 }
 
-void CopyImageData(char*  dst_, const char* src_, int rows_, int cols_,int rowPitch, int fmt_) {
+void CopyImageData(char* dst_, const char* src_, int rows_, int cols_, int rowPitch, int fmt_) {
 	//assert(rowsPitch >= cols_ * 4);
 	if (rowPitch == cols_ * (fmt_ == IBF_R8G8B8 ? 3 : 4)) {
 		if (fmt_ == IBF_B8G8R8A8) {
@@ -121,7 +119,7 @@ void CopyImageData(char*  dst_, const char* src_, int rows_, int cols_,int rowPi
 		else if (fmt_ == IBF_R8G8B8A8) {
 			//pixels count
 			int n = rows_ * cols_;
-			
+
 			for (int i = 0; i < n; ++i) {
 				dst_[0] = src_[2];//b
 				dst_[1] = src_[1];//g
@@ -149,11 +147,11 @@ void CopyImageData(char*  dst_, const char* src_, int rows_, int cols_,int rowPi
 				dst_ += dstPitch;
 				src_ += rowPitch;
 			}
-			
+
 		}
 		else if (fmt_ == IBF_R8G8B8A8) {
 			//pixels count
-			
+
 			for (int i = 0; i < rows_; ++i) {
 				for (int j = 0; j < cols_; ++j) {
 					const char* p = src_ + j * 4;//offset 
@@ -164,9 +162,9 @@ void CopyImageData(char*  dst_, const char* src_, int rows_, int cols_,int rowPi
 					dst_ += 4;//notirc that dst ptr is increasing
 				}
 				src_ += rowPitch;//row increase
-				
+
 			}
-			
+
 		}
 		else {
 			for (int i = 0; i < rows_; ++i) {
@@ -183,7 +181,7 @@ void CopyImageData(char*  dst_, const char* src_, int rows_, int cols_,int rowPi
 			}
 		}
 	}
-	
+
 }
 
 static DXGI_FORMAT GetDxgiFormat(DXGI_FORMAT format) {
@@ -238,16 +236,15 @@ HRESULT dx9_capture(LPDIRECT3DDEVICE9 pDevice) {
 		mutex.lock();
 		uchar* pshare = mem.data<byte>();
 		reinterpret_cast<FrameInfo*>(pshare)->format(DisplayHook::render_hwnd, surface_Desc.Width, surface_Desc.Height);
-		memcpy(pshare + sizeof(FrameInfo), (byte*)lockedRect.pBits, lockedRect.Pitch*surface_Desc.Height);
+		memcpy(pshare + sizeof(FrameInfo), (byte*)lockedRect.pBits, lockedRect.Pitch * surface_Desc.Height);
 		mutex.unlock();
 	}
 	pTex->UnlockRect(0);
-	
+
 	return hr;
 }
 //dx9 hooked EndScene function
-HRESULT STDMETHODCALLTYPE dx9_hkEndScene(IDirect3DDevice9* thiz)
-{
+HRESULT STDMETHODCALLTYPE dx9_hkEndScene(IDirect3DDevice9* thiz) {
 	typedef long(__stdcall* EndScene)(LPDIRECT3DDEVICE9);
 	auto ret = ((EndScene)DisplayHook::old_address)(thiz);
 	if (is_capture)
@@ -260,10 +257,10 @@ HRESULT STDMETHODCALLTYPE dx9_hkEndScene(IDirect3DDevice9* thiz)
 //-----------------------dx10----------------------------------
 //screen capture
 void dx10_capture(IDXGISwapChain* pswapchain) {
-	using Texture2D = ID3D10Texture2D * ;
+	using Texture2D = ID3D10Texture2D*;
 
 	HRESULT hr;
-	ID3D10Device *pdevices = nullptr;
+	ID3D10Device* pdevices = nullptr;
 	ID3D10Resource* backbuffer = nullptr;
 	Texture2D textDst = nullptr;
 	//LPD3D10BLOB pblob = nullptr;
@@ -310,7 +307,7 @@ void dx10_capture(IDXGISwapChain* pswapchain) {
 
 	pdevices->CopyResource(textDst, backbuffer);
 
-	D3D10_MAPPED_TEXTURE2D mapText = { 0,0 };
+	D3D10_MAPPED_TEXTURE2D mapText = {0,0};
 
 	hr = textDst->Map(0, D3D10_MAP_READ, 0, &mapText);
 
@@ -327,8 +324,7 @@ void dx10_capture(IDXGISwapChain* pswapchain) {
 		textDesc.Format == DXGI_FORMAT_B8G8R8A8_TYPELESS ||
 		textDesc.Format == DXGI_FORMAT_B8G8R8A8_UNORM_SRGB ||
 		textDesc.Format == DXGI_FORMAT_B8G8R8X8_TYPELESS ||
-		textDesc.Format == DXGI_FORMAT_B8G8R8X8_UNORM_SRGB)
-	{
+		textDesc.Format == DXGI_FORMAT_B8G8R8X8_UNORM_SRGB) {
 		fmt = IBF_B8G8R8A8;
 	}
 
@@ -340,7 +336,7 @@ void dx10_capture(IDXGISwapChain* pswapchain) {
 		//memcpy(mem.data<char>(), mapText.pData, textDesc.Width*textDesc.Height * 4);
 		uchar* pshare = mem.data<byte>();
 		reinterpret_cast<FrameInfo*>(pshare)->format(DisplayHook::render_hwnd, textDesc.Width, textDesc.Height);
-		CopyImageData((char*)pshare+ sizeof(FrameInfo), (char*)mapText.pData, textDesc.Height, textDesc.Width, mapText.RowPitch, fmt);
+		CopyImageData((char*)pshare + sizeof(FrameInfo), (char*)mapText.pData, textDesc.Height, textDesc.Width, mapText.RowPitch, fmt);
 		mutex.unlock();
 	}
 	else {
@@ -372,7 +368,7 @@ HRESULT STDMETHODCALLTYPE dx10_hkPresent(IDXGISwapChain* thiz, UINT SyncInterval
 void dx11_capture(IDXGISwapChain* swapchain) {
 
 	//setlog("d3d11 cap");
-	using Texture2D = ID3D11Texture2D * ;
+	using Texture2D = ID3D11Texture2D*;
 	HRESULT hr = 0;
 	IDXGIResource* backbufferptr = nullptr;
 	ID3D11Resource* backbuffer = nullptr;
@@ -433,7 +429,7 @@ void dx11_capture(IDXGISwapChain* swapchain) {
 
 	context->CopyResource(textDst, backbuffer);
 
-	D3D11_MAPPED_SUBRESOURCE mapSubres = { 0,0,0 };
+	D3D11_MAPPED_SUBRESOURCE mapSubres = {0,0,0};
 
 	//hr = pD3DX11SaveTextureToMemory(context, textureDst, D3DX11_IMAGE_FILE_FORMAT::D3DX11_IFF_BMP, &pblob, 0);
 	hr = context->Map(textDst, 0, D3D11_MAP_READ, 0, &mapSubres);
@@ -449,8 +445,7 @@ void dx11_capture(IDXGISwapChain* swapchain) {
 		textDesc.Format == DXGI_FORMAT_B8G8R8A8_TYPELESS ||
 		textDesc.Format == DXGI_FORMAT_B8G8R8A8_UNORM_SRGB ||
 		textDesc.Format == DXGI_FORMAT_B8G8R8X8_TYPELESS ||
-		textDesc.Format == DXGI_FORMAT_B8G8R8X8_UNORM_SRGB)
-	{
+		textDesc.Format == DXGI_FORMAT_B8G8R8X8_UNORM_SRGB) {
 		fmt = IBF_B8G8R8A8;
 	}
 
@@ -463,7 +458,7 @@ void dx11_capture(IDXGISwapChain* swapchain) {
 		reinterpret_cast<FrameInfo*>(pshare)->format(DisplayHook::render_hwnd, textDesc.Width, textDesc.Height);
 		//CopyImageData((char*)pshare + sizeof(FrameInfo), (char*)mapText.pData, textDesc.Height, textDesc.Width, fmt);
 		static_assert(sizeof(FrameInfo) == 28);
- 
+
 		CopyImageData((char*)pshare + sizeof(FrameInfo), (char*)mapSubres.pData, textDesc.Height, textDesc.Width, mapSubres.RowPitch, fmt);
 		mutex.unlock();
 	}
@@ -554,7 +549,7 @@ long gl_capture() {
 		mutex.lock();
 		uchar* pshare = mem.data<byte>();
 		reinterpret_cast<FrameInfo*>(pshare)->format(DisplayHook::render_hwnd, width, height);
-		pglReadPixels(0, 0, width, height, GL_BGRA_EXT, GL_UNSIGNED_BYTE, pshare+ sizeof(FrameInfo));
+		pglReadPixels(0, 0, width, height, GL_BGRA_EXT, GL_UNSIGNED_BYTE, pshare + sizeof(FrameInfo));
 		mutex.unlock();
 	}
 	else {
@@ -583,7 +578,7 @@ void __stdcall gl_hkwglSwapBuffers(HDC hdc) {
 	if (is_capture)
 		gl_capture();
 	((wglSwapBuffers_t)DisplayHook::old_address)(hdc);
-	
+
 }
 
 
@@ -645,7 +640,7 @@ unsigned int __stdcall gl_hkeglSwapBuffers(void* dpy, void* surface) {
 	if (is_capture)
 		egl_capture();
 	return ((eglSwapBuffers_t)DisplayHook::old_address)(dpy, surface);
-	
+
 }
 
 

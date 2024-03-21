@@ -1,12 +1,11 @@
-#pragma once
+﻿#pragma once
 #ifndef __BKDISPLAY_H_
 #define __BKDISPLAY_H_
 #include <thread>
 #include "optype.h"
 #include "IDisplay.h"
 struct Image;
-class opGDI:public IDisplay
-{
+class opGDI :public IDisplay {
 public:
 	opGDI();
 	~opGDI();
@@ -16,7 +15,7 @@ public:
 	long UnBindEx() override;
 
 	virtual bool requestCapture(int x1, int y1, int w, int h, Image& img)override;
-	
+
 private:
 	//设备句柄
 	HDC _hdc = NULL;
@@ -26,12 +25,12 @@ private:
 	HBITMAP _hbmpscreen = NULL;
 	HBITMAP _hbmp_old = NULL;
 	//bmp 文件头
-	BITMAPFILEHEADER _bfh = { 0 };
-	BITMAPINFOHEADER _bih = { 0 };//位图信息头
+	BITMAPFILEHEADER _bfh = {0};
+	BITMAPINFOHEADER _bih = {0};//位图信息头
 	int dx_, dy_;//去除标题栏
 	//bytearray temp_src;
 	FrameInfo m_frameInfo;
-	void fmtFrameInfo(void* dst,HWND hwnd, int w, int h);
+	void fmtFrameInfo(void* dst, HWND hwnd, int w, int h);
 };
 
 #endif
