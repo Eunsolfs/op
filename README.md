@@ -4,6 +4,7 @@ Overview
 # 仅oplib库
 1.移除COM等其他所有非oplib库的组件
 2.移除OCR模块
+# 自用[BlackBone](https://github.com/Eunsolfs/Blackbone)
 
 OP(operator & open)是一个开源插件(类似大漠插件).主要功能有:Windows消息模拟,后台截图，找图,字符识别(OCR)等。使用c++编写，源代码可编译为32/64位dll.op插件提供了两类接口:1）原生c++接口，可以让c/c++开发者方便调用；2）com接口，支持大多数编译型语言(c++,c#,vb,delphi等 以及脚本语言（python,lua等）的调用
 
