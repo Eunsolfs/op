@@ -1,4 +1,7 @@
 #pragma once
+
+#pragma warning(disable : 4267)
+
 #ifndef __MEMORYEX_H_
 #define __MEMORYEX_H_
 #include "./core/helpfunc.h"

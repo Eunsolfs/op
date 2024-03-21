@@ -10,8 +10,6 @@
     <!--ClCompile-->
     <LIB_Debug_RuntimeLibrary>MultiThreadedDebug</LIB_Debug_RuntimeLibrary>
     <LIB_Release_RuntimeLibrary>MultiThreaded</LIB_Release_RuntimeLibrary>
-    <LIB_LanguageStandard>stdcpp20</LIB_LanguageStandard>
-    <LIB_LanguageStandard_C>stdc17</LIB_LanguageStandard_C>
     <LIB_ProgramDataBaseFileName>$(TargetName).pdb</LIB_ProgramDataBaseFileName>
     <LIB_PrecompiledHeaderFile>pch.h</LIB_PrecompiledHeaderFile>
     <LIB_PrecompiledHeader>NotUsing</LIB_PrecompiledHeader>

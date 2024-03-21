@@ -1,4 +1,10 @@
 #pragma once
+
+
+#pragma warning(disable : 4302)
+#pragma warning(disable : 4311)
+#pragma warning(disable : 4312)
+
 #ifndef __BACKBASE_H_
 #define __BACKBASE_H_
 #include <string>

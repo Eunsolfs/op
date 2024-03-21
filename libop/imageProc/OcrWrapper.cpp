@@ -4,7 +4,9 @@
 #include <iostream>
 #include <condition_variable>
 
+
 using std::cout;
+using std::byte;
 using std::endl;
 OcrWrapper::OcrWrapper() : m_engine(nullptr) {
 	//	//paddle

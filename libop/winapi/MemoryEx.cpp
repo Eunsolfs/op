@@ -1,4 +1,4 @@
-//#include "stdafx.h"
+﻿//#include "stdafx.h"
 #include "MemoryEx.h"
 #include "./core/helpfunc.h"
 #define push(s,x)s.push_back(x)
@@ -84,42 +84,38 @@ int stringcompute(const wchar_t* s) {
 	return ns.back();
 }
 
-MemoryEx::MemoryEx()
-{
-}
+MemoryEx::MemoryEx() {}
 
 
-MemoryEx::~MemoryEx()
-{
-}
+MemoryEx::~MemoryEx() {}
 
 long MemoryEx::WriteData(HWND hwnd, const wstring& address, const wstring& data, LONG size) {
 	_hwnd = hwnd;
 	if (!checkaddress(address))
 		return 0;
 	vector<uchar> bin;
-	hex2bins(bin, data,size);
+	hex2bins(bin, data, size);
 	if (_hwnd) {
 		if (!::IsWindow(hwnd))
 			return 0;
 		DWORD pid;
 		::GetWindowThreadProcessId(hwnd, &pid);
 		auto hr = _proc.Attach(pid);
-		
+
 		if (hr >= 0) {
 			size_t addr = str2address(address);
 			if (addr == 0)return 0;
 			return mem_write(addr, bin.data(), size);
-			
+
 		}
 		return 0;
 	}
 	else {
 		size_t addr = str2address(address);
 		if (addr == 0)return 0;
-		return mem_write(addr,bin.data(), size);
+		return mem_write(addr, bin.data(), size);
 	}
-	
+
 
 }
 
@@ -140,7 +136,7 @@ wstring MemoryEx::ReadData(HWND hwnd, const wstring& address, LONG size) {
 		if (hr >= 0) {
 			size_t addr = str2address(address);
 			if (addr == 0)return L"";
-			 mem_read(bin.data(), addr, size);
+			mem_read(bin.data(), addr, size);
 		}
 	}
 	else {
@@ -236,18 +232,18 @@ size_t MemoryEx::str2address(const wstring& caddress) {
 	return stringcompute(address.data());
 }
 
-void MemoryEx::hex2bins(vector<uchar>&bin, const wstring& hex,size_t size) {
+void MemoryEx::hex2bins(vector<uchar>& bin, const wstring& hex, size_t size) {
 	bin.resize(size);
 	ZeroMemory(bin.data(), bin.size());
 	int low = 1;
 	for (int i = hex.size() - 1; i >= 0; --i) {
-		
-		bin[size - i / 2-1] |= low & 1 ? hex2bin(hex[i]) : hex2bin(hex[i]) << 4;
+
+		bin[size - i / 2 - 1] |= low & 1 ? hex2bin(hex[i]) : hex2bin(hex[i]) << 4;
 		low ^= 1;
 	}
 }
 
-void MemoryEx::bin2hexs(const vector<uchar>&bin, wstring& hex) {
+void MemoryEx::bin2hexs(const vector<uchar>& bin, wstring& hex) {
 	//hex.resize(bin.size() * 2);
 	hex.reserve(bin.size() * 2);
 	hex.clear();

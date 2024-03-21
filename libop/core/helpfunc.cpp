@@ -1,9 +1,12 @@
-//#include "stdafx.h"
+﻿//#include "stdafx.h"
 #include "helpfunc.h"
 #include <algorithm>
 #include <fstream>
 #include <iostream>
 #include <sstream>
+#include <string>
+#include <locale>
+#include <codecvt>
 #include <shlwapi.h>
 #include "globalVar.h"
 #include "opEnv.h"
@@ -12,9 +15,8 @@
 #include <boost/stacktrace.hpp>
 #endif
 
-std::wstring _s2wstring(const std::string&s) {
-	size_t nlen = s.length();
-
+std::wstring _s2wstring(const std::string& s) {
+	/*size_t nlen = s.length();
 	wchar_t* m_char;
 	int len = MultiByteToWideChar(CP_ACP, 0, s.c_str(), nlen, NULL, 0);
 	m_char = new wchar_t[len + 1];
@@ -22,10 +24,14 @@ std::wstring _s2wstring(const std::string&s) {
 	m_char[len] = '\0';
 	std::wstring ws(m_char);
 	delete[] m_char;
-	return ws;
+	return ws;*/
+
+	std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
+	return converter.from_bytes(s);
 }
 
-std::string _ws2string(const std::wstring&ws) {
+std::string _ws2string(const std::wstring& ws) {
+	//---1
 	// std::string strLocale = setlocale(LC_ALL, "");
 	// const wchar_t* wchSrc = ws.c_str();
 	// size_t nDestSize = wcstombs(NULL, wchSrc, 0) + 1;
@@ -36,8 +42,9 @@ std::string _ws2string(const std::wstring&ws) {
 	// delete[]chDest;
 	// setlocale(LC_ALL, strLocale.c_str());
 	//return strResult;
-	int nlen = ws.length();
 
+	//---2
+	/*int nlen = ws.length();
 	char* m_char;
 	int len = WideCharToMultiByte(CP_ACP, 0, ws.data(), nlen, NULL, 0, NULL, NULL);
 	m_char = new char[len + 1];
@@ -45,7 +52,11 @@ std::string _ws2string(const std::wstring&ws) {
 	m_char[len] = '\0';
 	std::string s(m_char);
 	delete[] m_char;
-	return s;
+	return s;*/
+
+	//--3
+	std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
+	return converter.to_bytes(ws);
 }
 
 string utf8_to_ansi(string strUTF8) {
@@ -63,7 +74,7 @@ string utf8_to_ansi(string strUTF8) {
 	return strUTF8;
 }
 
-long Path2GlobalPath(const std::wstring&file, const std::wstring& curr_path, std::wstring& out) {
+long Path2GlobalPath(const std::wstring& file, const std::wstring& curr_path, std::wstring& out) {
 	if (::PathFileExistsW(file.c_str())) {
 		out = file;
 		return 1;
@@ -84,7 +95,7 @@ long setlog(const wchar_t* format, ...) {
 	va_end(args);
 	wstring tmpw = buf;
 	string tmps = _ws2string(tmpw);
-	
+
 	return setlog(tmps.data());
 }
 
@@ -108,7 +119,7 @@ long setlog(const char* format, ...) {
 		<< boost::stacktrace::stacktrace() << std::endl;
 #endif // USE_BOOST_STACK_TRACE
 
-	
+
 	string s = ss.str();
 	if (opEnv::m_showErrorMsg == 1) {
 		MessageBoxA(NULL, s.data(), "error", MB_ICONERROR);
@@ -133,15 +144,13 @@ long setlog(const char* format, ...) {
 	return 1;
 }
 
-void split(const std::wstring& s, std::vector<std::wstring>& v, const std::wstring& c)
-{
+void split(const std::wstring& s, std::vector<std::wstring>& v, const std::wstring& c) {
 	std::wstring::size_type pos1, pos2;
 	size_t len = s.length();
 	pos2 = s.find(c);
 	pos1 = 0;
 	v.clear();
-	while (std::wstring::npos != pos2)
-	{
+	while (std::wstring::npos != pos2) {
 		v.emplace_back(s.substr(pos1, pos2 - pos1));
 
 		pos1 = pos2 + c.size();
@@ -151,15 +160,13 @@ void split(const std::wstring& s, std::vector<std::wstring>& v, const std::wstri
 		v.emplace_back(s.substr(pos1));
 }
 
-void split(const std::string& s, std::vector<std::string>& v, const std::string& c)
-{
+void split(const std::string& s, std::vector<std::string>& v, const std::string& c) {
 	std::string::size_type pos1, pos2;
 	size_t len = s.length();
 	pos2 = s.find(c);
 	pos1 = 0;
 	v.clear();
-	while (std::string::npos != pos2)
-	{
+	while (std::string::npos != pos2) {
 		v.emplace_back(s.substr(pos1, pos2 - pos1));
 
 		pos1 = pos2 + c.size();
@@ -170,7 +177,7 @@ void split(const std::string& s, std::vector<std::string>& v, const std::string&
 }
 
 void wstring2upper(std::wstring& s) {
-	std::transform(s.begin(), s.end(),s.begin(), towupper);
+	std::transform(s.begin(), s.end(), s.begin(), towupper);
 }
 
 void string2upper(std::string& s) {
@@ -185,7 +192,7 @@ void string2lower(std::string& s) {
 	std::transform(s.begin(), s.end(), s.begin(), tolower);
 }
 
-void replacea(string& str, const string&oldval, const string& newval) {
+void replacea(string& str, const string& oldval, const string& newval) {
 	size_t x0 = 0, dx = newval.length() - oldval.length() + 1;
 	size_t idx = str.find(oldval, x0);
 	while (idx != -1 && x0 >= 0) {
@@ -195,7 +202,7 @@ void replacea(string& str, const string&oldval, const string& newval) {
 	}
 }
 
-void replacew(wstring& str, const wstring&oldval, const wstring& newval) {
+void replacew(wstring& str, const wstring& oldval, const wstring& newval) {
 	size_t x0 = 0, dx = newval.length() - oldval.length() + 1;
 	size_t idx = str.find(oldval, x0);
 	while (idx != -1 && x0 >= 0) {
@@ -233,8 +240,7 @@ std::wostream& operator<<(std::wostream& o, FrameInfo const& rhs) {
 }
 
 //Returns the last Win32 error, in string format. Returns an empty string if there is no error.
-std::string GetLastErrorAsString()
-{
+std::string GetLastErrorAsString() {
 	//Get the error message ID, if any.
 	DWORD errorMessageID = ::GetLastError();
 	if (errorMessageID == 0) {
@@ -257,28 +263,24 @@ std::string GetLastErrorAsString()
 	return message;
 }
 
-bool Delay(long mis)
-{
-  MSG msg = {};
-  auto deadline = ::GetTickCount() + mis;
-  while (::GetTickCount() < deadline)
-  {
+bool Delay(long mis) {
+	MSG msg = {};
+	auto deadline = ::GetTickCount64() + mis;
+	while (::GetTickCount64() < deadline) {
 		// 除收到'WM_QUIT'消息，结果始终都是大于0的
-		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE) > 0)
-		{
+		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE) > 0) {
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
 		}
-  }
-  return true;
+	}
+	return true;
 }
 
-bool Delays(long mis_min, long mis_max)
-{
-  if (mis_min <= 0 || mis_max <= 0)
-    return false;
-  long mis = mis_min + rand() % mis_max;
-  return Delay(mis);
+bool Delays(long mis_min, long mis_max) {
+	if (mis_min <= 0 || mis_max <= 0)
+		return false;
+	long mis = mis_min + rand() % mis_max;
+	return Delay(mis);
 }
 
 

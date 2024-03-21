@@ -1108,61 +1108,61 @@ void libop::UseDict(long idx, long* ret) {
 //	}
 //	retstr = str;
 //}
-//在屏幕范围(x1,y1,x2,y2)内,查找string(可以是任意个字符串的组合),并返回符合color_format的坐标位置
-void libop::FindStr(long x1, long y1, long x2, long y2, const wchar_t* strs, const wchar_t* color, DOUBLE sim, long* retx, long* rety, long* ret) {
-	wstring str;
-	*retx = *rety = -1;
-	if (m_context->bkproc.check_bind() && m_context->bkproc.RectConvert(x1, y1, x2, y2)) {
-		if (!m_context->bkproc.requestCapture(x1, y1, x2 - x1, y2 - y1, m_context->image_proc._src)) {
-			setlog("error requestCapture");
-		}
-		else {
-			m_context->image_proc.set_offset(x1, y1);
-			*ret = m_context->image_proc.FindStr(strs, color, sim, *retx, *rety);
-		}
-	}
-}
-//返回符合color_format的所有坐标位置
-void libop::FindStrEx(long x1, long y1, long x2, long y2, const wchar_t* strs, const wchar_t* color, DOUBLE sim, std::wstring& retstr) {
-	wstring str;
-	if (m_context->bkproc.check_bind() && m_context->bkproc.RectConvert(x1, y1, x2, y2)) {
-		if (!m_context->bkproc.requestCapture(x1, y1, x2 - x1, y2 - y1, m_context->image_proc._src)) {
-			setlog("error requestCapture");
-		}
-		else {
-			m_context->image_proc.set_offset(x1, y1);
-			m_context->image_proc.FindStrEx(strs, color, sim, str);
-		}
-	}
-	retstr = str;
-}
+////在屏幕范围(x1,y1,x2,y2)内,查找string(可以是任意个字符串的组合),并返回符合color_format的坐标位置
+//void libop::FindStr(long x1, long y1, long x2, long y2, const wchar_t* strs, const wchar_t* color, DOUBLE sim, long* retx, long* rety, long* ret) {
+//	wstring str;
+//	*retx = *rety = -1;
+//	if (m_context->bkproc.check_bind() && m_context->bkproc.RectConvert(x1, y1, x2, y2)) {
+//		if (!m_context->bkproc.requestCapture(x1, y1, x2 - x1, y2 - y1, m_context->image_proc._src)) {
+//			setlog("error requestCapture");
+//		}
+//		else {
+//			m_context->image_proc.set_offset(x1, y1);
+//			*ret = m_context->image_proc.FindStr(strs, color, sim, *retx, *rety);
+//		}
+//	}
+//}
+////返回符合color_format的所有坐标位置
+//void libop::FindStrEx(long x1, long y1, long x2, long y2, const wchar_t* strs, const wchar_t* color, DOUBLE sim, std::wstring& retstr) {
+//	wstring str;
+//	if (m_context->bkproc.check_bind() && m_context->bkproc.RectConvert(x1, y1, x2, y2)) {
+//		if (!m_context->bkproc.requestCapture(x1, y1, x2 - x1, y2 - y1, m_context->image_proc._src)) {
+//			setlog("error requestCapture");
+//		}
+//		else {
+//			m_context->image_proc.set_offset(x1, y1);
+//			m_context->image_proc.FindStrEx(strs, color, sim, str);
+//		}
+//	}
+//	retstr = str;
+//}
+//
+//void libop::OcrAuto(long x1, long y1, long x2, long y2, DOUBLE sim, std::wstring& retstr) {
+//	wstring str;
+//	if (m_context->bkproc.check_bind() && m_context->bkproc.RectConvert(x1, y1, x2, y2)) {
+//		if (!m_context->bkproc.requestCapture(x1, y1, x2 - x1, y2 - y1, m_context->image_proc._src)) {
+//			setlog("error requestCapture");
+//		}
+//		else {
+//			m_context->image_proc.set_offset(x1, y1);
+//			m_context->image_proc.OcrAuto(sim, str);
+//		}
+//	}
+//	retstr = str;
+//}
 
-void libop::OcrAuto(long x1, long y1, long x2, long y2, DOUBLE sim, std::wstring& retstr) {
-	wstring str;
-	if (m_context->bkproc.check_bind() && m_context->bkproc.RectConvert(x1, y1, x2, y2)) {
-		if (!m_context->bkproc.requestCapture(x1, y1, x2 - x1, y2 - y1, m_context->image_proc._src)) {
-			setlog("error requestCapture");
-		}
-		else {
-			m_context->image_proc.set_offset(x1, y1);
-			m_context->image_proc.OcrAuto(sim, str);
-		}
-	}
-	retstr = str;
-}
-
-//从文件中识别图片
-void libop::OcrFromFile(const wchar_t* file_name, const wchar_t* color_format, DOUBLE sim, std::wstring& retstr) {
-	wstring str;
-	m_context->image_proc.OcrFromFile(file_name, color_format, sim, str);
-	retstr = str;
-}
-//从文件中识别图片,无需指定颜色
-void libop::OcrAutoFromFile(const wchar_t* file_name, DOUBLE sim, std::wstring& retstr) {
-	wstring str;
-	m_context->image_proc.OcrAutoFromFile(file_name, sim, str);
-	retstr = str;
-}
+////从文件中识别图片
+//void libop::OcrFromFile(const wchar_t* file_name, const wchar_t* color_format, DOUBLE sim, std::wstring& retstr) {
+//	wstring str;
+//	m_context->image_proc.OcrFromFile(file_name, color_format, sim, str);
+//	retstr = str;
+//}
+////从文件中识别图片,无需指定颜色
+//void libop::OcrAutoFromFile(const wchar_t* file_name, DOUBLE sim, std::wstring& retstr) {
+//	wstring str;
+//	m_context->image_proc.OcrAutoFromFile(file_name, sim, str);
+//	retstr = str;
+//}
 
 void libop::FindLine(long x1, long y1, long x2, long y2, const wchar_t* color, double sim, wstring& retstr) {
 	if (m_context->bkproc.check_bind() && m_context->bkproc.RectConvert(x1, y1, x2, y2)) {

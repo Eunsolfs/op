@@ -1,18 +1,13 @@
-//#include "stdafx.h"
+﻿//#include "stdafx.h"
 #include "Injecter.h"
 
 
-Injecter::Injecter()
-{
-}
+Injecter::Injecter() {}
 
 
-Injecter::~Injecter()
-{
-}
+Injecter::~Injecter() {}
 
-BOOL Injecter::EnablePrivilege(BOOL enable)
-{
+BOOL Injecter::EnablePrivilege(BOOL enable) {
 	// 得到令牌句柄
 	HANDLE hToken = NULL;
 	if (!OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY | TOKEN_READ, &hToken))
@@ -38,10 +33,9 @@ BOOL Injecter::EnablePrivilege(BOOL enable)
 }
 
 
-long Injecter::InjectDll(DWORD pid, LPCTSTR dllPath,long& error_code)
-{
-	
-	auto jhandle=::OpenProcess(PROCESS_ALL_ACCESS, FALSE, pid);
+long Injecter::InjectDll(DWORD pid, LPCTSTR dllPath, long& error_code) {
+
+	auto jhandle = ::OpenProcess(PROCESS_ALL_ACCESS, FALSE, pid);
 	/**pid = processInfo.dwProcessId;
 	*process = processInfo.hProcess;*/
 	if (!jhandle) {
@@ -52,30 +46,27 @@ long Injecter::InjectDll(DWORD pid, LPCTSTR dllPath,long& error_code)
 
 	// 申请内存用来存放DLL路径
 	void* remoteMemory = VirtualAllocEx(jhandle, NULL, dllPathSize, MEM_COMMIT, PAGE_EXECUTE_READWRITE);
-	if (remoteMemory == NULL)
-	{
+	if (remoteMemory == NULL) {
 		//setlog(L"申请内存失败，错误代码：%u\n", GetLastError());
 		error_code = ::GetLastError();
 		return -2;
 	}
 
 	// 写入DLL路径
-	if (!WriteProcessMemory(jhandle, remoteMemory, dllPath, dllPathSize, NULL))
-	{
+	if (!WriteProcessMemory(jhandle, remoteMemory, dllPath, dllPathSize, NULL)) {
 		//setlog(L"写入内存失败，错误代码：%u\n", GetLastError());
 		error_code = ::GetLastError();
 		return -3;
 	}
 
 	// 创建远线程调用LoadLibrary
-	auto lpfn=GetProcAddress(GetModuleHandleW(L"kernel32.dll"), "LoadLibraryW");
+	auto lpfn = GetProcAddress(GetModuleHandleW(L"kernel32.dll"), "LoadLibraryW");
 	if (!lpfn) {
 		error_code = ::GetLastError();
 		return -4;
 	}
 	HANDLE remoteThread = CreateRemoteThread(jhandle, NULL, 0, (LPTHREAD_START_ROUTINE)lpfn, remoteMemory, 0, NULL);
-	if (remoteThread == NULL)
-	{
+	if (remoteThread == NULL) {
 		//setlog(L"创建远线程失败，错误代码：%u\n", GetLastError());
 		error_code = ::GetLastError();
 		return -5;

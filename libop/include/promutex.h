@@ -1,13 +1,16 @@
 #pragma once
+
+
+#pragma warning(disable : 4267)
+
+#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <string>
 #include <assert.h>
 using std::wstring;
-class promutex
-{
+class promutex {
 public:
-	explicit promutex():_hmutex(NULL) {
-	}
+	explicit promutex() :_hmutex(NULL) {}
 	~promutex() {
 		if (_hmutex) {
 			unlock();
@@ -28,7 +31,7 @@ public:
 		else {
 			return false;
 		}
-		
+
 	}
 	bool open(const wstring& name_) {
 		HANDLE temp;

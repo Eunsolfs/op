@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include <string>
 #include "ImageLoc.h"
 #include <map>
@@ -52,9 +52,9 @@ public:
 
 	//long OcrEx(const wstring& color, double sim, std::wstring& out_str);
 
-	long FindStr(const wstring& str, const wstring& color, double sim, long& retx, long& rety);
+	//long FindStr(const wstring& str, const wstring& color, double sim, long& retx, long& rety);
 
-	long FindStrEx(const wstring& str, const wstring& color, double sim, std::wstring& out_str);
+	//long FindStrEx(const wstring& str, const wstring& color, double sim, std::wstring& out_str);
 
 	//long OcrAuto(double sim, std::wstring& retstr);
 

@@ -1,6 +1,11 @@
+
+
 #ifndef __FRAME_INFO_H_
 #define __FRAME_INFO_H_
 #pragma pack(1)
+
+#pragma warning(disable : 4244)
+
 struct FrameInfo {
 	unsigned __int64 hwnd;
 	unsigned __int32 frameId;
@@ -15,12 +20,12 @@ struct FrameInfo {
 	void format(HWND hwnd_, int w_, int h_) {
 		hwnd = (unsigned __int64)hwnd_;
 		frameId++;
-		time = ::GetTickCount();
+		time = ::GetTickCount64();
 		width = w_;
 		height = h_;
 		fmtChk();
 	}
-	
+
 };
 #pragma pack()
 #endif // !__FRAME_INFO_H_

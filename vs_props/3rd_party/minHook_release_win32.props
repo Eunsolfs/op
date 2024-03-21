@@ -6,21 +6,16 @@
   <ItemDefinitionGroup>
     <ClCompile>
       <AdditionalIncludeDirectories>$(minHook_IncludeDirectories)%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>$(minHook_PreprocessorDefinitions)%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalOptions>$(minHook_CompilerFlags) %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(minHook_LibraryDirectories)%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>$(minHook_Libraries)%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalDependencies>$(minHook_SystemLibs)%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalOptions>$(minHook_LinkerFlags) %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <Midl>
       <AdditionalIncludeDirectories>$(minHook_IncludeDirectories)%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </Midl>
     <ResourceCompile>
       <AdditionalIncludeDirectories>$(minHook_IncludeDirectories)%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>$(minHook_PreprocessorDefinitions)%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
   </ItemDefinitionGroup>
 </Project>

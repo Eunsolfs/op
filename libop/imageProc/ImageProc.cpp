@@ -1,4 +1,4 @@
-//#include "stdafx.h"
+﻿//#include "stdafx.h"
 #include "ImageProc.h"
 #include "../core/helpfunc.h"
 #include <fstream>
@@ -379,62 +379,62 @@ void ImageProc::files2mats(const wstring& files, std::vector<Image*>& vpic, std:
 //	}
 //}
 
-long ImageProc::FindStr(const wstring& str, const wstring& color, double sim, long& retx, long& rety) {
-	vector<wstring> vstr;
-	vector<color_df_t> colors;
-	split(str, vstr, L"|");
-	if (str2colordfs(color, colors) == 0) {
-		bgr2binary(colors);
-	}
-	else {
-		bgr2binarybk(colors);
-	}
-	if (sim < 0. || sim > 1.)
-		sim = 1.;
-	std::map<point_t, ocr_rec_t> ocr_res;
-	if (_dicts[_curr_idx].size() == 0) {
-		vocr_rec_t res;
-		OcrWrapper::getInstance()->ocr(_src.pdata, _src.width, _src.height, 4, res);
-		for (auto& it : res) {
-			if (it.confidence >= sim - 1e-9) {
-				ocr_res[it.left_top] = it;
-			}
-		}
-	}
-	else {
-		ImageBase::bin_ocr(_dicts[_curr_idx], sim, ocr_res);
-	}
-	return ImageBase::FindStr(ocr_res, vstr, sim, retx, rety);
-}
+//long ImageProc::FindStr(const wstring& str, const wstring& color, double sim, long& retx, long& rety) {
+//	vector<wstring> vstr;
+//	vector<color_df_t> colors;
+//	split(str, vstr, L"|");
+//	if (str2colordfs(color, colors) == 0) {
+//		bgr2binary(colors);
+//	}
+//	else {
+//		bgr2binarybk(colors);
+//	}
+//	if (sim < 0. || sim > 1.)
+//		sim = 1.;
+//	std::map<point_t, ocr_rec_t> ocr_res;
+//	if (_dicts[_curr_idx].size() == 0) {
+//		vocr_rec_t res;
+//		OcrWrapper::getInstance()->ocr(_src.pdata, _src.width, _src.height, 4, res);
+//		for (auto& it : res) {
+//			if (it.confidence >= sim - 1e-9) {
+//				ocr_res[it.left_top] = it;
+//			}
+//		}
+//	}
+//	else {
+//		ImageBase::bin_ocr(_dicts[_curr_idx], sim, ocr_res);
+//	}
+//	return ImageBase::FindStr(ocr_res, vstr, sim, retx, rety);
+//}
 
-long ImageProc::FindStrEx(const wstring& str, const wstring& color, double sim, std::wstring& out_str) {
-	out_str.clear();
-	vector<wstring> vstr;
-	vector<color_df_t> colors;
-	split(str, vstr, L"|");
-	if (str2colordfs(color, colors) == 0) {
-		bgr2binary(colors);
-	}
-	else {
-		bgr2binarybk(colors);
-	}
-	if (sim < 0. || sim > 1.)
-		sim = 1.;
-	std::map<point_t, ocr_rec_t> ocr_res;
-	if (_dicts[_curr_idx].size() == 0) {
-		vocr_rec_t res;
-		OcrWrapper::getInstance()->ocr(_src.pdata, _src.width, _src.height, 4, res);
-		for (auto& it : res) {
-			if (it.confidence >= sim - 1e-9) {
-				ocr_res[it.left_top] = it;
-			}
-		}
-	}
-	else {
-		ImageBase::bin_ocr(_dicts[_curr_idx], sim, ocr_res);
-	}
-	return ImageBase::FindStrEx(ocr_res, vstr, sim, out_str);
-}
+//long ImageProc::FindStrEx(const wstring& str, const wstring& color, double sim, std::wstring& out_str) {
+//	out_str.clear();
+//	vector<wstring> vstr;
+//	vector<color_df_t> colors;
+//	split(str, vstr, L"|");
+//	if (str2colordfs(color, colors) == 0) {
+//		bgr2binary(colors);
+//	}
+//	else {
+//		bgr2binarybk(colors);
+//	}
+//	if (sim < 0. || sim > 1.)
+//		sim = 1.;
+//	std::map<point_t, ocr_rec_t> ocr_res;
+//	if (_dicts[_curr_idx].size() == 0) {
+//		vocr_rec_t res;
+//		OcrWrapper::getInstance()->ocr(_src.pdata, _src.width, _src.height, 4, res);
+//		for (auto& it : res) {
+//			if (it.confidence >= sim - 1e-9) {
+//				ocr_res[it.left_top] = it;
+//			}
+//		}
+//	}
+//	else {
+//		ImageBase::bin_ocr(_dicts[_curr_idx], sim, ocr_res);
+//	}
+//	return ImageBase::FindStrEx(ocr_res, vstr, sim, out_str);
+//}
 
 //long ImageProc::OcrAuto(double sim, std::wstring& retstr) {
 //	return OCR(L"", sim, retstr);

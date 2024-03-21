@@ -1,4 +1,4 @@
-//#include "stdafx.h"
+﻿//#include "stdafx.h"
 #include "ImageLoc.h"
 
 #include <assert.h>
@@ -133,8 +133,7 @@ ImageBase::ImageBase() : m_threadPool(std::thread::hardware_concurrency()) {
 
 }
 
-ImageBase::~ImageBase() {
-}
+ImageBase::~ImageBase() {}
 
 void ImageBase::set_offset(int x1, int y1) {
 	_x1 = x1;
@@ -207,7 +206,7 @@ static void gen_rangeyx(int dir, const opRange2D& range, opRange2D& out) {
 
 long ImageBase::FindColor(vector<color_df_t>& colors, int dir, long& x,
 	long& y) {
-	opRange2D rng = { 0,_src.width,0,_src.height,0,0 }, range;
+	opRange2D rng = {0,_src.width,0,_src.height,0,0}, range;
 	gen_rangeyx(dir, rng, range);
 	for (auto& it : colors) {  //对每个颜色描述
 
@@ -258,7 +257,7 @@ long ImageBase::FindMultiColor(std::vector<color_df_t>& first_color,
 	double sim, long dir, long& x, long& y) {
 	int max_err_ct = offset_color.size() * (1. - sim);
 	int err_ct;
-	opRange2D rng = { 0,_src.width,0,_src.height,0,0 }, range;
+	opRange2D rng = {0,_src.width,0,_src.height,0,0}, range;
 	gen_rangeyx(dir, rng, range);
 	for (int i = range.y1; i != range.y2; i += range.stepY) {
 		auto p = _src.ptr<color_t>(i);
@@ -299,7 +298,7 @@ long ImageBase::FindMultiColorEx(std::vector<color_df_t>& first_color,
 	int max_err_ct = offset_color.size() * (1. - sim);
 	int err_ct;
 	int find_ct = 0;
-	opRange2D rng = { 0,_src.width,0,_src.height,0,0 }, range;
+	opRange2D rng = {0,_src.width,0,_src.height,0,0}, range;
 	gen_rangeyx(dir, rng, range);
 
 	for (int i = range.y1; i != range.y2; i += range.stepY) {
@@ -358,7 +357,7 @@ long ImageBase::FindPic(std::vector<Image*>& pics, color_t dfcolor, double sim, 
 	_gray.fromImage4(_src);
 	record_sum(_gray);
 	int tnorm;
-	opRange2D rng = { 0,_src.width,0,_src.height,0,0 }, range;
+	opRange2D rng = {0,_src.width,0,_src.height,0,0}, range;
 	gen_rangeyx(dir, rng, range);
 	//将小循环放在最外面，提高处理速度
 	for (int pic_id = 0; pic_id < pics.size(); ++pic_id) {
@@ -509,7 +508,7 @@ long ImageBase::FindPicEx(std::vector<Image*>& pics, color_t dfcolor,
 					points, max_err_ct)
 					: real_match(j, i, &gimg, tnorm, sim));
 				if (match_ret) {
-					point_desc_t pd = { pic_id, point_t(j + _x1 + _dx, i + _y1 + _dy) };
+					point_desc_t pd = {pic_id, point_t(j + _x1 + _dx, i + _y1 + _dy)};
 
 					vpd.push_back(pd);
 					++obj_ct;
@@ -586,7 +585,7 @@ long ImageBase::FindPicExTh(std::vector<Image*>& pics, color_t dfcolor,
 			if (vp.size() > 0) {
 				for (auto& p : vp) {
 					if (obj_ct < _max_return_obj_ct) {
-						point_desc_t pd = { pic_id, p };
+						point_desc_t pd = {pic_id, p};
 
 						vpd.push_back(pd);
 						++obj_ct;
@@ -721,7 +720,7 @@ long ImageBase::FindStrEx(std::map<point_t, ocr_rec_t>& ps, const vector<wstring
 	// step 5. 回到第3步
 
 	retstr.clear();
-	
+
 	// setp 2.
 	wstring str;
 	for (auto& it : ps) {
@@ -744,7 +743,7 @@ long ImageBase::FindStrEx(std::map<point_t, ocr_rec_t>& ps, const vector<wstring
 				if (current_len < index + 1) continue;
 				if (it.second.text.find(str[index]) != -1) {
 					//记录坐标
-					wchar_t buff[20] = { 0 };
+					wchar_t buff[20] = {0};
 					//注意加偏移
 					wsprintf(buff, L"%d,%d,%d|", i, it.first.x + _x1 + _dx,
 						it.first.y + _y1 + _dy);
@@ -931,7 +930,7 @@ constexpr int MIN_CUT_W = 5;
 constexpr int MIN_CUT_H = 2;
 
 int ImageBase::get_bk_color(inputbin bin) {
-	int y[256] = { 0 };
+	int y[256] = {0};
 	auto ptr = bin.pixels.data();
 	int n = bin.pixels.size();
 	for (int i = 0; i < n; ++i) y[ptr[i]]++;
@@ -1280,7 +1279,7 @@ void ImageBase::_bin_ocr(const Dict& dict,
 	//将所有字库按照大小分成几类，对于每个大小根据像素密度查找对应的符合字库
 	auto makeinfo = [](int begin, int end, int szh, int szw) {
 		return std::make_pair(begin << 16 | end, szh << 8 | szw);
-	};
+		};
 	vector<std::pair<int, int>> dict_sz;
 	auto& vword = dict.words;
 	// 32 begin(8)

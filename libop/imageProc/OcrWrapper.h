@@ -1,13 +1,20 @@
 #pragma once
+
+#pragma warning(disable : 4267)
+
 #include "../core/optype.h"
 #include <mutex>
+#include <cstddef>
 #define ocr_engine_ok 0
 #define ocr_engine_err 1
+
+using std::byte;
+
 struct ocr_engine;
 struct ocr_engine_ocr_result {
-    int x1, y1, x2, y2;
-    char* text;
-    float confidence;
+	int x1, y1, x2, y2;
+	char* text;
+	float confidence;
 };
 
 typedef int(_stdcall* ocr_engine_init_t)(ocr_engine** obj, char* argv[], int argc);

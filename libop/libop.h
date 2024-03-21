@@ -3,6 +3,13 @@
 所有op的开放接口都从此cpp类衍生而出
 */
 #pragma once
+
+
+#pragma warning(disable : 4312)
+#pragma warning(disable : 4311)
+#pragma warning(disable : 4302)
+
+
 #include <string>
 //forward declare
 //class WinApi;
@@ -294,16 +301,16 @@ public:
 	//void Ocr(long x1, long y1, long x2, long y2, const wchar_t* color, double sim,std::wstring& ret_str);
 	//回识别到的字符串，以及每个字符的坐标.
 	//void OcrEx(long x1, long y1, long x2, long y2, const wchar_t* color, double sim, std::wstring& ret_str);
-	//在屏幕范围(x1,y1,x2,y2)内,查找string(可以是任意个字符串的组合),并返回符合color_format的坐标位置
-	void FindStr(long x1, long y1, long x2, long y2, const wchar_t* strs, const wchar_t* color, double sim, long* retx, long* rety, long* ret);
-	//返回符合color_format的所有坐标位置
-	void FindStrEx(long x1, long y1, long x2, long y2, const wchar_t* strs, const wchar_t* color, double sim, std::wstring& retstr);
-	//识别屏幕范围(x1,y1,x2,y2)内的字符串,自动二值化，而无需指定颜色
-	void OcrAuto(long x1, long y1, long x2, long y2, double sim, std::wstring& ret_str);
-	//从文件中识别图片
-	void OcrFromFile(const wchar_t* file_name, const wchar_t* color_format, double sim, std::wstring& retstr);
-	//从文件中识别图片,无需指定颜色
-	void OcrAutoFromFile(const wchar_t* file_name, double sim, std::wstring& retstr);
+	////在屏幕范围(x1,y1,x2,y2)内,查找string(可以是任意个字符串的组合),并返回符合color_format的坐标位置
+	//void FindStr(long x1, long y1, long x2, long y2, const wchar_t* strs, const wchar_t* color, double sim, long* retx, long* rety, long* ret);
+	////返回符合color_format的所有坐标位置
+	//void FindStrEx(long x1, long y1, long x2, long y2, const wchar_t* strs, const wchar_t* color, double sim, std::wstring& retstr);
+	////识别屏幕范围(x1,y1,x2,y2)内的字符串,自动二值化，而无需指定颜色
+	//void OcrAuto(long x1, long y1, long x2, long y2, double sim, std::wstring& ret_str);
+	////从文件中识别图片
+	//void OcrFromFile(const wchar_t* file_name, const wchar_t* color_format, double sim, std::wstring& retstr);
+	////从文件中识别图片,无需指定颜色
+	//void OcrAutoFromFile(const wchar_t* file_name, double sim, std::wstring& retstr);
 	//查找频幕中的直线
 	void FindLine(long x1, long y1, long x2, long y2, const wchar_t* color, double sim, std::wstring& retstr);
 

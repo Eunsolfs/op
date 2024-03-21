@@ -27,13 +27,10 @@
 //	
 //}
 //
-bkkeypad::bkkeypad():_hwnd(0),_mode(0)
-{
-}
+bkkeypad::bkkeypad() :_hwnd(0), _mode(0) {}
 //
 //
-bkkeypad::~bkkeypad()
-{
+bkkeypad::~bkkeypad() {
 	UnBind();
 }
 //
@@ -194,8 +191,8 @@ long bkkeypad::UnBind() {
 //}
 //
 //long bkkeypad::WaitKey(long vk_code, long time_out) {
-//	auto deadline = ::GetTickCount() + time_out;
-//	while (::GetTickCount() < deadline) {
+//	auto deadline = ::GetTickCount64() + time_out;
+//	while (::GetTickCount64() < deadline) {
 //		if (GetKeyState(vk_code))
 //			return 1;
 //		::Sleep(1);
