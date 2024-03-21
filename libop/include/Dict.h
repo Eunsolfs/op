@@ -2,6 +2,7 @@
 
 #pragma warning(disable : 4267)
 #pragma warning(disable : 4244)
+#pragma warning(disable : 4018)
 
 #ifndef __DICT_H_
 #define __DICT_H_

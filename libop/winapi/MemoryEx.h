@@ -1,13 +1,13 @@
-#pragma once
+﻿#pragma once
 
 #pragma warning(disable : 4267)
+#pragma warning(disable : 4018)
 
 #ifndef __MEMORYEX_H_
 #define __MEMORYEX_H_
 #include "./core/helpfunc.h"
 #include "BlackBone/Process/Process.h"
-class MemoryEx
-{
+class MemoryEx {
 public:
 	MemoryEx();
 	~MemoryEx();
@@ -17,8 +17,8 @@ public:
 	size_t str2address(const wstring& caddress);
 	bool mem_read(void* dst, size_t src, size_t size);
 	bool mem_write(size_t dst, void* src, size_t size);
-	void hex2bins(vector<uchar>&bin, const wstring& hex,size_t size);
-	void bin2hexs(const vector<uchar>&bin, wstring& hex);
+	void hex2bins(vector<uchar>& bin, const wstring& hex, size_t size);
+	void bin2hexs(const vector<uchar>& bin, wstring& hex);
 private:
 	blackbone::Process _proc;
 	HWND _hwnd;

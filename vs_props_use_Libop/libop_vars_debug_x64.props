@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="libop_Variables">
+    <libop_RootFolder>Y:\lib\op</libop_RootFolder>
+    <libop_IncludeDirectories>$(libop_RootFolder)\include;</libop_IncludeDirectories>
+    <libop_LibraryDirectories>$(libop_RootFolder)\lib;</libop_LibraryDirectories>
+    <libop_Libraries>libop_x64_Debug.lib;</libop_Libraries>
+  </PropertyGroup>
+</Project>
