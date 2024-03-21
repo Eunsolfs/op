@@ -2,7 +2,8 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ImportGroup Label="PropertySheets">
     <Import Project="libop_vars_debug_win32.props"/>
-  </ImportGroup>  <ItemDefinitionGroup>
+  </ImportGroup>
+  <ItemDefinitionGroup>
     <ClCompile>
       <AdditionalIncludeDirectories>$(libop_IncludeDirectories);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>

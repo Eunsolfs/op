@@ -78,8 +78,8 @@ struct word_t {
 		for (int j = 0; j < cols; ++j) {
 			for (int i = 0; i < 11; ++i) {
 				int idx = j * 11 + i;
-				if (GET_BIT(bin[idx >> 3], 7 - (idx & 7))) {
-					SET_BIT(clines[j], 31 - i);
+				if (GET_BIT_op(bin[idx >> 3], 7 - (idx & 7))) {
+					SET_BIT_op(clines[j], 31 - i);
 					++info.bit_count;
 				}
 
@@ -126,8 +126,8 @@ struct word1_t {
 
 		for (int x = 0; x < info.w; x++) {
 			for (int y = 0; y < info.h; y++) {
-				if (GET_BIT(wd.clines[x], 31 - y))
-					SET_BIT(data[idx / 8], idx & 7);
+				if (GET_BIT_op(wd.clines[x], 31 - y))
+					SET_BIT_op(data[idx / 8], idx & 7);
 				idx++;
 			}
 		}
@@ -314,7 +314,7 @@ struct Dict {
 			for (int i = rc.y1; i < y2; ++i) {
 				auto val = binary.at(i, j);
 				if (val == 1) {
-					SET_BIT(word.data[idx / 8], idx & 7);
+					SET_BIT_op(word.data[idx / 8], idx & 7);
 
 					++word.info.bit_cnt;
 				}

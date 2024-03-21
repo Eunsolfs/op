@@ -1182,7 +1182,7 @@ inline int full_match(const ImageBin& binary, rect_t& rc, const uint8_t* data) {
 	int idx = 0;
 	for (int x = rc.x1; x < rc.x2; ++x) {
 		for (int y = rc.y1; y < rc.y2; ++y) {
-			int val = GET_BIT(data[idx / 8], idx & 7);
+			int val = GET_BIT_op(data[idx / 8], idx & 7);
 			if (binary.at(y, x) != val) return 0;
 			idx++;
 		}
@@ -1197,7 +1197,7 @@ inline int part_match(const ImageBin& binary, rect_t& rc, int max_error,
 	int idx = 0;
 	for (int x = rc.x1; x < rc.x2; ++x) {
 		for (int y = rc.y1; y < rc.y2; ++y) {
-			int val = GET_BIT(data[idx / 8], idx & 7);
+			int val = GET_BIT_op(data[idx / 8], idx & 7);
 			if (binary.at(y, x) != val) {
 				++err_ct;
 				if (err_ct > max_error) return err_ct;

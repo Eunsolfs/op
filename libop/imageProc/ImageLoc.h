@@ -28,9 +28,9 @@ inline int HEX2INT(wchar_t c) {
 }
 
 
-#define SET_BIT(x, idx) (x |= 1u << (idx))
-
-#define GET_BIT(x, idx) ((x >> (idx)) & 1u)
+//#define SET_BIT(x, idx) (x |= 1u << (idx))
+//
+//#define GET_BIT(x, idx) ((x >> (idx)) & 1u)
 
 using img_names = std::vector<std::wstring>;
 //检查是否为透明图
