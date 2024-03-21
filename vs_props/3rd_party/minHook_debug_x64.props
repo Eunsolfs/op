@@ -1,33 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ImportGroup Label="PropertySheets">
+    <Import Project="minHook_vars_debug_x64.props"/>
   </ImportGroup>
-  <ImportGroup Label="PropertySheets">
-    <Import Project="BlackBone_vars_debug_x64.props"/>
-  </ImportGroup>
-  <PropertyGroup>
-    <ConanDebugPath>$(ConanluaBinaryDirectories);$(ConanDebugPath)</ConanDebugPath>
-    <LocalDebuggerEnvironment>PATH=$(ConanDebugPath);%PATH%</LocalDebuggerEnvironment>
-    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
-  </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
-      <AdditionalIncludeDirectories>$(ConanluaIncludeDirectories)%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>$(ConanluaPreprocessorDefinitions)%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalOptions>$(ConanluaCompilerFlags) %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>$(minHook_IncludeDirectories)%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>$(minHook_PreprocessorDefinitions)%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalOptions>$(minHook_CompilerFlags) %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>$(ConanluaLibraryDirectories)%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>$(ConanluaLibraries)%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalDependencies>$(ConanluaSystemLibs)%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalOptions>$(ConanluaLinkerFlags) %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalLibraryDirectories>$(minHook_LibraryDirectories)%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>$(minHook_Libraries)%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(minHook_SystemLibs)%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>$(minHook_LinkerFlags) %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <Midl>
-      <AdditionalIncludeDirectories>$(ConanluaIncludeDirectories)%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(minHook_IncludeDirectories)%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </Midl>
     <ResourceCompile>
-      <AdditionalIncludeDirectories>$(ConanluaIncludeDirectories)%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>$(ConanluaPreprocessorDefinitions)%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(minHook_IncludeDirectories)%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>$(minHook_PreprocessorDefinitions)%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
   </ItemDefinitionGroup>
 </Project>

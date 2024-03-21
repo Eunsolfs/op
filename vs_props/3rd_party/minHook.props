@@ -1,12 +1,12 @@
 <?xml version="1.0" ?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
 	<ImportGroup Label="PropertySheets">
-		<Import Condition="'$(Configuration)' == 'Release' And '$(Platform)' == 'Win32'" Project="BlackBone_release_win32.props"/>
-		<Import Condition="'$(Configuration)' == 'Debug' And '$(Platform)' == 'Win32'" Project="BlackBone_debug_win32.props"/>
-		<Import Condition="'$(Configuration)' == 'Release' And '$(Platform)' == 'x64'" Project="BlackBone_release_x64.props"/>
-		<Import Condition="'$(Configuration)' == 'Debug' And '$(Platform)' == 'x64'" Project="BlackBone_debug_x64.props"/>
+		<Import Condition="'$(Configuration)' == 'Release' And '$(Platform)' == 'Win32'" Project="minHook_release_win32.props"/>
+		<Import Condition="'$(Configuration)' == 'Debug' And '$(Platform)' == 'Win32'" Project="minHook_debug_win32.props"/>
+		<Import Condition="'$(Configuration)' == 'Release' And '$(Platform)' == 'x64'" Project="minHook_release_x64.props"/>
+		<Import Condition="'$(Configuration)' == 'Debug' And '$(Platform)' == 'x64'" Project="minHook_debug_x64.props"/>
 	</ImportGroup>
 	<PropertyGroup>
-		<BlackBone_props_imported>True</BlackBone_props_imported>
+		<minHook_props_imported>True</minHook_props_imported>
 	</PropertyGroup>
 </Project>

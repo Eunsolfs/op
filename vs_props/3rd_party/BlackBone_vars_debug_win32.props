@@ -7,7 +7,6 @@
     <BlackBone_LinkerFlags></BlackBone_LinkerFlags>
     <BlackBone_PreprocessorDefinitions></BlackBone_PreprocessorDefinitions>
     <BlackBone_IncludeDirectories>$(BlackBone_RootFolder)/src;</BlackBone_IncludeDirectories>
-    <BlackBone_ResourceDirectories></BlackBone_ResourceDirectories>
     <BlackBone_LibraryDirectories>$(BlackBone_RootFolder)/build/Win32/Debug;</BlackBone_LibraryDirectories>
     <BlackBone_Libraries>BlackBone.lib;</BlackBone_Libraries>
     <BlackBone_SystemLibs></BlackBone_SystemLibs>

@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Label="BlackBoneVariables">
-    <BlackBone_RootFolder>Y:/lib/Blackbone</BlackBone_RootFolder>
-    <BlackBone_BinaryDirectories></BlackBone_BinaryDirectories>
-    <BlackBone_CompilerFlags></BlackBone_CompilerFlags>
-    <BlackBone_LinkerFlags></BlackBone_LinkerFlags>
-    <BlackBone_PreprocessorDefinitions></BlackBone_PreprocessorDefinitions>
-    <BlackBone_IncludeDirectories>$(BlackBone_RootFolder)/src;</BlackBone_IncludeDirectories>
-    <BlackBone_ResourceDirectories></BlackBone_ResourceDirectories>
-    <BlackBone_LibraryDirectories>$(BlackBone_RootFolder)/build/x64/Debug;</BlackBone_LibraryDirectories>
-    <BlackBone_Libraries>BlackBone.lib;</BlackBone_Libraries>
-    <BlackBone_SystemLibs></BlackBone_SystemLibs>
+    <minHook_RootFolder>Y:/lib/Blackbone</minHook_RootFolder>
+    <minHook_BinaryDirectories></minHook_BinaryDirectories>
+    <minHook_CompilerFlags></minHook_CompilerFlags>
+    <minHook_LinkerFlags></minHook_LinkerFlags>
+    <minHook_PreprocessorDefinitions></minHook_PreprocessorDefinitions>
+    <minHook_IncludeDirectories>$(minHook_RootFolder)/src;</minHook_IncludeDirectories>
+    <minHook_ResourceDirectories></minHook_ResourceDirectories>
+    <minHook_LibraryDirectories>$(minHook_RootFolder)/build/x64/Debug;</minHook_LibraryDirectories>
+    <minHook_Libraries>BlackBone.lib;</minHook_Libraries>
+    <minHook_SystemLibs></minHook_SystemLibs>
   </PropertyGroup>
 </Project>

@@ -1,33 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ImportGroup Label="PropertySheets">
-  </ImportGroup>
-  <ImportGroup Label="PropertySheets">
     <Import Project="BlackBone_vars_release_x64.props"/>
   </ImportGroup>
-  <PropertyGroup>
-    <ConanDebugPath>$(ConanluaBinaryDirectories);$(ConanDebugPath)</ConanDebugPath>
-    <LocalDebuggerEnvironment>PATH=$(ConanDebugPath);%PATH%</LocalDebuggerEnvironment>
-    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
-  </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
-      <AdditionalIncludeDirectories>$(ConanluaIncludeDirectories)%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>$(ConanluaPreprocessorDefinitions)%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalOptions>$(ConanluaCompilerFlags) %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>$(BlackBone_IncludeDirectories)%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>$(BlackBone_PreprocessorDefinitions)%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalOptions>$(BlackBone_CompilerFlags) %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>$(ConanluaLibraryDirectories)%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>$(ConanluaLibraries)%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalDependencies>$(ConanluaSystemLibs)%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalOptions>$(ConanluaLinkerFlags) %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalLibraryDirectories>$(BlackBone_LibraryDirectories)%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>$(BlackBone_Libraries)%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>$(BlackBone_LinkerFlags) %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <Midl>
-      <AdditionalIncludeDirectories>$(ConanluaIncludeDirectories)%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(BlackBone_IncludeDirectories)%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </Midl>
     <ResourceCompile>
-      <AdditionalIncludeDirectories>$(ConanluaIncludeDirectories)%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>$(ConanluaPreprocessorDefinitions)%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(BlackBone_IncludeDirectories)%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>$(BlackBone_PreprocessorDefinitions)%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
   </ItemDefinitionGroup>
 </Project>
