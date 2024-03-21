@@ -7,9 +7,6 @@
     <Filter Include="libop\algorithm">
       <UniqueIdentifier>{f1498b8c-7bcb-4c03-973c-5309fc793a50}</UniqueIdentifier>
     </Filter>
-    <Filter Include="libop\com">
-      <UniqueIdentifier>{2cfceb23-7854-4122-abaf-e0ac38fce193}</UniqueIdentifier>
-    </Filter>
     <Filter Include="libop\core">
       <UniqueIdentifier>{6c3d05a2-f251-41b0-9d81-85d1a88cdfcf}</UniqueIdentifier>
     </Filter>
@@ -95,24 +92,6 @@
     </ClInclude>
     <ClInclude Include="libop\background\mouse\opMouseWin.h">
       <Filter>libop\background\mouse</Filter>
-    </ClInclude>
-    <ClInclude Include="libop\com\compreg.h">
-      <Filter>libop\com</Filter>
-    </ClInclude>
-    <ClInclude Include="libop\com\dllmain.h">
-      <Filter>libop\com</Filter>
-    </ClInclude>
-    <ClInclude Include="libop\com\OpInterface.h">
-      <Filter>libop\com</Filter>
-    </ClInclude>
-    <ClInclude Include="libop\com\resource.h">
-      <Filter>libop\com</Filter>
-    </ClInclude>
-    <ClInclude Include="libop\com\stdafx.h">
-      <Filter>libop\com</Filter>
-    </ClInclude>
-    <ClInclude Include="libop\com\targetver.h">
-      <Filter>libop\com</Filter>
     </ClInclude>
     <ClInclude Include="libop\core\Cmder.h">
       <Filter>libop\core</Filter>
@@ -227,18 +206,6 @@
     <ClCompile Include="libop\background\mouse\opMouseWin.cpp">
       <Filter>libop\background\mouse</Filter>
     </ClCompile>
-    <ClCompile Include="libop\com\dllmain.cpp">
-      <Filter>libop\com</Filter>
-    </ClCompile>
-    <ClCompile Include="libop\com\op.cpp">
-      <Filter>libop\com</Filter>
-    </ClCompile>
-    <ClCompile Include="libop\com\OpInterface.cpp">
-      <Filter>libop\com</Filter>
-    </ClCompile>
-    <ClCompile Include="libop\com\stdafx.cpp">
-      <Filter>libop\com</Filter>
-    </ClCompile>
     <ClCompile Include="libop\core\globalVar.cpp">
       <Filter>libop\core</Filter>
     </ClCompile>
@@ -283,27 +250,5 @@
     <None Include="libop\background\Hook\dinput.md">
       <Filter>libop\background\Hook</Filter>
     </None>
-    <None Include="libop\com\op.def">
-      <Filter>libop\com</Filter>
-    </None>
-    <None Include="libop\com\op.rgs">
-      <Filter>libop\com</Filter>
-    </None>
-    <None Include="libop\com\OpInterface.rgs">
-      <Filter>libop\com</Filter>
-    </None>
-    <None Include="libop\com\opps.def">
-      <Filter>libop\com</Filter>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Midl Include="libop\com\op.idl">
-      <Filter>libop\com</Filter>
-    </Midl>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="libop\com\op.rc">
-      <Filter>libop\com</Filter>
-    </ResourceCompile>
   </ItemGroup>
 </Project>

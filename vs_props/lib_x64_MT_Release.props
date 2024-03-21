@@ -12,7 +12,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
-      <RuntimeLibrary>$(LIB_Debug_RuntimeLibrary)</RuntimeLibrary>
+      <RuntimeLibrary>$(LIB_Release_RuntimeLibrary)</RuntimeLibrary>
       <LanguageStandard>$(LIB_LanguageStandard)</LanguageStandard>
       <LanguageStandard_C>$(LIB_LanguageStandard_C)</LanguageStandard_C>
       <ProgramDataBaseFileName>$(LIB_ProgramDataBaseFileName)</ProgramDataBaseFileName>
