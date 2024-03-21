@@ -227,9 +227,6 @@
     <ClCompile Include="libop\background\mouse\opMouseWin.cpp">
       <Filter>libop\background\mouse</Filter>
     </ClCompile>
-    <ClCompile Include="libop\com\compreg.cpp">
-      <Filter>libop\com</Filter>
-    </ClCompile>
     <ClCompile Include="libop\com\dllmain.cpp">
       <Filter>libop\com</Filter>
     </ClCompile>
@@ -265,9 +262,6 @@
     </ClCompile>
     <ClCompile Include="libop\imageProc\tess_ocr.cpp">
       <Filter>libop\imageProc</Filter>
-    </ClCompile>
-    <ClCompile Include="libop\imageProc\compute\ThreadPool.cpp">
-      <Filter>libop\imageProc\compute</Filter>
     </ClCompile>
     <ClCompile Include="libop\winapi\Injecter.cpp">
       <Filter>libop\winapi</Filter>

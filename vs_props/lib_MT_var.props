@@ -5,7 +5,7 @@
     <LIB_OutDir>$(ProjectDir)lib\</LIB_OutDir>
     <LIB_IntDir>$(ProjectDir)tmp\$(PlatformName)\$(RootNamespace)\$(Configuration)\</LIB_IntDir>
     <LIB_TargetName>$(RootNamespace)_$(PlatformName)_$(Configuration)</LIB_TargetName>
-    <LIB_IncludePath>$(ProjectDir);$(ProjectDir)include;$(ProjectDir)3rd_party;$(ProjectDir)3rd_party/include;$(ProjectDir)libop;$(ProjectDir)libop/core;$(ProjectDir)libop/algorithm;$(ProjectDir)libop/background;$(ProjectDir)libop/imageProc;$(ProjectDir)libop/include;$(ProjectDir)libop/winapi;$(IncludePath)</LIB_IncludePath>
+    <LIB_IncludePath>$(ProjectDir);$(ProjectDir)include;$(ProjectDir)3rd_party;$(ProjectDir)3rd_party/include;$(ProjectDir)libop;$(ProjectDir)libop/core;$(ProjectDir)libop/com;$(ProjectDir)libop/algorithm;$(ProjectDir)libop/background;$(ProjectDir)libop/imageProc;$(ProjectDir)libop/include;$(ProjectDir)libop/winapi;$(IncludePath)</LIB_IncludePath>
     <LIB_TargetExt>.lib</LIB_TargetExt>
     <!--ClCompile-->
     <LIB_Debug_RuntimeLibrary>MultiThreadedDebug</LIB_Debug_RuntimeLibrary>

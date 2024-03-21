@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Label="minHook_Variables">
-    <minHook_RootFolder>$(ProjectDir)/3rd_party/include</minHook_RootFolder>
+    <minHook_RootFolder>$(ProjectDir)3rd_party/include</minHook_RootFolder>
     <minHook_IncludeDirectories>$(minHook_RootFolder)/src;</minHook_IncludeDirectories>
-    <minHook_LibraryDirectories>$(ProjectDir)/3rd_party/lib/x86;</minHook_LibraryDirectories>
+    <minHook_LibraryDirectories>$(ProjectDir)3rd_party/lib/x86;</minHook_LibraryDirectories>
     <minHook_Libraries>minhook.lib;</minHook_Libraries>
   </PropertyGroup>
 </Project>

@@ -1,4 +1,4 @@
-// DXGIDuplicator.cpp
+ï»¿// DXGIDuplicator.cpp
 
 #include "opDXGI.h"
 #include "./core/globalVar.h"
@@ -109,7 +109,7 @@ bool opDXGI::requestCapture(int x1, int y1, int w, int h, Image& img) {
 	_pmutex->lock();
 	uchar* pshare = _shmem->data<byte>();
 	
-	//½«Êı¾İ¿½±´µ½Ä¿±ê
+	//å°†æ•°æ®æ‹·è´åˆ°ç›®æ ‡
 	for (int i = 0; i < h; i++) {
 		//memcpy(img.ptr<uchar>(i), pDest + (desc.Height - 1 - i - src_y) * 4 * desc.Width + src_x * 4,
 			//4 * w);

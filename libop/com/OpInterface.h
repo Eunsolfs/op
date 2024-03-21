@@ -28,31 +28,27 @@ using namespace ATL;
 class ATL_NO_VTABLE OpInterface :
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<OpInterface, &CLSID_OpInterface>,
-	public IDispatchImpl<IOpInterface, &IID_IOpInterface, &LIBID_opLib, /*wMajor =*/ 1, /*wMinor =*/ 0>
-{
+	public IDispatchImpl<IOpInterface, &IID_IOpInterface, &LIBID_opLib, /*wMajor =*/ 1, /*wMinor =*/ 0> {
 public:
 	OpInterface();
 
-DECLARE_REGISTRY_RESOURCEID(106)
+	DECLARE_REGISTRY_RESOURCEID(106)
 
 
-BEGIN_COM_MAP(OpInterface)
-	COM_INTERFACE_ENTRY(IOpInterface)
-	COM_INTERFACE_ENTRY(IDispatch)
-END_COM_MAP()
+	BEGIN_COM_MAP(OpInterface)
+		COM_INTERFACE_ENTRY(IOpInterface)
+		COM_INTERFACE_ENTRY(IDispatch)
+	END_COM_MAP()
 
 
 
 	DECLARE_PROTECT_FINAL_CONSTRUCT()
 
-	HRESULT FinalConstruct()
-	{
+	HRESULT FinalConstruct() {
 		return S_OK;
 	}
 
-	void FinalRelease()
-	{
-	}
+	void FinalRelease() {}
 private:
 	////一些共用变量
 
@@ -78,7 +74,7 @@ public:
 	//设置目录
 	STDMETHOD(SetPath)(BSTR path, LONG* ret);
 	//获取目录
-	STDMETHOD(GetPath)(BSTR*path);
+	STDMETHOD(GetPath)(BSTR* path);
 	//获取插件目录
 	STDMETHOD(GetBasePath)(BSTR* path);
 	//
@@ -87,19 +83,19 @@ public:
 	STDMETHOD(GetLastError)(LONG* ret);
 	//设置是否弹出错误信息,默认是打开 0为关闭，1为显示为信息框，2为保存到文件
 	STDMETHOD(SetShowErrorMsg)(LONG show_type, LONG* ret);
-	
+
 	//sleep
 	STDMETHOD(Sleep)(LONG millseconds, LONG* ret);
 	//Process
 	//inject dll
-	STDMETHOD(InjectDll)(BSTR process_name,BSTR dll_name, LONG* ret);
+	STDMETHOD(InjectDll)(BSTR process_name, BSTR dll_name, LONG* ret);
 	//设置是否开启或者关闭插件内部的图片缓存机制
 	STDMETHOD(EnablePicCache)(LONG enable, LONG* ret);
 	//取上次操作的图色区域，保存为file(24位位图)
 	STDMETHOD(CapturePre)(BSTR file_name, LONG* ret);
 	//---------------------algorithm-------------------------------
 	//A星算法
-	STDMETHOD(AStarFindPath)(LONG mapWidth,LONG mapHeight,BSTR disable_points,LONG beginX,LONG beginY, LONG endX,LONG endY,BSTR* path);
+	STDMETHOD(AStarFindPath)(LONG mapWidth, LONG mapHeight, BSTR disable_points, LONG beginX, LONG beginY, LONG endX, LONG endY, BSTR* path);
 	//根据部分Ex接口的返回值，然后在所有坐标里找出距离指定坐标最近的那个坐标.
 	STDMETHOD(FindNearestPos)(BSTR all_pos, LONG type, LONG x, LONG y, BSTR* retstr);
 	//--------------------windows api------------------------------
@@ -175,18 +171,18 @@ public:
 	STDMETHOD(WinExec)(BSTR cmdline, LONG cmdshow, LONG* ret);
 
 	//运行命令行并返回结果
-	STDMETHOD(GetCmdStr)(BSTR cmd,LONG millseconds, BSTR* retstr);
-    //设置剪贴板数据
+	STDMETHOD(GetCmdStr)(BSTR cmd, LONG millseconds, BSTR* retstr);
+	//设置剪贴板数据
 	STDMETHOD(SetClipboard)(BSTR str, LONG* ret);
 	//获取剪贴板数据
 	STDMETHOD(GetClipboard)(BSTR* ret);
 	//延时指定的毫秒,过程中不阻塞UI操作
 	STDMETHOD(Delay)(LONG mis, LONG* ret);
 	//延时指定范围内随机毫秒,过程中不阻塞UI操作
-	STDMETHOD(Delays)(LONG mis_min,LONG mis_max, LONG* ret);
+	STDMETHOD(Delays)(LONG mis_min, LONG mis_max, LONG* ret);
 	//--------------------Background -----------------------
 	//bind window and beign capture screen
-	STDMETHOD(BindWindow)(LONG hwnd, BSTR display, BSTR mouse, BSTR keypad, LONG mode,LONG *ret);
+	STDMETHOD(BindWindow)(LONG hwnd, BSTR display, BSTR mouse, BSTR keypad, LONG mode, LONG* ret);
 	//
 	STDMETHOD(UnBindWindow)(LONG* ret);
 	//获取当前对象已经绑定的窗口句柄. 无绑定返回0
@@ -201,7 +197,7 @@ public:
 	//把鼠标移动到目的点(x,y)
 	STDMETHOD(MoveTo)(LONG x, LONG y, LONG* ret);
 	//把鼠标移动到目的范围内的任意一点
-	STDMETHOD(MoveToEx)(LONG x, LONG y,LONG w,LONG h, LONG* ret);
+	STDMETHOD(MoveToEx)(LONG x, LONG y, LONG w, LONG h, LONG* ret);
 	//按下鼠标左键
 	STDMETHOD(LeftClick)(LONG* ret);
 	//双击鼠标左键
@@ -226,7 +222,7 @@ public:
 	STDMETHOD(WheelDown)(LONG* ret);
 	//滚轮向上滚
 	STDMETHOD(WheelUp)(LONG* ret);
-    //设置鼠标单击或者双击时,鼠标按下和弹起的时间间隔
+	//设置鼠标单击或者双击时,鼠标按下和弹起的时间间隔
 	STDMETHOD(SetMouseDelay)(BSTR type, LONG delay, LONG* ret);
 	//获取指定的按键状态.(前台信息,不是后台)
 	STDMETHOD(GetKeyState)(LONG vk_code, LONG* ret);
@@ -239,37 +235,37 @@ public:
 	//弹起来虚拟键vk_code
 	STDMETHOD(KeyUpChar)(BSTR vk_code, LONG* ret);
 	//等待指定的按键按下 (前台,不是后台)
-	STDMETHOD(WaitKey)(LONG vk_code,LONG time_out, LONG* ret);
+	STDMETHOD(WaitKey)(LONG vk_code, LONG time_out, LONG* ret);
 	//发送字符串
 	//STDMETHOD(SendString)(LONG HWND)
 	//弹起来虚拟键vk_code
 	STDMETHOD(KeyPress)(LONG vk_code, LONG* ret);
 	STDMETHOD(KeyPressChar)(BSTR vk_code, LONG* ret);
 	//设置按键时,键盘按下和弹起的时间间隔
-    STDMETHOD(SetKeypadDelay)(BSTR type, LONG delay, LONG* ret);
-    //根据指定的字符串序列，依次按顺序按下其中的字符
+	STDMETHOD(SetKeypadDelay)(BSTR type, LONG delay, LONG* ret);
+	//根据指定的字符串序列，依次按顺序按下其中的字符
 	STDMETHOD(KeyPressStr)(BSTR key_str, LONG delay, LONG* ret);
 	//--------------------image and color-----------------------
 	//抓取指定区域(x1, y1, x2, y2)的图像, 保存为file
 	STDMETHOD(Capture)(LONG x1, LONG y1, LONG x2, LONG y2, BSTR file_name, LONG* ret);
 	//比较指定坐标点(x,y)的颜色
-	STDMETHOD(CmpColor)(LONG x, LONG y,BSTR color,DOUBLE sim, LONG* ret);
+	STDMETHOD(CmpColor)(LONG x, LONG y, BSTR color, DOUBLE sim, LONG* ret);
 	//查找指定区域内的颜色
-	STDMETHOD(FindColor)(LONG x1, LONG y1, LONG x2, LONG y2, BSTR color,DOUBLE sim,LONG dir, VARIANT* x, VARIANT* y, LONG* ret);
+	STDMETHOD(FindColor)(LONG x1, LONG y1, LONG x2, LONG y2, BSTR color, DOUBLE sim, LONG dir, VARIANT* x, VARIANT* y, LONG* ret);
 	//查找指定区域内的所有颜色
-	STDMETHOD(FindColorEx)(LONG x1, LONG y1, LONG x2, LONG y2, BSTR color, DOUBLE sim,LONG dir, BSTR* retstr);
+	STDMETHOD(FindColorEx)(LONG x1, LONG y1, LONG x2, LONG y2, BSTR color, DOUBLE sim, LONG dir, BSTR* retstr);
 	//根据指定的多点查找颜色坐标
 	STDMETHOD(FindMultiColor)(LONG x1, LONG y1, LONG x2, LONG y2, BSTR first_color, BSTR offset_color, DOUBLE sim, LONG dir, VARIANT* x, VARIANT* y, LONG* ret);
 	//根据指定的多点查找所有颜色坐标
-	STDMETHOD(FindMultiColorEx)(LONG x1, LONG y1, LONG x2, LONG y2, BSTR first_color, BSTR offset_color, DOUBLE sim, LONG dir,BSTR* retstr);
+	STDMETHOD(FindMultiColorEx)(LONG x1, LONG y1, LONG x2, LONG y2, BSTR first_color, BSTR offset_color, DOUBLE sim, LONG dir, BSTR* retstr);
 	//查找指定区域内的图片
-	STDMETHOD(FindPic)(LONG x1,LONG y1,LONG x2,LONG y2,BSTR files, BSTR delta_color,DOUBLE sim,LONG dir,VARIANT* x,VARIANT* y,LONG* ret);
+	STDMETHOD(FindPic)(LONG x1, LONG y1, LONG x2, LONG y2, BSTR files, BSTR delta_color, DOUBLE sim, LONG dir, VARIANT* x, VARIANT* y, LONG* ret);
 	//查找多个图片
-	STDMETHOD(FindPicEx)(LONG x1, LONG y1, LONG x2, LONG y2, BSTR files, BSTR delta_color, DOUBLE sim, LONG dir,BSTR* retstr);
+	STDMETHOD(FindPicEx)(LONG x1, LONG y1, LONG x2, LONG y2, BSTR files, BSTR delta_color, DOUBLE sim, LONG dir, BSTR* retstr);
 	//这个函数可以查找多个图片, 并且返回所有找到的图像的坐标.此函数同FindPicEx.只是返回值不同.(file1,x,y|file2,x,y|...)
 	STDMETHOD(FindPicExS)(LONG x1, LONG y1, LONG x2, LONG y2, BSTR files, BSTR delta_color, DOUBLE sim, LONG dir, BSTR* retstr);
 	//查找指定区域内的颜色块,颜色格式"RRGGBB-DRDGDB",注意,和按键的颜色格式相反
-	STDMETHOD(FindColorBlock)(LONG x1, LONG y1, LONG x2, LONG y2, BSTR color,DOUBLE sim, LONG count,LONG height,LONG width, VARIANT* x, VARIANT* y, LONG* ret);
+	STDMETHOD(FindColorBlock)(LONG x1, LONG y1, LONG x2, LONG y2, BSTR color, DOUBLE sim, LONG count, LONG height, LONG width, VARIANT* x, VARIANT* y, LONG* ret);
 	//查找指定区域内的所有颜色块, 颜色格式"RRGGBB-DRDGDB", 注意, 和按键的颜色格式相反
 	STDMETHOD(FindColorBlockEx)(LONG x1, LONG y1, LONG x2, LONG y2, BSTR color, DOUBLE sim, LONG count, LONG height, LONG width, BSTR* ret);
 	//对插件部分接口的返回值进行解析,并返回ret中的坐标个数
@@ -282,35 +278,37 @@ public:
 	STDMETHOD(SetDisplayInput)(BSTR mode, LONG* ret);
 	STDMETHOD(LoadPic)(BSTR pic_name, LONG* ret);
 	STDMETHOD(FreePic)(BSTR pic_name, LONG* ret);
-	STDMETHOD(LoadMemPic)(BSTR pic_name, long long data , LONG size, LONG* ret);
+	STDMETHOD(LoadMemPic)(BSTR pic_name, long long data, LONG size, LONG* ret);
 	//获取指定区域的图像,用二进制数据的方式返回
-	STDMETHOD(GetScreenData)(LONG x1, LONG y1, LONG x2, LONG y2,LONG* ret);
+	STDMETHOD(GetScreenData)(LONG x1, LONG y1, LONG x2, LONG y2, LONG* ret);
 	//获取指定区域的图像,用24位位图的数据格式返回,方便二次开发.（或者可以配合SetDisplayInput的mem模式）
-	STDMETHOD(GetScreenDataBmp)(LONG x1, LONG y1, LONG x2, LONG y2, VARIANT* data, VARIANT* size,LONG* ret);
+	STDMETHOD(GetScreenDataBmp)(LONG x1, LONG y1, LONG x2, LONG y2, VARIANT* data, VARIANT* size, LONG* ret);
 	//根据通配符获取文件集合. 方便用于FindPic和FindPicEx
 	STDMETHOD(MatchPicName)(BSTR pic_name, BSTR* ret);
-	
+
 	//----------------------ocr-------------------------
 	//设置字库文件
 	STDMETHOD(SetDict)(LONG idx, BSTR file_name, LONG* ret);
 	//设置内存字库文件
 	STDMETHOD(SetMemDict)(LONG idx, BSTR data, LONG size, LONG* ret);
 	//使用哪个字库文件进行识别
-	STDMETHOD(UseDict)(LONG idx,  LONG* ret);
-	//识别屏幕范围(x1,y1,x2,y2)内符合color_format的字符串,并且相似度为sim,sim取值范围(0.1-1.0),
-	STDMETHOD(Ocr)(LONG x1, LONG y1, LONG x2, LONG y2, BSTR color, DOUBLE sim,BSTR* ret_str);
-	//回识别到的字符串，以及每个字符的坐标.
-	STDMETHOD(OcrEx)(LONG x1, LONG y1, LONG x2, LONG y2, BSTR color, DOUBLE sim, BSTR* ret_str);
-	//在屏幕范围(x1,y1,x2,y2)内,查找string(可以是任意个字符串的组合),并返回符合color_format的坐标位置
-	STDMETHOD(FindStr)(LONG x1, LONG y1, LONG x2, LONG y2,BSTR strs, BSTR color, DOUBLE sim, VARIANT* retx,VARIANT* rety,LONG* ret);
-	//返回符合color_format的所有坐标位置
-	STDMETHOD(FindStrEx)(LONG x1, LONG y1, LONG x2, LONG y2, BSTR strs, BSTR color, DOUBLE sim,BSTR* retstr);
-	//识别屏幕范围(x1,y1,x2,y2)内的字符串,使用tesseract库识别
-	STDMETHOD(OcrAuto)(LONG x1, LONG y1, LONG x2, LONG y2, DOUBLE sim, BSTR* ret_str);
-	//从文件中识别图片
-	STDMETHOD(OcrFromFile)(BSTR file_name,BSTR color_format, DOUBLE sim, BSTR* retstr);
-	//从文件中识别图片,使用tesseract库识别
-	STDMETHOD(OcrAutoFromFile)(BSTR file_name, DOUBLE sim, BSTR* retstr);
+	STDMETHOD(UseDict)(LONG idx, LONG* ret);
+
+	////识别屏幕范围(x1,y1,x2,y2)内符合color_format的字符串,并且相似度为sim,sim取值范围(0.1-1.0),
+	//STDMETHOD(Ocr)(LONG x1, LONG y1, LONG x2, LONG y2, BSTR color, DOUBLE sim,BSTR* ret_str);
+	////回识别到的字符串，以及每个字符的坐标.
+	//STDMETHOD(OcrEx)(LONG x1, LONG y1, LONG x2, LONG y2, BSTR color, DOUBLE sim, BSTR* ret_str);
+	////在屏幕范围(x1,y1,x2,y2)内,查找string(可以是任意个字符串的组合),并返回符合color_format的坐标位置
+	//STDMETHOD(FindStr)(LONG x1, LONG y1, LONG x2, LONG y2,BSTR strs, BSTR color, DOUBLE sim, VARIANT* retx,VARIANT* rety,LONG* ret);
+	////返回符合color_format的所有坐标位置
+	//STDMETHOD(FindStrEx)(LONG x1, LONG y1, LONG x2, LONG y2, BSTR strs, BSTR color, DOUBLE sim,BSTR* retstr);
+	////识别屏幕范围(x1,y1,x2,y2)内的字符串,使用tesseract库识别
+	//STDMETHOD(OcrAuto)(LONG x1, LONG y1, LONG x2, LONG y2, DOUBLE sim, BSTR* ret_str);
+	////从文件中识别图片
+	//STDMETHOD(OcrFromFile)(BSTR file_name,BSTR color_format, DOUBLE sim, BSTR* retstr);
+	////从文件中识别图片,使用tesseract库识别
+	//STDMETHOD(OcrAutoFromFile)(BSTR file_name, DOUBLE sim, BSTR* retstr);
+
 	//查找频幕中的直线
 	STDMETHOD(FindLine)(LONG x1, LONG y1, LONG x2, LONG y2, BSTR color, DOUBLE sim, BSTR* retstr);
 

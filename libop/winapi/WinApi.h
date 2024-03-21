@@ -4,8 +4,18 @@
 #pragma warning(disable : 4477)
 #pragma warning(disable : 4313)
 #pragma warning(disable : 4312)
+#pragma warning(disable : 4311)
+#pragma warning(disable : 4302)
 #pragma warning(disable : 4018)
 #pragma warning(disable : 4267)
+#pragma warning(disable : 4805)
+#pragma warning(disable : 6273)
+#pragma warning(disable : 6262)
+#pragma warning(disable : 6387)
+#pragma warning(disable : 28183)
+#pragma warning(disable : 6011)
+#pragma warning(disable : 6387)
+#pragma warning(disable : 4244)
 
 #ifndef __WINAPI_H_
 #define __WINAPI_JH_

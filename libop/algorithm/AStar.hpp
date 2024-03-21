@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include<list>
 #include <set>
@@ -94,7 +94,7 @@ public:
 			if (curr_node.pos == _end) {//get it!
 				break;
 			}
-			//Éú³ÉËùÓĞÏàÁÚ½Úµã
+			//ç”Ÿæˆæ‰€æœ‰ç›¸é‚»èŠ‚ç‚¹
 			Node temp;
 			for (int i = 0; i < 8; ++i) {
 				temp.pos = curr_node.pos + _dir4[i];
@@ -108,13 +108,13 @@ public:
 				if (outside(temp.pos))
 					continue;
 				auto it = _openset.find(temp);
-				//Èç¹û½Úµã²»ÔÚ¿ª·Å½Úµã
+				//å¦‚æœèŠ‚ç‚¹ä¸åœ¨å¼€æ”¾èŠ‚ç‚¹
 				if (it == _openset.end()) {
 					temp.parent = (Node*)&(*_closedset.find(curr_node));
 					_openset.insert(temp);
 				}
 				else {
-					//¸üĞÂ¿ª·Å½Úµã
+					//æ›´æ–°å¼€æ”¾èŠ‚ç‚¹
 					if (it->F > temp.F) {
 						auto ptr = (Node*)&(*it);
 						ptr->F = temp.F;
@@ -122,7 +122,7 @@ public:
 				}
 			}
 		}
-		//»ñÈ¡Â·¾¶
+		//è·å–è·¯å¾„
 		curr_node.pos = _end;
 		auto endit = _closedset.find(curr_node);
 		if (endit != _closedset.end()) {
@@ -142,16 +142,16 @@ public:
 private:
 	//Eigen::
 	Vec2i _start, _end;
-	//µØÍ¼´óĞ¡
+	//åœ°å›¾å¤§å°
 	Vec2i _mapSize;
-	//¿ª·Å½Úµã
+	//å¼€æ”¾èŠ‚ç‚¹
 	set<Node, Nodeless> _openset;
 	set<Node, Nodeless> _closedset;
-	//Ç½½Úµã
+	//å¢™èŠ‚ç‚¹
 	set<Vec2i, Vec2less> _wallset;
-	//Â·¾¶½Úµã
+	//è·¯å¾„èŠ‚ç‚¹
 	set<Vec2i, Vec2less> _pathset;
-	//·½Ïò
+	//æ–¹å‘
 	Vec2i const  _dir4[8] = { {0,1},{0,-1},{-1,0},{1,0},{1,1},{-1,1},{-1,-1},{1,-1} };
 private:
 };

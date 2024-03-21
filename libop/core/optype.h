@@ -1,7 +1,6 @@
 #pragma once
 #ifndef __optype_h_
 #define __optype_h_
-#define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
 #include <assert.h>
 

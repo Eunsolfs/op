@@ -1,4 +1,4 @@
-
+ï»¿
 #include <winrt/Windows.Foundation.Collections.h>
 #include <winrt/Windows.Gaming.Input.h>
 #include <iostream>
@@ -212,9 +212,9 @@ bool opWGC::Init(HWND _hwnd)
 			winrt::to_hresult().value);
 		return false;
 	}
-	//ÒÔÏÂ´úÂë»ñÈ¡´°¿Ú´óĞ¡£¬²¢´ÓĞÂ³õÊ¼»¯¹²ÏíÄÚ´æ¡£  GetWindowRec·½Ê½»ñÈ¡µÄ²»×¼£¬Ëõ·ÅÊ±
+	//ä»¥ä¸‹ä»£ç è·å–çª—å£å¤§å°ï¼Œå¹¶ä»æ–°åˆå§‹åŒ–å…±äº«å†…å­˜ã€‚  GetWindowRecæ–¹å¼è·å–çš„ä¸å‡†ï¼Œç¼©æ”¾æ—¶
 	Direct3D11CaptureFrame frame = {nullptr};
-	//´°¿Ú×îĞ¡»¯Ê±£¬¿ÉÄÜ»ñÈ¡²»µ½£¬ ×î¿ªÊ¼µÄÊ±ºòÒ²»ñÈ¡²»µ½£¬ ³¢ÊÔ20´Î£¬Èç¹û³¢ÊÔ²»³É¹¦¾Í°ó¶¨Ê§°Ü
+	//çª—å£æœ€å°åŒ–æ—¶ï¼Œå¯èƒ½è·å–ä¸åˆ°ï¼Œ æœ€å¼€å§‹çš„æ—¶å€™ä¹Ÿè·å–ä¸åˆ°ï¼Œ å°è¯•20æ¬¡ï¼Œå¦‚æœå°è¯•ä¸æˆåŠŸå°±ç»‘å®šå¤±è´¥
 	int i = 20;
 	while (!frame && i > 0)
 	{
@@ -233,7 +233,7 @@ bool opWGC::Init(HWND _hwnd)
 	frame_surface->GetDesc(&desc);
 	_width = desc.Width;
 	_height = desc.Height;
-	//´ÓĞÂ³õÊ¼»¯¹²ÏíÄÚ´æ
+	//ä»æ–°åˆå§‹åŒ–å…±äº«å†…å­˜
 	SAFE_DELETE(_shmem);
 	SAFE_DELETE(_pmutex);
 
@@ -312,7 +312,7 @@ bool opWGC::requestCapture(int x1, int y1, int w, int h, Image& img) {
 	_pmutex->lock();
 	uchar* pshare = _shmem->data<byte>();
 
-	//½«Êı¾İ¿½±´µ½Ä¿±ê
+	//å°†æ•°æ®æ‹·è´åˆ°ç›®æ ‡
 	for (int i = 0; i < h; i++) {
 		memcpy(img.ptr<uchar>(i), pDest + (y1 + i) * 4 * desc.Width + x1 * 4, 4 * w);
 	}

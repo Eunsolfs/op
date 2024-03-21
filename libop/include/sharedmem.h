@@ -3,18 +3,16 @@
 
 #pragma warning(disable : 4267)
 
-#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <string>
 using std::wstring;
-class sharedmem
-{
+class sharedmem {
 public:
-	explicit sharedmem(const wstring& name_,size_t size_):_hmap(nullptr),_paddress(nullptr),_ismaped(0){
+	explicit sharedmem(const wstring& name_, size_t size_) :_hmap(nullptr), _paddress(nullptr), _ismaped(0) {
 		open_create(name_, size_);
 
 	}
-	sharedmem() :_hmap(nullptr),_paddress(nullptr), _ismaped(0) {
+	sharedmem() :_hmap(nullptr), _paddress(nullptr), _ismaped(0) {
 
 	}
 	~sharedmem() {
@@ -27,14 +25,14 @@ public:
 			temph = CreateFileMappingW(INVALID_HANDLE_VALUE, NULL, PAGE_READWRITE, 0, size_, name_.data());
 			if (!temph)
 				return false;
-			
+
 		}
 		_hmap = temph;
 		if (!_ismaped)
 			_paddress = MapViewOfFile(_hmap, FILE_MAP_ALL_ACCESS, 0, 0, 0);
 		_ismaped = 1;
 		return true;
-		
+
 	}
 	/*open only*/
 	bool open(const wstring& name_) {

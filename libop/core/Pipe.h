@@ -1,12 +1,14 @@
 #pragma once
+
+#pragma warning(disable : 4267)
+
 #include <windows.h>
 #include <string>
 #include <thread>
-class Pipe
-{
+class Pipe {
 public:
 	using handle_t = HANDLE;
-	using string=std::string;
+	using string = std::string;
 	Pipe();
 	virtual ~Pipe();
 	int open(const string& cmd);

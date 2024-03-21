@@ -1,4 +1,4 @@
-#include "OcrWrapper.h"
+ï»¿#include "OcrWrapper.h"
 #include "../core/helpfunc.h"
 #include "../core/opEnv.h"
 #include <iostream>
@@ -49,7 +49,7 @@ OcrWrapper* OcrWrapper::getInstance() {
 
 int OcrWrapper::init(const std::wstring& engine, const std::wstring& dllName, const vector<string>& argvs) {
 
-	//Ö»Ğè¼ÓÔØÒ»´Î
+	//åªéœ€åŠ è½½ä¸€æ¬¡
 	if (ocr_engine_init == nullptr) {
 		wchar_t old_path[512] = {};
 		DWORD nlen = GetDllDirectoryW(512, old_path);
