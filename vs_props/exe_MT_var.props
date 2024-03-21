@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="EXE_Variables">
+    <!--Normal-->
+    <EXE_OutDir>$(ProjectDir)bin\</EXE_OutDir>
+    <EXE_IntDir>$(ProjectDir)tmp\$(PlatformName)\$(RootNamespace)\$(Configuration)\</EXE_IntDir>
+    <EXE_TargetName>$(RootNamespace)_$(PlatformName)_$(Configuration)</EXE_TargetName>
+    <EXE_IncludePath>$(ProjectDir);$(ProjectDir)include;$(ProjectDir)3rdparty;$(IncludePath)</EXE_IncludePath>
+    <EXE_TargetExt>.exe</EXE_TargetExt>
+    <!--PropertySheetDisplayName-->
+    <E8D_PropertySheetDisplayName>exe_x86_MT_Debug</E8D_PropertySheetDisplayName>
+    <E8R_PropertySheetDisplayName>exe_x86_MT_Release</E8R_PropertySheetDisplayName>
+    <E6D_PropertySheetDisplayName>exe_x64_MT_Debug</E6D_PropertySheetDisplayName>
+    <E6R_PropertySheetDisplayName>exe_x64_MT_Release</E6R_PropertySheetDisplayName>
+    <!--ClCompile-->
+    <EXE_Debug_RuntimeLibrary>MultiThreadedDebug</EXE_Debug_RuntimeLibrary>
+    <EXE_Release_RuntimeLibrary>MultiThreaded</EXE_Release_RuntimeLibrary>
+    <EXE_ProgramDataBaseFileName>$(EXE_IntDir)$(TargetName).pdb</EXE_ProgramDataBaseFileName>
+    <EXE_PrecompiledHeaderFile>pch.h</EXE_PrecompiledHeaderFile>
+    <EXE_PrecompiledHeader>NotUsing</EXE_PrecompiledHeader>
+    <EXE_LanguageStandard>stdcpp17</EXE_LanguageStandard>
+    <EXE_LanguageStandard_C>stdc11</EXE_LanguageStandard_C>
+    <!--Link-->
+    <EXE_ProgramDatabaseFile>$(EXE_IntDir)$(TargetName).pdb</EXE_ProgramDatabaseFile>
+    <!--ResourceCompile-->
+    <EXE_ResourceOutputFileName>$(EXE_IntDir)%(Filename).res</EXE_ResourceOutputFileName>
+  </PropertyGroup>
+</Project>

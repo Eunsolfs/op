@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets">
+    <Import Project="exe_MD_var.props"/>
+  </ImportGroup>
+  <PropertyGroup>
+    <OutDir>$(EXE_OutDir)</OutDir>
+    <IntDir>$(EXE_IntDir)</IntDir>
+    <TargetName>$(EXE_TargetName)</TargetName>
+    <IncludePath>$(EXE_IncludePath)</IncludePath>
+    <TargetExt>$(EXE_TargetExt)</TargetExt>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <RuntimeLibrary>$(EXE_Release_RuntimeLibrary)</RuntimeLibrary>
+      <LanguageStandard>$(EXE_LanguageStandard)</LanguageStandard>
+      <LanguageStandard_C>$(EXE_LanguageStandard_C)</LanguageStandard_C>
+      <ProgramDataBaseFileName>$(EXE_ProgramDataBaseFileName)</ProgramDataBaseFileName>
+      <PrecompiledHeaderFile>$(EXE_PrecompiledHeaderFile)</PrecompiledHeaderFile>
+      <PrecompiledHeader>$(EXE_PrecompiledHeader)</PrecompiledHeader>
+    </ClCompile>
+    <Link>
+      <ProgramDatabaseFile>$(EXE_ProgramDatabaseFile)</ProgramDatabaseFile>
+    </Link>
+    <ResourceCompile>
+      <ResourceOutputFileName>$(EXE_ResourceOutputFileName)</ResourceOutputFileName>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+</Project>

@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<ImportGroup Label="PropertySheets">
+		<Import Condition="'$(Configuration)' == 'Release'" Project="exe_release_MT.props"/>
+		<Import Condition="'$(Configuration)' == 'Debug'" Project="exe_debug_MT.props"/>
+		<!--
+		<Import Condition="'$(Configuration)' == 'Release' And '$(Platform)' == 'x64'" Project="exe_release_MT.props"/>
+		<Import Condition="'$(Configuration)' == 'Debug' And '$(Platform)' == 'x64'" Project="exe_debug_MT.props"/>
+		<Import Condition="'$(Configuration)' == 'Release' And '$(Platform)' == 'Win32'" Project="exe_release_MT.props"/>
+		<Import Condition="'$(Configuration)' == 'Debug' And '$(Platform)' == 'Win32'" Project="exe_debug_MT.props"/>
+		-->	</ImportGroup>
+	<PropertyGroup>
+		<exe_props_imported>True</exe_props_imported>
+	</PropertyGroup>
+</Project>

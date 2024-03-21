@@ -13,6 +13,8 @@
     <LIB_ProgramDataBaseFileName>$(TargetName).pdb</LIB_ProgramDataBaseFileName>
     <LIB_PrecompiledHeaderFile>pch.h</LIB_PrecompiledHeaderFile>
     <LIB_PrecompiledHeader>NotUsing</LIB_PrecompiledHeader>
+    <LIB_LanguageStandard>stdcpp17</LIB_LanguageStandard>
+    <LIB_LanguageStandard_C>stdc11</LIB_LanguageStandard_C>
     <!--Link-->
     <LIB_ProgramDatabaseFile>$(LIB_OutDir)$(LIB_TargetName).pdb</LIB_ProgramDatabaseFile>
     <!--ResourceCompile-->
