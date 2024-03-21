@@ -17,17 +17,6 @@
 //class ImageProc;
 struct op_context;
 
-#ifdef U_STATIC_IMPLEMENTATION
-#define OP_API
-#else
-#ifndef OP_API 
-#if defined(OP_EXPORTS)
-#define OP_API __declspec(dllexport)
-#else
-#define OP_API __declspec(dllimport)
-#endif
-#endif
-#endif
 // libop
 #undef FindWindow
 #undef FindWindowEx
@@ -35,7 +24,7 @@ struct op_context;
 
 
 
-class OP_API libop {
+class libop {
 
 public:
 
