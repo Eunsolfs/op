@@ -1,0 +1,315 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="libop">
+      <UniqueIdentifier>{f150bab8-ade1-4836-a957-6dfc22f46344}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libop\algorithm">
+      <UniqueIdentifier>{f1498b8c-7bcb-4c03-973c-5309fc793a50}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libop\com">
+      <UniqueIdentifier>{2cfceb23-7854-4122-abaf-e0ac38fce193}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libop\core">
+      <UniqueIdentifier>{6c3d05a2-f251-41b0-9d81-85d1a88cdfcf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libop\imageProc">
+      <UniqueIdentifier>{7a152efc-7c68-46d6-8faa-a19ad94d2c54}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libop\include">
+      <UniqueIdentifier>{d1869e39-d890-4eb9-ab81-2e1213d15265}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libop\winapi">
+      <UniqueIdentifier>{415cbc3b-11e2-42d8-a064-e67372515df9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libop\background">
+      <UniqueIdentifier>{797da7d0-93e7-4644-873c-40b47bc10d76}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libop\background\display">
+      <UniqueIdentifier>{74ea9006-26b8-4d80-b4c6-b77fa5a0772c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libop\background\Hook">
+      <UniqueIdentifier>{bace3bc3-04d8-4d08-8c64-723f747f61fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libop\background\keypad">
+      <UniqueIdentifier>{9a7dce12-e645-4542-b57f-0b7e4ed8206e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libop\background\mouse">
+      <UniqueIdentifier>{8fd45a5d-87bc-43a8-9c2d-8a9e4437acce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="libop\imageProc\compute">
+      <UniqueIdentifier>{72c1611e-21c7-4ccc-ae19-6d1db32c4e11}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="libop\algorithm\AStar.hpp">
+      <Filter>libop\algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="libop\background\opBackground.h">
+      <Filter>libop\background</Filter>
+    </ClInclude>
+    <ClInclude Include="libop\background\display\frameInfo.h">
+      <Filter>libop\background\display</Filter>
+    </ClInclude>
+    <ClInclude Include="libop\background\display\IDisplay.h">
+      <Filter>libop\background\display</Filter>
+    </ClInclude>
+    <ClInclude Include="libop\background\display\opDXGI.h">
+      <Filter>libop\background\display</Filter>
+    </ClInclude>
+    <ClInclude Include="libop\background\display\opDxGL.h">
+      <Filter>libop\background\display</Filter>
+    </ClInclude>
+    <ClInclude Include="libop\background\display\opGDI.h">
+      <Filter>libop\background\display</Filter>
+    </ClInclude>
+    <ClInclude Include="libop\background\display\opWGC.h">
+      <Filter>libop\background\display</Filter>
+    </ClInclude>
+    <ClInclude Include="libop\background\Hook\d3dx12.h">
+      <Filter>libop\background\Hook</Filter>
+    </ClInclude>
+    <ClInclude Include="libop\background\Hook\DisplayHook.h">
+      <Filter>libop\background\Hook</Filter>
+    </ClInclude>
+    <ClInclude Include="libop\background\Hook\HookExport.h">
+      <Filter>libop\background\Hook</Filter>
+    </ClInclude>
+    <ClInclude Include="libop\background\Hook\InputHook.h">
+      <Filter>libop\background\Hook</Filter>
+    </ClInclude>
+    <ClInclude Include="libop\background\Hook\opDx12Hook.h">
+      <Filter>libop\background\Hook</Filter>
+    </ClInclude>
+    <ClInclude Include="libop\background\Hook\opMessage.h">
+      <Filter>libop\background\Hook</Filter>
+    </ClInclude>
+    <ClInclude Include="libop\background\keypad\Bkkeypad.h">
+      <Filter>libop\background\keypad</Filter>
+    </ClInclude>
+    <ClInclude Include="libop\background\keypad\winkeypad.h">
+      <Filter>libop\background\keypad</Filter>
+    </ClInclude>
+    <ClInclude Include="libop\background\mouse\opMouseDx.h">
+      <Filter>libop\background\mouse</Filter>
+    </ClInclude>
+    <ClInclude Include="libop\background\mouse\opMouseWin.h">
+      <Filter>libop\background\mouse</Filter>
+    </ClInclude>
+    <ClInclude Include="libop\com\compreg.h">
+      <Filter>libop\com</Filter>
+    </ClInclude>
+    <ClInclude Include="libop\com\dllmain.h">
+      <Filter>libop\com</Filter>
+    </ClInclude>
+    <ClInclude Include="libop\com\OpInterface.h">
+      <Filter>libop\com</Filter>
+    </ClInclude>
+    <ClInclude Include="libop\com\resource.h">
+      <Filter>libop\com</Filter>
+    </ClInclude>
+    <ClInclude Include="libop\com\stdafx.h">
+      <Filter>libop\com</Filter>
+    </ClInclude>
+    <ClInclude Include="libop\com\targetver.h">
+      <Filter>libop\com</Filter>
+    </ClInclude>
+    <ClInclude Include="libop\core\Cmder.h">
+      <Filter>libop\core</Filter>
+    </ClInclude>
+    <ClInclude Include="libop\core\globalVar.h">
+      <Filter>libop\core</Filter>
+    </ClInclude>
+    <ClInclude Include="libop\core\helpfunc.h">
+      <Filter>libop\core</Filter>
+    </ClInclude>
+    <ClInclude Include="libop\core\opEnv.h">
+      <Filter>libop\core</Filter>
+    </ClInclude>
+    <ClInclude Include="libop\core\optype.h">
+      <Filter>libop\core</Filter>
+    </ClInclude>
+    <ClInclude Include="libop\core\Pipe.h">
+      <Filter>libop\core</Filter>
+    </ClInclude>
+    <ClInclude Include="libop\imageProc\ImageLoc.h">
+      <Filter>libop\imageProc</Filter>
+    </ClInclude>
+    <ClInclude Include="libop\imageProc\ImageProc.h">
+      <Filter>libop\imageProc</Filter>
+    </ClInclude>
+    <ClInclude Include="libop\imageProc\imageView.hpp">
+      <Filter>libop\imageProc</Filter>
+    </ClInclude>
+    <ClInclude Include="libop\imageProc\OcrWrapper.h">
+      <Filter>libop\imageProc</Filter>
+    </ClInclude>
+    <ClInclude Include="libop\imageProc\tess_ocr.h">
+      <Filter>libop\imageProc</Filter>
+    </ClInclude>
+    <ClInclude Include="libop\imageProc\compute\ThreadPool.h">
+      <Filter>libop\imageProc\compute</Filter>
+    </ClInclude>
+    <ClInclude Include="libop\winapi\Injecter.h">
+      <Filter>libop\winapi</Filter>
+    </ClInclude>
+    <ClInclude Include="libop\winapi\MemoryEx.h">
+      <Filter>libop\winapi</Filter>
+    </ClInclude>
+    <ClInclude Include="libop\winapi\query_api.h">
+      <Filter>libop\winapi</Filter>
+    </ClInclude>
+    <ClInclude Include="libop\winapi\WinApi.h">
+      <Filter>libop\winapi</Filter>
+    </ClInclude>
+    <ClInclude Include="libop\libop.h">
+      <Filter>libop</Filter>
+    </ClInclude>
+    <ClInclude Include="libop\include\bitfunc.h">
+      <Filter>libop\include</Filter>
+    </ClInclude>
+    <ClInclude Include="libop\include\color.h">
+      <Filter>libop\include</Filter>
+    </ClInclude>
+    <ClInclude Include="libop\include\Dict.h">
+      <Filter>libop\include</Filter>
+    </ClInclude>
+    <ClInclude Include="libop\include\Image.hpp">
+      <Filter>libop\include</Filter>
+    </ClInclude>
+    <ClInclude Include="libop\include\promutex.h">
+      <Filter>libop\include</Filter>
+    </ClInclude>
+    <ClInclude Include="libop\include\sharedmem.h">
+      <Filter>libop\include</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="libop\background\opBackground.cpp">
+      <Filter>libop\background</Filter>
+    </ClCompile>
+    <ClCompile Include="libop\background\display\IDisplay.cpp">
+      <Filter>libop\background\display</Filter>
+    </ClCompile>
+    <ClCompile Include="libop\background\display\opDXGI.cpp">
+      <Filter>libop\background\display</Filter>
+    </ClCompile>
+    <ClCompile Include="libop\background\display\opDxGL.cpp">
+      <Filter>libop\background\display</Filter>
+    </ClCompile>
+    <ClCompile Include="libop\background\display\opGDI.cpp">
+      <Filter>libop\background\display</Filter>
+    </ClCompile>
+    <ClCompile Include="libop\background\display\opWGC.cpp">
+      <Filter>libop\background\display</Filter>
+    </ClCompile>
+    <ClCompile Include="libop\background\Hook\DisplayHook.cpp">
+      <Filter>libop\background\Hook</Filter>
+    </ClCompile>
+    <ClCompile Include="libop\background\Hook\HookExport.cpp">
+      <Filter>libop\background\Hook</Filter>
+    </ClCompile>
+    <ClCompile Include="libop\background\Hook\InputHook.cpp">
+      <Filter>libop\background\Hook</Filter>
+    </ClCompile>
+    <ClCompile Include="libop\background\Hook\opDx12Hook.cpp">
+      <Filter>libop\background\Hook</Filter>
+    </ClCompile>
+    <ClCompile Include="libop\background\keypad\Bkkeypad.cpp">
+      <Filter>libop\background\keypad</Filter>
+    </ClCompile>
+    <ClCompile Include="libop\background\keypad\winkeypad.cpp">
+      <Filter>libop\background\keypad</Filter>
+    </ClCompile>
+    <ClCompile Include="libop\background\mouse\opMouseDx.cpp">
+      <Filter>libop\background\mouse</Filter>
+    </ClCompile>
+    <ClCompile Include="libop\background\mouse\opMouseWin.cpp">
+      <Filter>libop\background\mouse</Filter>
+    </ClCompile>
+    <ClCompile Include="libop\com\compreg.cpp">
+      <Filter>libop\com</Filter>
+    </ClCompile>
+    <ClCompile Include="libop\com\dllmain.cpp">
+      <Filter>libop\com</Filter>
+    </ClCompile>
+    <ClCompile Include="libop\com\op.cpp">
+      <Filter>libop\com</Filter>
+    </ClCompile>
+    <ClCompile Include="libop\com\OpInterface.cpp">
+      <Filter>libop\com</Filter>
+    </ClCompile>
+    <ClCompile Include="libop\com\stdafx.cpp">
+      <Filter>libop\com</Filter>
+    </ClCompile>
+    <ClCompile Include="libop\core\globalVar.cpp">
+      <Filter>libop\core</Filter>
+    </ClCompile>
+    <ClCompile Include="libop\core\helpfunc.cpp">
+      <Filter>libop\core</Filter>
+    </ClCompile>
+    <ClCompile Include="libop\core\opEnv.cpp">
+      <Filter>libop\core</Filter>
+    </ClCompile>
+    <ClCompile Include="libop\core\Pipe.cpp">
+      <Filter>libop\core</Filter>
+    </ClCompile>
+    <ClCompile Include="libop\imageProc\ImageLoc.cpp">
+      <Filter>libop\imageProc</Filter>
+    </ClCompile>
+    <ClCompile Include="libop\imageProc\ImageProc.cpp">
+      <Filter>libop\imageProc</Filter>
+    </ClCompile>
+    <ClCompile Include="libop\imageProc\OcrWrapper.cpp">
+      <Filter>libop\imageProc</Filter>
+    </ClCompile>
+    <ClCompile Include="libop\imageProc\tess_ocr.cpp">
+      <Filter>libop\imageProc</Filter>
+    </ClCompile>
+    <ClCompile Include="libop\imageProc\compute\ThreadPool.cpp">
+      <Filter>libop\imageProc\compute</Filter>
+    </ClCompile>
+    <ClCompile Include="libop\winapi\Injecter.cpp">
+      <Filter>libop\winapi</Filter>
+    </ClCompile>
+    <ClCompile Include="libop\winapi\MemoryEx.cpp">
+      <Filter>libop\winapi</Filter>
+    </ClCompile>
+    <ClCompile Include="libop\winapi\query_api.cpp">
+      <Filter>libop\winapi</Filter>
+    </ClCompile>
+    <ClCompile Include="libop\winapi\WinApi.cpp">
+      <Filter>libop\winapi</Filter>
+    </ClCompile>
+    <ClCompile Include="libop\libop.cpp">
+      <Filter>libop</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="libop\background\Hook\dinput.md">
+      <Filter>libop\background\Hook</Filter>
+    </None>
+    <None Include="libop\com\op.def">
+      <Filter>libop\com</Filter>
+    </None>
+    <None Include="libop\com\op.rgs">
+      <Filter>libop\com</Filter>
+    </None>
+    <None Include="libop\com\OpInterface.rgs">
+      <Filter>libop\com</Filter>
+    </None>
+    <None Include="libop\com\opps.def">
+      <Filter>libop\com</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Midl Include="libop\com\op.idl">
+      <Filter>libop\com</Filter>
+    </Midl>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="libop\com\op.rc">
+      <Filter>libop\com</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>

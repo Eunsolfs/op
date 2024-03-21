@@ -1,4 +1,4 @@
-#include "../../core/globalVar.h"
+﻿#include "../../core/globalVar.h"
 
 
 //描述： 设置显示Hook

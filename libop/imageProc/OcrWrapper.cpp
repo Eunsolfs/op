@@ -3,40 +3,38 @@
 #include "../core/opEnv.h"
 #include <iostream>
 #include <condition_variable>
-ocr_engine_init_t OcrWrapper::ocr_engine_init;
-ocr_engine_ocr_t OcrWrapper::ocr_engine_ocr;
-ocr_engine_release_t OcrWrapper::ocr_engine_release;
+
 using std::cout;
 using std::endl;
 OcrWrapper::OcrWrapper() : m_engine(nullptr) {
-	//paddle
-	cout << "OcrWrapper::OcrWrapper()" << endl;
-#ifdef _M_X64
-	std::wstring paddle_path = opEnv::getBasePath() + L"/paddle";
-	auto dllName =  L"paddle_ocr.dll";
-	std::wstring root = paddle_path;
-	wstring detName = root + L"/models/ch_PP-OCRv3_det_infer";
-	wstring recName = root + L"/models/ch_PP-OCRv3_rec_infer";
-	wstring otherName = root + L"/utils/ppocr_keys_v1.txt";
-	vector<string> argvs = {
-		"tests",
-		"--det_model_dir=" + _ws2string(detName),
-		"--rec_model_dir=" + _ws2string(recName),
-		"--rec_char_dict_path=" + _ws2string(otherName),
-		"--enable_mkldnn=true"
-	};
-#else
-	//tess
-	std::wstring paddle_path = opEnv::getBasePath() + L"/tess";
-	auto dllName = L"tess_engine.dll";
-	std::wstring root = opEnv::getBasePath()+L"/tess";
-	vector<string> argvs = {
-		"tests",
-		_ws2string(root)+"/tess_model",
-		"chi_sim"
-	};
-#endif
-	init(paddle_path, dllName, argvs);
+	//	//paddle
+	//	cout << "OcrWrapper::OcrWrapper()" << endl;
+	//#ifdef _M_X64
+	//	std::wstring paddle_path = opEnv::getBasePath() + L"/paddle";
+	//	auto dllName = L"paddle_ocr.dll";
+	//	std::wstring root = paddle_path;
+	//	wstring detName = root + L"/models/ch_PP-OCRv3_det_infer";
+	//	wstring recName = root + L"/models/ch_PP-OCRv3_rec_infer";
+	//	wstring otherName = root + L"/utils/ppocr_keys_v1.txt";
+	//	vector<string> argvs = {
+	//		"tests",
+	//		"--det_model_dir=" + _ws2string(detName),
+	//		"--rec_model_dir=" + _ws2string(recName),
+	//		"--rec_char_dict_path=" + _ws2string(otherName),
+	//		"--enable_mkldnn=true"
+	//	};
+	//#else
+	//	////tess
+	//	//std::wstring paddle_path = opEnv::getBasePath() + L"/tess";
+	//	//auto dllName = L"tess_engine.dll";
+	//	//std::wstring root = opEnv::getBasePath() + L"/tess";
+	//	//vector<string> argvs = {
+	//	//	"tests",
+	//	//	_ws2string(root) + "/tess_model",
+	//	//	"chi_sim"
+	//	//};
+	//#endif
+	//	init(paddle_path, dllName, argvs);
 }
 OcrWrapper::~OcrWrapper() {
 	release();
@@ -48,7 +46,7 @@ OcrWrapper* OcrWrapper::getInstance() {
 }
 
 int OcrWrapper::init(const std::wstring& engine, const std::wstring& dllName, const vector<string>& argvs) {
-	
+
 	//只需加载一次
 	if (ocr_engine_init == nullptr) {
 		wchar_t old_path[512] = {};
@@ -57,8 +55,8 @@ int OcrWrapper::init(const std::wstring& engine, const std::wstring& dllName, co
 		::SetDllDirectoryW(engine.c_str());
 		auto absdllName = engine + L"/" + dllName;
 		auto hdll = LoadLibraryW(absdllName.c_str());
-		
-		
+
+
 		if (hdll == NULL) {
 			::SetDllDirectoryW(old_path);
 			cout << "error: LoadLibraryA false:" << GetLastErrorAsString() << endl;
@@ -78,18 +76,18 @@ int OcrWrapper::init(const std::wstring& engine, const std::wstring& dllName, co
 	}
 	if (m_engine == nullptr) {
 		const int argc = argvs.size();
-		char** argv=new char*[argc];
+		char** argv = new char* [argc];
 		//cout << "ocr_engine_init before\n";
 		for (int i = 0; i < argc; i++) {
 			argv[i] = new char[argvs[i].size() + 1];
 			strcpy(argv[i], argvs[i].c_str());
 			//cout << i << " new: " << "address:" << (void*)(argv[i]) << argv[i] << "\n";
 		}
-		ocr_engine_init(&m_engine, argv,argc);
+		ocr_engine_init(&m_engine, argv, argc);
 		//cout << "ocr_engine_init after\n";
 		for (int i = 0; i < argc; i++) {
 			//cout <<i<< " delete: " << "address:"<<(void*)(argv[i]) << argv[i]<< "\n";
-			delete []argv[i];
+			delete[]argv[i];
 		}
 		delete[]argv;
 		//cout << " delete\n";
@@ -135,7 +133,7 @@ int OcrWrapper::ocr(byte* data, int w, int h, int bpp, vocr_rec_t& result) {
 		}
 		free(results);
 	}
-	
+
 	return n;
 }
 

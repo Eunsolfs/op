@@ -28,17 +28,17 @@ struct op_context;
 
 
 
-class OP_API libop{
-	
+class OP_API libop {
+
 public:
-	
+
 	libop();
 	~libop();
 	//复制构造
 	libop(libop const&) = delete;
 	libop& operator=(libop const rhs) = delete;
 private:
-	
+
 	//一些共用变量
 
 	////1. Windows API
@@ -57,7 +57,7 @@ private:
 	//long m_screen_data_mode;
 	//int m_id;
 	op_context* m_context;
-	static int s_id;
+	inline static int s_id = 0;
 public:
 	//---------------基本设置/属性-------------------
 
@@ -75,12 +75,12 @@ public:
 	void GetLastError(long* ret);
 	//设置是否弹出错误信息,默认是打开 0:关闭，1:显示为信息框，2:保存到文件,3:输出到标准输出
 	void SetShowErrorMsg(long show_type, long* ret);
-	
+
 	//sleep
 	void Sleep(long millseconds, long* ret);
 	//Process
 	//inject dll
-	void InjectDll(const wchar_t* process_name,const wchar_t* dll_name, long* ret);
+	void InjectDll(const wchar_t* process_name, const wchar_t* dll_name, long* ret);
 	//设置是否开启或者关闭插件内部的图片缓存机制
 	void EnablePicCache(long enable, long* ret);
 	//取上次操作的图色区域，保存为file(24位位图)
@@ -89,7 +89,7 @@ public:
 	void SetScreenDataMode(long mode, long* ret);
 	//---------------------algorithm-------------------------------
 	//A星算法
-	void AStarFindPath(long mapWidth,long mapHeight,const wchar_t* disable_points,long beginX,long beginY, long endX,long endY,std::wstring& ret);
+	void AStarFindPath(long mapWidth, long mapHeight, const wchar_t* disable_points, long beginX, long beginY, long endX, long endY, std::wstring& ret);
 	//
 	void FindNearestPos(const wchar_t* all_pos, long type, long x, long y, std::wstring& ret);
 	//--------------------windows api------------------------------
@@ -165,21 +165,21 @@ public:
 	void WinExec(const wchar_t* cmdline, long cmdshow, long* ret);
 
 	//运行命令行并返回结果
-	void GetCmdStr(const wchar_t* cmd,long millseconds, std::wstring& retstr);
-    //设置剪贴板数据
+	void GetCmdStr(const wchar_t* cmd, long millseconds, std::wstring& retstr);
+	//设置剪贴板数据
 	void SetClipboard(const wchar_t* str, long* ret);
 	//获取剪贴板数据
 	void GetClipboard(std::wstring& ret);
 	//延时指定的毫秒,过程中不阻塞UI操作
 	void Delay(long mis, long* ret);
 	//延时指定范围内随机毫秒,过程中不阻塞UI操作
-	void Delays(long mis_min,long mis_max, long* ret);
+	void Delays(long mis_min, long mis_max, long* ret);
 	//--------------------Background -----------------------
 	//bind window and beign capture screen
-	void BindWindow(long hwnd, const wchar_t* display, const wchar_t* mouse, const wchar_t* keypad, long mode,long *ret);
+	void BindWindow(long hwnd, const wchar_t* display, const wchar_t* mouse, const wchar_t* keypad, long mode, long* ret);
 	//解绑窗口
 	void UnBindWindow(long* ret);
-    //获取当前对象已经绑定的窗口句柄. 无绑定返回0
+	//获取当前对象已经绑定的窗口句柄. 无绑定返回0
 	void GetBindWindow(long* ret);
 	//判定当前对象是否已绑定窗口.
 	void IsBind(long* ret);
@@ -191,7 +191,7 @@ public:
 	//把鼠标移动到目的点(x,y)
 	void MoveTo(long x, long y, long* ret);
 	//把鼠标移动到目的范围内的任意一点
-	void MoveToEx(long x, long y,long w,long h, long* ret);
+	void MoveToEx(long x, long y, long w, long h, long* ret);
 	//按下鼠标左键
 	void LeftClick(long* ret);
 	//双击鼠标左键
@@ -229,7 +229,7 @@ public:
 	//弹起来虚拟键vk_code
 	void KeyUpChar(const wchar_t* vk_code, long* ret);
 	//等待指定的按键按下 (前台,不是后台)
-	void WaitKey(long vk_code,long time_out, long* ret);
+	void WaitKey(long vk_code, long time_out, long* ret);
 	//发送字符串
 	//long SendString(long HWND)
 	//弹起来虚拟键vk_code
@@ -243,26 +243,26 @@ public:
 	//抓取指定区域(x1, y1, x2, y2)的图像, 保存为file
 	void Capture(long x1, long y1, long x2, long y2, const wchar_t* file_name, long* ret);
 	//比较指定坐标点(x,y)的颜色
-	void CmpColor(long x, long y,const wchar_t* color,double sim, long* ret);
+	void CmpColor(long x, long y, const wchar_t* color, double sim, long* ret);
 	//查找指定区域内的颜色
-	void FindColor(long x1, long y1, long x2, long y2, const wchar_t* color,double sim,long dir, long* x, long* y, long* ret);
+	void FindColor(long x1, long y1, long x2, long y2, const wchar_t* color, double sim, long dir, long* x, long* y, long* ret);
 	//查找指定区域内的所有颜色
-	void FindColorEx(long x1, long y1, long x2, long y2, const wchar_t* color, double sim,long dir, std::wstring& retstr);
+	void FindColorEx(long x1, long y1, long x2, long y2, const wchar_t* color, double sim, long dir, std::wstring& retstr);
 	//根据指定的多点查找颜色坐标
 	void FindMultiColor(long x1, long y1, long x2, long y2, const wchar_t* first_color, const wchar_t* offset_color, double sim, long dir, long* x, long* y, long* ret);
 	//根据指定的多点查找所有颜色坐标
-	void FindMultiColorEx(long x1, long y1, long x2, long y2, const wchar_t* first_color, const wchar_t* offset_color, double sim, long dir,std::wstring& retstr);
+	void FindMultiColorEx(long x1, long y1, long x2, long y2, const wchar_t* first_color, const wchar_t* offset_color, double sim, long dir, std::wstring& retstr);
 	//查找指定区域内的图片
-	void FindPic(long x1,long y1,long x2,long y2,const wchar_t* files, const wchar_t* delta_color,double sim,long dir,long* x,long* y,long* ret);
+	void FindPic(long x1, long y1, long x2, long y2, const wchar_t* files, const wchar_t* delta_color, double sim, long dir, long* x, long* y, long* ret);
 	//查找多个图片
-	void FindPicEx(long x1, long y1, long x2, long y2, const wchar_t* files, const wchar_t* delta_color, double sim, long dir,std::wstring& retstr);
+	void FindPicEx(long x1, long y1, long x2, long y2, const wchar_t* files, const wchar_t* delta_color, double sim, long dir, std::wstring& retstr);
 	//
 	//这个函数可以查找多个图片, 并且返回所有找到的图像的坐标.此函数同FindPicEx.只是返回值不同.(file1,x,y|file2,x,y|...)
 	void FindPicExS(long x1, long y1, long x2, long y2, const wchar_t* files, const wchar_t* delta_color, double sim, long dir, std::wstring& retstr);
 	//查找指定区域内的颜色块,颜色格式"RRGGBB-DRDGDB",注意,和按键的颜色格式相反
-	void FindColorBlock(long x1, long y1, long x2, long y2, const wchar_t*  color, double sim, long count, long height, long width, long* x, long* y, long* ret);
+	void FindColorBlock(long x1, long y1, long x2, long y2, const wchar_t* color, double sim, long count, long height, long width, long* x, long* y, long* ret);
 	//查找指定区域内的所有颜色块, 颜色格式"RRGGBB-DRDGDB", 注意, 和按键的颜色格式相反
-	void FindColorBlockEx(long x1, long y1, long x2, long y2, const wchar_t*  color, double sim, long count, long height, long width, std::wstring& retstr);
+	void FindColorBlockEx(long x1, long y1, long x2, long y2, const wchar_t* color, double sim, long count, long height, long width, std::wstring& retstr);
 	//获取(x,y)的颜色
 	void GetColor(long x, long y, std::wstring& ret);
 	//
@@ -273,45 +273,45 @@ public:
 
 	void FreePic(const wchar_t* file_name, long* ret);
 	//从内存加载要查找的图片
-	void LoadMemPic(const wchar_t* file_name,void* data,long size, long* ret);
+	void LoadMemPic(const wchar_t* file_name, void* data, long size, long* ret);
 	//
-	void GetScreenData(long x1, long y1, long x2, long y2, size_t* data,long* ret);
+	void GetScreenData(long x1, long y1, long x2, long y2, size_t* data, long* ret);
 	//
-	void GetScreenDataBmp(long x1, long y1, long x2, long y2, size_t* data,long* size, long* ret);
+	void GetScreenDataBmp(long x1, long y1, long x2, long y2, size_t* data, long* size, long* ret);
 	//
 	void GetScreenFrameInfo(long* frame_id, long* time);
 	//
 	void MatchPicName(const wchar_t* pic_name, std::wstring& retstr);
 	//----------------------ocr-------------------------
-	long SetOcrEngine(const wchar_t* path_of_engine,const wchar_t* dll_name, const wchar_t* argv);
+	long SetOcrEngine(const wchar_t* path_of_engine, const wchar_t* dll_name, const wchar_t* argv);
 	//设置字库文件
 	void SetDict(long idx, const wchar_t* file_name, long* ret);
 	//设置内存字库文件
 	void SetMemDict(long idx, const wchar_t* data, long size, long* ret);
 	//使用哪个字库文件进行识别
-	void UseDict(long idx,  long* ret);
+	void UseDict(long idx, long* ret);
 	//识别屏幕范围(x1,y1,x2,y2)内符合color_format的字符串,并且相似度为sim,sim取值范围(0.1-1.0),
-	void Ocr(long x1, long y1, long x2, long y2, const wchar_t* color, double sim,std::wstring& ret_str);
+	//void Ocr(long x1, long y1, long x2, long y2, const wchar_t* color, double sim,std::wstring& ret_str);
 	//回识别到的字符串，以及每个字符的坐标.
-	void OcrEx(long x1, long y1, long x2, long y2, const wchar_t* color, double sim, std::wstring& ret_str);
+	//void OcrEx(long x1, long y1, long x2, long y2, const wchar_t* color, double sim, std::wstring& ret_str);
 	//在屏幕范围(x1,y1,x2,y2)内,查找string(可以是任意个字符串的组合),并返回符合color_format的坐标位置
-	void FindStr(long x1, long y1, long x2, long y2,const wchar_t* strs, const wchar_t* color, double sim, long* retx,long* rety,long* ret);
+	void FindStr(long x1, long y1, long x2, long y2, const wchar_t* strs, const wchar_t* color, double sim, long* retx, long* rety, long* ret);
 	//返回符合color_format的所有坐标位置
-	void FindStrEx(long x1, long y1, long x2, long y2, const wchar_t* strs, const wchar_t* color, double sim,std::wstring& retstr);
+	void FindStrEx(long x1, long y1, long x2, long y2, const wchar_t* strs, const wchar_t* color, double sim, std::wstring& retstr);
 	//识别屏幕范围(x1,y1,x2,y2)内的字符串,自动二值化，而无需指定颜色
 	void OcrAuto(long x1, long y1, long x2, long y2, double sim, std::wstring& ret_str);
 	//从文件中识别图片
-	void OcrFromFile(const wchar_t* file_name,const wchar_t* color_format, double sim, std::wstring& retstr);
+	void OcrFromFile(const wchar_t* file_name, const wchar_t* color_format, double sim, std::wstring& retstr);
 	//从文件中识别图片,无需指定颜色
 	void OcrAutoFromFile(const wchar_t* file_name, double sim, std::wstring& retstr);
 	//查找频幕中的直线
 	void FindLine(long x1, long y1, long x2, long y2, const wchar_t* color, double sim, std::wstring& retstr);
-	
+
 	//向某进程写入数据
 	void WriteData(long hwnd, const wchar_t* address, const wchar_t* data, long size, long* ret);
 	//读取数据
 	void ReadData(long hwnd, const wchar_t* address, long size, std::wstring& retstr);
-		
+
 };
 
 

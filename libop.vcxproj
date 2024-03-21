@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="libop\algorithm\AStar.hpp" />
+    <ClInclude Include="libop\background\display\frameInfo.h" />
+    <ClInclude Include="libop\background\display\IDisplay.h" />
+    <ClInclude Include="libop\background\display\opDXGI.h" />
+    <ClInclude Include="libop\background\display\opDxGL.h" />
+    <ClInclude Include="libop\background\display\opGDI.h" />
+    <ClInclude Include="libop\background\display\opWGC.h" />
+    <ClInclude Include="libop\background\Hook\d3dx12.h" />
+    <ClInclude Include="libop\background\Hook\DisplayHook.h" />
+    <ClInclude Include="libop\background\Hook\HookExport.h" />
+    <ClInclude Include="libop\background\Hook\InputHook.h" />
+    <ClInclude Include="libop\background\Hook\opDx12Hook.h" />
+    <ClInclude Include="libop\background\Hook\opMessage.h" />
+    <ClInclude Include="libop\background\keypad\Bkkeypad.h" />
+    <ClInclude Include="libop\background\keypad\winkeypad.h" />
+    <ClInclude Include="libop\background\mouse\opMouseDx.h" />
+    <ClInclude Include="libop\background\mouse\opMouseWin.h" />
+    <ClInclude Include="libop\background\opBackground.h" />
+    <ClInclude Include="libop\com\compreg.h" />
+    <ClInclude Include="libop\com\dllmain.h" />
+    <ClInclude Include="libop\com\OpInterface.h" />
+    <ClInclude Include="libop\com\resource.h" />
+    <ClInclude Include="libop\com\stdafx.h" />
+    <ClInclude Include="libop\com\targetver.h" />
+    <ClInclude Include="libop\core\Cmder.h" />
+    <ClInclude Include="libop\core\globalVar.h" />
+    <ClInclude Include="libop\core\helpfunc.h" />
+    <ClInclude Include="libop\core\opEnv.h" />
+    <ClInclude Include="libop\core\optype.h" />
+    <ClInclude Include="libop\core\Pipe.h" />
+    <ClInclude Include="libop\imageProc\compute\ThreadPool.h" />
+    <ClInclude Include="libop\imageProc\ImageLoc.h" />
+    <ClInclude Include="libop\imageProc\ImageProc.h" />
+    <ClInclude Include="libop\imageProc\imageView.hpp" />
+    <ClInclude Include="libop\imageProc\OcrWrapper.h" />
+    <ClInclude Include="libop\imageProc\tess_ocr.h" />
+    <ClInclude Include="libop\include\bitfunc.h" />
+    <ClInclude Include="libop\include\color.h" />
+    <ClInclude Include="libop\include\Dict.h" />
+    <ClInclude Include="libop\include\Image.hpp" />
+    <ClInclude Include="libop\include\promutex.h" />
+    <ClInclude Include="libop\include\sharedmem.h" />
+    <ClInclude Include="libop\libop.h" />
+    <ClInclude Include="libop\winapi\Injecter.h" />
+    <ClInclude Include="libop\winapi\MemoryEx.h" />
+    <ClInclude Include="libop\winapi\query_api.h" />
+    <ClInclude Include="libop\winapi\WinApi.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="libop\background\display\IDisplay.cpp" />
+    <ClCompile Include="libop\background\display\opDXGI.cpp" />
+    <ClCompile Include="libop\background\display\opDxGL.cpp" />
+    <ClCompile Include="libop\background\display\opGDI.cpp" />
+    <ClCompile Include="libop\background\display\opWGC.cpp" />
+    <ClCompile Include="libop\background\Hook\DisplayHook.cpp" />
+    <ClCompile Include="libop\background\Hook\HookExport.cpp" />
+    <ClCompile Include="libop\background\Hook\InputHook.cpp" />
+    <ClCompile Include="libop\background\Hook\opDx12Hook.cpp" />
+    <ClCompile Include="libop\background\keypad\Bkkeypad.cpp" />
+    <ClCompile Include="libop\background\keypad\winkeypad.cpp" />
+    <ClCompile Include="libop\background\mouse\opMouseDx.cpp" />
+    <ClCompile Include="libop\background\mouse\opMouseWin.cpp" />
+    <ClCompile Include="libop\background\opBackground.cpp" />
+    <ClCompile Include="libop\com\compreg.cpp" />
+    <ClCompile Include="libop\com\dllmain.cpp" />
+    <ClCompile Include="libop\com\op.cpp" />
+    <ClCompile Include="libop\com\OpInterface.cpp" />
+    <ClCompile Include="libop\com\stdafx.cpp" />
+    <ClCompile Include="libop\core\globalVar.cpp" />
+    <ClCompile Include="libop\core\helpfunc.cpp" />
+    <ClCompile Include="libop\core\opEnv.cpp" />
+    <ClCompile Include="libop\core\Pipe.cpp" />
+    <ClCompile Include="libop\imageProc\compute\ThreadPool.cpp" />
+    <ClCompile Include="libop\imageProc\ImageLoc.cpp" />
+    <ClCompile Include="libop\imageProc\ImageProc.cpp" />
+    <ClCompile Include="libop\imageProc\OcrWrapper.cpp" />
+    <ClCompile Include="libop\imageProc\tess_ocr.cpp" />
+    <ClCompile Include="libop\libop.cpp" />
+    <ClCompile Include="libop\winapi\Injecter.cpp" />
+    <ClCompile Include="libop\winapi\MemoryEx.cpp" />
+    <ClCompile Include="libop\winapi\query_api.cpp" />
+    <ClCompile Include="libop\winapi\WinApi.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="libop\background\Hook\dinput.md" />
+    <None Include="libop\com\op.def" />
+    <None Include="libop\com\op.rgs" />
+    <None Include="libop\com\OpInterface.rgs" />
+    <None Include="libop\com\opps.def" />
+  </ItemGroup>
+  <ItemGroup>
+    <Midl Include="libop\com\op.idl" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="libop\com\op.rc" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{a7d6e8d7-4c34-4d77-9e01-353c0b9de7bc}</ProjectGuid>
+    <RootNamespace>libop</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="vs_props\lib_MT.props" />
+    <Import Project="vs_props\3rd_party\BlackBone.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="vs_props\lib_MT.props" />
+    <Import Project="vs_props\3rd_party\BlackBone.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="vs_props\lib_MT.props" />
+    <Import Project="vs_props\3rd_party\BlackBone.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="vs_props\lib_MT.props" />
+    <Import Project="vs_props\3rd_party\BlackBone.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Label="Vcpkg">
+    <VcpkgEnabled>false</VcpkgEnabled>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>
+      </SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>
+      </SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>
+      </SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_LIB;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>
+      </SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

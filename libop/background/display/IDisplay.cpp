@@ -1,18 +1,16 @@
-//#include "stdafx.h"
+﻿//#include "stdafx.h"
 #include "IDisplay.h"
 #include "./core/globalVar.h"
 #include "./core/helpfunc.h"
 IDisplay::IDisplay()
 	:_hwnd(NULL), _shmem(nullptr), _pmutex(nullptr),
 	_bind_state(0), _width(0), _height(0),
-	_client_x(0), _client_y(0)
-{
+	_client_x(0), _client_y(0) {
 
 }
 
 
-IDisplay::~IDisplay()
-{
+IDisplay::~IDisplay() {
 	bind_release();
 	_bind_state = 0;
 }
@@ -34,7 +32,7 @@ long IDisplay::Bind(HWND hwnd, long flag) {
 		bind_release();
 		_bind_state = 0;
 	}
-		
+
 
 	return _bind_state;
 
@@ -55,7 +53,7 @@ long IDisplay::bind_init() {
 	RECT rc;
 	assert(::IsWindow(_hwnd));
 	::GetWindowRect(_hwnd, &rc);
-	res_size = (rc.right - rc.left) * (rc.bottom - rc.top) * 4+sizeof(FrameInfo);
+	res_size = (rc.right - rc.left) * (rc.bottom - rc.top) * 4 + sizeof(FrameInfo);
 	wsprintf(_shared_res_name, SHARED_RES_NAME_FORMAT, _hwnd);
 	wsprintf(_mutex_name, MUTEX_NAME_FORMAT, _hwnd);
 	//setlog(L"mem=%s mutex=%s", _shared_res_name, _mutex_name);

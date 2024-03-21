@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets">
+    <Import Project="lib_MT_var.props"/>
+  </ImportGroup>
+  <PropertyGroup>
+    <OutDir>$(LIB_OutDir)</OutDir>
+    <IntDir>$(LIB_IntDir)</IntDir>
+    <TargetName>$(LIB_TargetName)</TargetName>
+    <IncludePath>$(LIB_IncludePath)</IncludePath>
+    <TargetExt>.lib</TargetExt>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <RuntimeLibrary>$(LIB_Debug_RuntimeLibrary)</RuntimeLibrary>
+      <LanguageStandard>$(LIB_LanguageStandard)</LanguageStandard>
+      <LanguageStandard_C>$(LIB_LanguageStandard_C)</LanguageStandard_C>
+      <ProgramDataBaseFileName>$(LIB_ProgramDataBaseFileName)</ProgramDataBaseFileName>
+      <PrecompiledHeaderFile>$(LIB_PrecompiledHeaderFile)</PrecompiledHeaderFile>
+      <PrecompiledHeader>$(LIB_PrecompiledHeader)</PrecompiledHeader>
+    </ClCompile>
+    <Link>
+      <ProgramDatabaseFile>$(LIB_ProgramDatabaseFile)</ProgramDatabaseFile>
+    </Link>
+    <ResourceCompile>
+      <ResourceOutputFileName>$(LIB_ResourceOutputFileName)</ResourceOutputFileName>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+</Project>

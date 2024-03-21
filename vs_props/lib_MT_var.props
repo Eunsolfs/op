@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="LIB_Variables">
+    <!--Normal-->
+    <LIB_OutDir>$(ProjectDir)lib\</LIB_OutDir>
+    <LIB_IntDir>$(ProjectDir)tmp\$(PlatformName)\$(RootNamespace)\$(Configuration)\</LIB_IntDir>
+    <LIB_TargetName>$(RootNamespace)_$(PlatformName)_$(Configuration)</LIB_TargetName>
+    <LIB_IncludePath>$(ProjectDir);$(ProjectDir)include;$(ProjectDir)3rd_party;$(ProjectDir)3rd_party/include;$(ProjectDir)libop;$(IncludePath)</LIB_IncludePath>
+    <LIB_TargetExt>.lib</LIB_TargetExt>
+    <!--ClCompile-->
+    <LIB_Debug_RuntimeLibrary>MultiThreadedDebug</LIB_Debug_RuntimeLibrary>
+    <LIB_Release_RuntimeLibrary>MultiThreaded</LIB_Release_RuntimeLibrary>
+    <LIB_LanguageStandard>stdcpp20</LIB_LanguageStandard>
+    <LIB_LanguageStandard_C>stdc17</LIB_LanguageStandard_C>
+    <LIB_ProgramDataBaseFileName>$(TargetName).pdb</LIB_ProgramDataBaseFileName>
+    <LIB_PrecompiledHeaderFile>pch.h</LIB_PrecompiledHeaderFile>
+    <LIB_PrecompiledHeader>NotUsing</LIB_PrecompiledHeader>
+    <!--Link-->
+    <LIB_ProgramDatabaseFile>$(LIB_OutDir)$(LIB_TargetName).pdb</LIB_ProgramDatabaseFile>
+    <!--ResourceCompile-->
+    <LIB_ResourceOutputFileName>$(LIB_OutDir)%(LIB_TargetName).res</LIB_ResourceOutputFileName>
+  </PropertyGroup>
+</Project>

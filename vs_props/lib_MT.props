@@ -1,0 +1,12 @@
+<?xml version="1.0" ?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+	<ImportGroup Label="PropertySheets">
+		<Import Condition="'$(Configuration)' == 'Release' And '$(Platform)' == 'Win32'" Project="lib_x86_MT_Release.props"/>
+		<Import Condition="'$(Configuration)' == 'Debug' And '$(Platform)' == 'Win32'" Project="lib_x86_MT_Debug.props"/>
+		<Import Condition="'$(Configuration)' == 'Release' And '$(Platform)' == 'x64'" Project="lib_x64_MT_Release.props"/>
+		<Import Condition="'$(Configuration)' == 'Debug' And '$(Platform)' == 'x64'" Project="lib_x64_MT_Debug.props"/>
+	</ImportGroup>
+	<PropertyGroup>
+		<conan_lua_props_imported>True</conan_lua_props_imported>
+	</PropertyGroup>
+</Project>
