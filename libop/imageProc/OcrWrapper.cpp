@@ -61,7 +61,7 @@ int OcrWrapper::init(const std::wstring& engine, const std::wstring& dllName, co
 
 		if (hdll == NULL) {
 			::SetDllDirectoryW(old_path);
-			cout << "error: LoadLibraryA false:" << GetLastErrorAsString() << endl;
+			cout << "error: LoadLibraryW false:" << GetLastErrorAsString() << endl;
 			return -1;
 		}
 		ocr_engine_init = (ocr_engine_init_t)GetProcAddress(hdll, "ocr_engine_init");
@@ -106,11 +106,8 @@ int OcrWrapper::release() {
 		ocr_engine_release(m_engine);
 		m_engine = nullptr;
 	}
-
 	return 0;
 }
-
-
 
 int OcrWrapper::ocr(byte* data, int w, int h, int bpp, vocr_rec_t& result) {
 	const std::lock_guard<std::mutex> lock(m_mutex);
@@ -131,11 +128,9 @@ int OcrWrapper::ocr(byte* data, int w, int h, int bpp, vocr_rec_t& result) {
 			ts.text = _s2wstring(utf8_to_ansi(p.text));
 			result.push_back(ts);
 			free(results[i].text);
-
 		}
 		free(results);
 	}
-
 	return n;
 }
 

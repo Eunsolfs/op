@@ -56,6 +56,10 @@
     <ClInclude Include="libop\include\promutex.h" />
     <ClInclude Include="libop\include\sharedmem.h" />
     <ClInclude Include="libop\libop.h" />
+    <ClInclude Include="libop\om\struct\fc.hpp" />
+    <ClInclude Include="libop\om\struct\fmc.hpp" />
+    <ClInclude Include="libop\om\struct\point.hpp" />
+    <ClInclude Include="libop\om\struct\rect.hpp" />
     <ClInclude Include="libop\winapi\Injecter.h" />
     <ClInclude Include="libop\winapi\MemoryEx.h" />
     <ClInclude Include="libop\winapi\query_api.h" />

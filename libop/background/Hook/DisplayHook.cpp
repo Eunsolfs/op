@@ -162,7 +162,6 @@ void CopyImageData(char* dst_, const char* src_, int rows_, int cols_, int rowPi
 					dst_ += 4;//notirc that dst ptr is increasing
 				}
 				src_ += rowPitch;//row increase
-
 			}
 
 		}
@@ -213,12 +212,12 @@ HRESULT dx9_capture(LPDIRECT3DDEVICE9 pDevice) {
 	CComPtr<IDirect3DTexture9> pTex;
 	CComPtr<IDirect3DSurface9> pTexSurface;
 	hr = pDevice->CreateTexture(surface_Desc.Width,
-		surface_Desc.Height,
-		1,
-		0,
-		surface_Desc.Format,
-		D3DPOOL_SYSTEMMEM, // 必须为这个
-		&pTex, NULL);
+								surface_Desc.Height,
+								1,
+								0,
+								surface_Desc.Format,
+								D3DPOOL_SYSTEMMEM, // 必须为这个
+								&pTex, NULL);
 	if (hr < 0) {
 		return hr;
 	}
@@ -474,11 +473,11 @@ void dx11_capture(IDXGISwapChain* swapchain) {
 		int tf = textDesc.Format;
 
 		setlog("textDesc.Format= %d,fmt=%d textDesc.Height=%d\n textDesc.Width=%d\n  mapSubres.DepthPitch=%d\n mapSubres.RowPitch=%d\n",
-			tf, fmt,
-			textDesc.Height,
-			textDesc.Width,
-			mapSubres.DepthPitch,
-			mapSubres.RowPitch
+			   tf, fmt,
+			   textDesc.Height,
+			   textDesc.Width,
+			   mapSubres.DepthPitch,
+			   mapSubres.RowPitch
 		);
 		first = false;
 	}

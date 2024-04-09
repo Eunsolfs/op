@@ -27,11 +27,6 @@ inline int HEX2INT(wchar_t c) {
 	return 0;
 }
 
-
-//#define SET_BIT(x, idx) (x |= 1u << (idx))
-//
-//#define GET_BIT(x, idx) ((x >> (idx)) & 1u)
-
 using img_names = std::vector<std::wstring>;
 //检查是否为透明图
 int check_transparent(Image* img);
@@ -51,9 +46,7 @@ void extractConnectivity(const ImageBin& src, int threshold, std::vector<ImageBi
 
 
 struct gray_diff_t {
-	gray_diff_t(color_df_t const& cd) :gray(cd.color.toGray()), diff(cd.df.toGray()) {
-
-	}
+	gray_diff_t(color_df_t const& cd) :gray(cd.color.toGray()), diff(cd.df.toGray()) {}
 	unsigned char gray;
 	unsigned char diff;
 };

@@ -1,6 +1,4 @@
-﻿//#include "stdafx.h"
-
-
+﻿
 #include "WinApi.h"
 
 #include <Tlhelp32.h>
@@ -57,9 +55,9 @@ BOOL WinApi::EnumProcessbyName(DWORD dwPID, LPCWSTR ExeName, LONG type) {
 }
 
 DWORD WinApi::FindChildWnd(HWND hchile, const wchar_t* title,
-	const wchar_t* classname, wchar_t* retstring,
-	bool isGW_OWNER, bool isVisible,
-	const wchar_t* process_name) {
+						   const wchar_t* classname, wchar_t* retstring,
+						   bool isGW_OWNER, bool isVisible,
+						   const wchar_t* process_name) {
 	hchile = ::GetWindow(hchile, GW_HWNDFIRST);
 	while (hchile != NULL) {
 		if (isGW_OWNER)  //判断是否要匹配所有者窗口为0的窗口,即顶级窗口
@@ -218,7 +216,7 @@ DWORD WinApi::FindChildWnd(HWND hchile, const wchar_t* title,
 		HWND hchilechile = ::GetWindow(hchile, GW_CHILD);
 		if (hchilechile != NULL) {
 			DWORD dret = FindChildWnd(hchilechile, title, classname, retstring,
-				isGW_OWNER, isVisible, process_name);
+									  isGW_OWNER, isVisible, process_name);
 			if (dret > 0) break;
 		}
 
@@ -241,8 +239,8 @@ DWORD WinApi::FindChildWnd(HWND hchile, const wchar_t* title,
 //
 // 32 : 匹配出的窗口按照窗口打开顺序依次排列
 bool WinApi::EnumWindow(HWND parent, const wchar_t* title,
-	const wchar_t* class_name, LONG filter,
-	wchar_t* retstring, const wchar_t* process_name) {
+						const wchar_t* class_name, LONG filter,
+						wchar_t* retstring, const wchar_t* process_name) {
 	bool bret = false;
 	bool bZwindow = false;  //匹配出的窗口按照窗口打开顺序依次排列
 	if (parent == 0) {
@@ -266,245 +264,49 @@ bool WinApi::EnumWindow(HWND parent, const wchar_t* title,
 	DWORD processpid = 0;
 	retstringlen = 0;
 	switch (filter) {
-	case 0:  //所有模式
-	{
-		if (process_name)  // EnumWindowByProcess
+		case 0:  //所有模式
 		{
-			return false;
-		}
-
-		HWND p = ::GetWindow(parent, GW_CHILD);  //获取桌面窗口的子窗口
-		if (p == NULL) return false;
-		p = ::GetWindow(p, GW_HWNDFIRST);
-		while (p != NULL) {
-			if (retstringlen == 0) retstringlen = wcslen(retstring);
-			if (retstringlen > 1)
-				swprintf(retstring, L"%s,%d", retstring, p);
-			else
-				swprintf(retstring, L"%d", p);
-			bret = true;
-			HWND hchile = ::GetWindow(p, GW_CHILD);
-			if (hchile != NULL) {
-				FindChildWnd(hchile, NULL, NULL, retstring);
-			}
-
-			p = ::GetWindow(p, GW_HWNDNEXT);  //获取下一个窗口
-		}
-		break;
-	}
-	case 1:  // 1 : 匹配窗口标题,参数title有效
-	{
-		if (wcslen(title) < 1) return false;
-		HWND p = ::GetWindow(parent, GW_CHILD);  //获取桌面窗口的子窗口
-		if (p == NULL) return false;
-		p = ::GetWindow(p, GW_HWNDFIRST);
-		while (p != NULL) {
-			wchar_t WindowTitle[MAX_PATH] = {0};
-			::GetWindowText(p, WindowTitle, MAX_PATH);
-			if (wcslen(WindowTitle) > 1) {
-				wchar_t* strfind = wcsstr(WindowTitle, title);  //模糊匹配
-				if (strfind) {
-					if (process_name)  // EnumWindowByProcess
-					{
-						DWORD pid = 0;
-						GetWindowThreadProcessId(p, &pid);
-						if (EnumProcessbyName(pid, process_name)) {
-							if (retstringlen == 0) retstringlen = wcslen(retstring);
-							if (retstringlen > 1)
-								swprintf(retstring, L"%s,%d", retstring, p);
-							else
-								swprintf(retstring, L"%d", p);
-							bret = true;
-						}
-					}
-					else {
-						if (retstringlen == 0) retstringlen = wcslen(retstring);
-						if (retstringlen > 1)
-							swprintf(retstring, L"%s,%d", retstring, p);
-						else
-							swprintf(retstring, L"%d", p);
-						bret = true;
-						HWND hchile = ::GetWindow(p, GW_CHILD);
-						if (hchile != NULL) {
-							FindChildWnd(hchile, title, NULL, retstring);
-						}
-					}
-				}
-			}
-
-			p = ::GetWindow(p, GW_HWNDNEXT);  //获取下一个窗口
-		}
-		break;
-	}
-	case 2:  // 2 : 匹配窗口类名,参数class_name有效.
-	{
-		if (wcslen(class_name) < 1) return false;
-		HWND p = ::GetWindow(parent, GW_CHILD);  //获取桌面窗口的子窗口
-		if (p == NULL) return false;
-		p = ::GetWindow(p, GW_HWNDFIRST);
-		while (p != NULL) {
-			wchar_t WindowClassName[MAX_PATH] = {0};
-			::GetClassName(p, WindowClassName, MAX_PATH);
-			if (wcslen(WindowClassName) > 1) {
-				wchar_t* strfind = wcsstr(WindowClassName, class_name);  //模糊匹配
-				if (strfind) {
-					if (process_name)  // EnumWindowByProcess
-					{
-						DWORD pid = 0;
-						GetWindowThreadProcessId(p, &pid);
-						if (EnumProcessbyName(pid, process_name)) {
-							if (retstringlen == 0) retstringlen = wcslen(retstring);
-							if (retstringlen > 1)
-								swprintf(retstring, L"%s,%d", retstring, p);
-							else
-								swprintf(retstring, L"%d", p);
-							bret = true;
-						}
-					}
-					else {
-						if (retstringlen == 0) retstringlen = wcslen(retstring);
-						if (retstringlen > 1)
-							swprintf(retstring, L"%s,%d", retstring, p);
-						else
-							swprintf(retstring, L"%d", p);
-						bret = true;
-						HWND hchile = ::GetWindow(p, GW_CHILD);
-						if (hchile != NULL) {
-							FindChildWnd(hchile, NULL, class_name, retstring);
-						}
-					}
-				}
-			}
-			p = ::GetWindow(p, GW_HWNDNEXT);  //获取下一个窗口
-		}
-		break;
-	}
-	case 3:  // 1.窗口标题+2.窗口类名
-	{
-		if (wcslen(class_name) < 1 && wcslen(title) < 1) return false;
-		HWND p = ::GetWindow(parent, GW_CHILD);  //获取桌面窗口的子窗口
-		if (p == NULL) return false;
-		p = ::GetWindow(p, GW_HWNDFIRST);
-		while (p != NULL) {
-			wchar_t WindowClassName[MAX_PATH] = {0};
-			::GetClassName(p, WindowClassName, MAX_PATH);
-			wchar_t WindowTitle[MAX_PATH] = {0};
-			::GetWindowText(p, WindowTitle, MAX_PATH);
-			if (wcslen(WindowClassName) > 1 && wcslen(WindowTitle) > 1) {
-				wchar_t* strfindclass =
-					wcsstr(WindowClassName, class_name);             //模糊匹配
-				wchar_t* strfindtitle = wcsstr(WindowTitle, title);  //模糊匹配
-				if (strfindclass && strfindtitle) {
-					if (process_name)  // EnumWindowByProcess
-					{
-						DWORD pid = 0;
-						GetWindowThreadProcessId(p, &pid);
-						if (EnumProcessbyName(pid, process_name)) {
-							if (retstringlen == 0) retstringlen = wcslen(retstring);
-							if (retstringlen > 1)
-								swprintf(retstring, L"%s,%d", retstring, p);
-							else
-								swprintf(retstring, L"%d", p);
-							bret = true;
-						}
-					}
-					else {
-						if (retstringlen == 0) retstringlen = wcslen(retstring);
-						if (retstringlen > 1)
-							swprintf(retstring, L"%s,%d", retstring, p);
-						else
-							swprintf(retstring, L"%d", p);
-						bret = true;
-						HWND hchile = ::GetWindow(p, GW_CHILD);
-						if (hchile != NULL) {
-							FindChildWnd(hchile, title, class_name, retstring);
-						}
-					}
-				}
-			}
-
-			p = ::GetWindow(p, GW_HWNDNEXT);  //获取下一个窗口
-		}
-		break;
-	}
-	case 4:  // 4 : 只匹配指定父窗口的第一层孩子窗口
-	{
-		HWND p = ::GetWindow(parent, GW_CHILD);  //获取桌面窗口的子窗口
-		if (p == NULL) return false;
-		p = ::GetWindow(p, GW_HWNDFIRST);
-		while (p != NULL) {
 			if (process_name)  // EnumWindowByProcess
 			{
-				DWORD pid = 0;
-				GetWindowThreadProcessId(p, &pid);
-				if (EnumProcessbyName(pid, process_name)) {
-					if (processpid !=
-						pid)  //只匹配指定映像的所对应的第一个进程.
-						//可能有很多同映像名的进程，只匹配第一个进程的.
-					{
-						if (indexpid < IsEuemprosuccess) {
-							indexpid++;
-							processpid = pid;
-							memset(retstring, 0, retstringlen);  //清空返回字符串
-							retstringlen = 0;
-						}
-					}
-					if (processpid == pid) {
-						if (retstringlen == 0) retstringlen = wcslen(retstring);
-						if (retstringlen > 1)
-							swprintf(retstring, L"%s,%d", retstring, p);
-						else
-							swprintf(retstring, L"%d", p);
-						bret = true;
-						HWND hchile = ::GetWindow(p, GW_CHILD);
-						if (hchile != NULL) {
-							FindChildWnd(hchile, NULL, NULL, retstring, false, false,
-								process_name);
-						}
-					}
-				}
+				return false;
 			}
-			else {
+
+			HWND p = ::GetWindow(parent, GW_CHILD);  //获取桌面窗口的子窗口
+			if (p == NULL) return false;
+			p = ::GetWindow(p, GW_HWNDFIRST);
+			while (p != NULL) {
 				if (retstringlen == 0) retstringlen = wcslen(retstring);
 				if (retstringlen > 1)
 					swprintf(retstring, L"%s,%d", retstring, p);
 				else
 					swprintf(retstring, L"%d", p);
 				bret = true;
-			}
-			p = ::GetWindow(p, GW_HWNDNEXT);  //获取下一个窗口
-		}
-		break;
-	}
-	case 5:  // 1.匹配窗口标题+//4 : 只匹配指定父窗口的第一层孩子窗口
-	{
-		if (wcslen(title) < 1) return false;
+				HWND hchile = ::GetWindow(p, GW_CHILD);
+				if (hchile != NULL) {
+					FindChildWnd(hchile, NULL, NULL, retstring);
+				}
 
-		HWND p = ::GetWindow(parent, GW_CHILD);  //获取桌面窗口的子窗口
-		if (p == NULL) return false;
-		p = ::GetWindow(p, GW_HWNDFIRST);
-		while (p != NULL) {
-			if (process_name)  // EnumWindowByProcess
-			{
-				DWORD pid = 0;
-				GetWindowThreadProcessId(p, &pid);
-				if (EnumProcessbyName(pid, process_name)) {
-					if (processpid !=
-						pid)  //只匹配指定映像的所对应的第一个进程.
-						//可能有很多同映像名的进程，只匹配第一个进程的.
-					{
-						if (indexpid < IsEuemprosuccess) {
-							indexpid++;
-							processpid = pid;
-							memset(retstring, 0, retstringlen);  //清空返回字符串
-							retstringlen = 0;
-						}
-					}
-					if (processpid == pid) {
-						wchar_t WindowTitle[MAX_PATH] = {0};
-						::GetWindowText(p, WindowTitle, MAX_PATH);
-						if (wcslen(WindowTitle) > 1) {
-							if (wcsstr(WindowTitle, title)) {
+				p = ::GetWindow(p, GW_HWNDNEXT);  //获取下一个窗口
+			}
+			break;
+		}
+		case 1:  // 1 : 匹配窗口标题,参数title有效
+		{
+			if (wcslen(title) < 1) return false;
+			HWND p = ::GetWindow(parent, GW_CHILD);  //获取桌面窗口的子窗口
+			if (p == NULL) return false;
+			p = ::GetWindow(p, GW_HWNDFIRST);
+			while (p != NULL) {
+				wchar_t WindowTitle[MAX_PATH] = {0};
+				::GetWindowText(p, WindowTitle, MAX_PATH);
+				if (wcslen(WindowTitle) > 1) {
+					wchar_t* strfind = wcsstr(WindowTitle, title);  //模糊匹配
+					if (strfind) {
+						if (process_name)  // EnumWindowByProcess
+						{
+							DWORD pid = 0;
+							GetWindowThreadProcessId(p, &pid);
+							if (EnumProcessbyName(pid, process_name)) {
 								if (retstringlen == 0) retstringlen = wcslen(retstring);
 								if (retstringlen > 1)
 									swprintf(retstring, L"%s,%d", retstring, p);
@@ -513,136 +315,75 @@ bool WinApi::EnumWindow(HWND parent, const wchar_t* title,
 								bret = true;
 							}
 						}
-						HWND hchile = ::GetWindow(p, GW_CHILD);
-						if (hchile != NULL) {
-							FindChildWnd(hchile, title, NULL, retstring, false, false,
-								process_name);
-						}
-					}
-				}
-
-			}
-			else {
-				wchar_t WindowTitle[MAX_PATH] = {0};
-				::GetWindowText(p, WindowTitle, MAX_PATH);
-				if (wcslen(WindowTitle) > 1) {
-					if (wcsstr(WindowTitle, title)) {
-						if (retstringlen == 0) retstringlen = wcslen(retstring);
-						if (retstringlen > 1)
-							swprintf(retstring, L"%s,%d", retstring, p);
-						else
-							swprintf(retstring, L"%d", p);
-						bret = true;
-					}
-				}
-			}
-
-			p = ::GetWindow(p, GW_HWNDNEXT);  //获取下一个窗口
-		}
-		break;
-	}
-	case 6:  // 2 : 匹配窗口类名+4 : 只匹配指定父窗口的第一层孩子窗口
-	{
-		if (wcslen(class_name) < 1) return false;
-		HWND p = ::GetWindow(parent, GW_CHILD);  //获取桌面窗口的子窗口
-		if (p == NULL) return false;
-		p = ::GetWindow(p, GW_HWNDFIRST);
-		while (p != NULL) {
-			if (process_name)  // EnumWindowByProcess
-			{
-				DWORD pid = 0;
-				GetWindowThreadProcessId(p, &pid);
-				if (EnumProcessbyName(pid, process_name)) {
-					if (indexpid < IsEuemprosuccess) {
-						indexpid++;
-						processpid = pid;
-						memset(retstring, 0, retstringlen);  //清空返回字符串
-						retstringlen = 0;
-					}
-				}
-				if (processpid == pid) {
-					wchar_t WindowClassName[MAX_PATH] = {0};
-					::GetClassName(p, WindowClassName, MAX_PATH);
-					if (wcslen(WindowClassName) > 1) {
-						if (wcsstr(WindowClassName, class_name)) {
+						else {
 							if (retstringlen == 0) retstringlen = wcslen(retstring);
 							if (retstringlen > 1)
 								swprintf(retstring, L"%s,%d", retstring, p);
 							else
 								swprintf(retstring, L"%d", p);
 							bret = true;
+							HWND hchile = ::GetWindow(p, GW_CHILD);
+							if (hchile != NULL) {
+								FindChildWnd(hchile, title, NULL, retstring);
+							}
 						}
 					}
-					HWND hchile = ::GetWindow(p, GW_CHILD);
-					if (hchile != NULL) {
-						FindChildWnd(hchile, NULL, class_name, retstring, false, false,
-							process_name);
-					}
 				}
+
+				p = ::GetWindow(p, GW_HWNDNEXT);  //获取下一个窗口
 			}
-			else {
+			break;
+		}
+		case 2:  // 2 : 匹配窗口类名,参数class_name有效.
+		{
+			if (wcslen(class_name) < 1) return false;
+			HWND p = ::GetWindow(parent, GW_CHILD);  //获取桌面窗口的子窗口
+			if (p == NULL) return false;
+			p = ::GetWindow(p, GW_HWNDFIRST);
+			while (p != NULL) {
 				wchar_t WindowClassName[MAX_PATH] = {0};
 				::GetClassName(p, WindowClassName, MAX_PATH);
 				if (wcslen(WindowClassName) > 1) {
-					if (wcsstr(WindowClassName, class_name)) {
-						if (retstringlen == 0) retstringlen = wcslen(retstring);
-						if (retstringlen > 1)
-							swprintf(retstring, L"%s,%d", retstring, p);
-						else
-							swprintf(retstring, L"%d", p);
-						bret = true;
-					}
-				}
-			}
-			p = ::GetWindow(p, GW_HWNDNEXT);  //获取下一个窗口
-		}
-		break;
-	}
-	case 7:  // 1.窗口标题+2.窗口类名+4 : 只匹配指定父窗口的第一层孩子窗口
-	{
-		if (wcslen(class_name) < 1 && wcslen(title) < 1) return false;
-		HWND p = ::GetWindow(parent, GW_CHILD);  //获取桌面窗口的子窗口
-		if (p == NULL) return false;
-		p = ::GetWindow(p, GW_HWNDFIRST);
-		while (p != NULL) {
-			if (process_name)  // EnumWindowByProcess
-			{
-				DWORD pid = 0;
-				GetWindowThreadProcessId(p, &pid);
-				if (EnumProcessbyName(pid, process_name)) {
-					if (indexpid < IsEuemprosuccess) {
-						indexpid++;
-						processpid = pid;
-						memset(retstring, 0, retstringlen);  //清空返回字符串
-						retstringlen = 0;
-					}
-				}
-				if (processpid == pid) {
-					wchar_t WindowClassName[MAX_PATH] = {0};
-					::GetClassName(p, WindowClassName, MAX_PATH);
-					wchar_t WindowTitle[MAX_PATH] = {0};
-					::GetWindowText(p, WindowTitle, MAX_PATH);
-					if (wcslen(WindowClassName) > 1 && wcslen(WindowTitle) > 1) {
-						wchar_t* strfindclass =
-							wcsstr(WindowClassName, class_name);  //模糊匹配
-						wchar_t* strfindtitle = wcsstr(WindowTitle, title);  //模糊匹配
-						if (strfindclass && strfindtitle) {
+					wchar_t* strfind = wcsstr(WindowClassName, class_name);  //模糊匹配
+					if (strfind) {
+						if (process_name)  // EnumWindowByProcess
+						{
+							DWORD pid = 0;
+							GetWindowThreadProcessId(p, &pid);
+							if (EnumProcessbyName(pid, process_name)) {
+								if (retstringlen == 0) retstringlen = wcslen(retstring);
+								if (retstringlen > 1)
+									swprintf(retstring, L"%s,%d", retstring, p);
+								else
+									swprintf(retstring, L"%d", p);
+								bret = true;
+							}
+						}
+						else {
 							if (retstringlen == 0) retstringlen = wcslen(retstring);
 							if (retstringlen > 1)
 								swprintf(retstring, L"%s,%d", retstring, p);
 							else
 								swprintf(retstring, L"%d", p);
 							bret = true;
+							HWND hchile = ::GetWindow(p, GW_CHILD);
+							if (hchile != NULL) {
+								FindChildWnd(hchile, NULL, class_name, retstring);
+							}
 						}
 					}
-					HWND hchile = ::GetWindow(p, GW_CHILD);
-					if (hchile != NULL) {
-						FindChildWnd(hchile, title, class_name, retstring, false, false,
-							process_name);
-					}
 				}
+				p = ::GetWindow(p, GW_HWNDNEXT);  //获取下一个窗口
 			}
-			else {
+			break;
+		}
+		case 3:  // 1.窗口标题+2.窗口类名
+		{
+			if (wcslen(class_name) < 1 && wcslen(title) < 1) return false;
+			HWND p = ::GetWindow(parent, GW_CHILD);  //获取桌面窗口的子窗口
+			if (p == NULL) return false;
+			p = ::GetWindow(p, GW_HWNDFIRST);
+			while (p != NULL) {
 				wchar_t WindowClassName[MAX_PATH] = {0};
 				::GetClassName(p, WindowClassName, MAX_PATH);
 				wchar_t WindowTitle[MAX_PATH] = {0};
@@ -652,251 +393,44 @@ bool WinApi::EnumWindow(HWND parent, const wchar_t* title,
 						wcsstr(WindowClassName, class_name);             //模糊匹配
 					wchar_t* strfindtitle = wcsstr(WindowTitle, title);  //模糊匹配
 					if (strfindclass && strfindtitle) {
-						if (retstringlen == 0) retstringlen = wcslen(retstring);
-						if (retstringlen > 1)
-							swprintf(retstring, L"%s,%d", retstring, p);
-						else
-							swprintf(retstring, L"%d", p);
-						bret = true;
+						if (process_name)  // EnumWindowByProcess
+						{
+							DWORD pid = 0;
+							GetWindowThreadProcessId(p, &pid);
+							if (EnumProcessbyName(pid, process_name)) {
+								if (retstringlen == 0) retstringlen = wcslen(retstring);
+								if (retstringlen > 1)
+									swprintf(retstring, L"%s,%d", retstring, p);
+								else
+									swprintf(retstring, L"%d", p);
+								bret = true;
+							}
+						}
+						else {
+							if (retstringlen == 0) retstringlen = wcslen(retstring);
+							if (retstringlen > 1)
+								swprintf(retstring, L"%s,%d", retstring, p);
+							else
+								swprintf(retstring, L"%d", p);
+							bret = true;
+							HWND hchile = ::GetWindow(p, GW_CHILD);
+							if (hchile != NULL) {
+								FindChildWnd(hchile, title, class_name, retstring);
+							}
+						}
 					}
 				}
-			}
 
-			p = ::GetWindow(p, GW_HWNDNEXT);  //获取下一个窗口
-		}
-		break;
-	}
-	case 8:  // 8 : 匹配所有者窗口为0的窗口,即顶级窗口
-	{
-		HWND p = ::GetWindow(parent, GW_CHILD);  //获取桌面窗口的子窗口
-		if (p == NULL) return false;
-		p = ::GetWindow(p, GW_HWNDFIRST);
-		while (p != NULL) {
-			if (::GetWindow(p, GW_OWNER) == 0) {
-				if (process_name)  // EnumWindowByProcess
-				{
-					DWORD pid = 0;
-					GetWindowThreadProcessId(p, &pid);
-					if (EnumProcessbyName(pid, process_name)) {
-						if (retstringlen == 0) retstringlen = wcslen(retstring);
-						if (retstringlen > 1)
-							swprintf(retstring, L"%s,%d", retstring, p);
-						else
-							swprintf(retstring, L"%d", p);
-						bret = true;
-						HWND hchile = ::GetWindow(p, GW_CHILD);
-						if (hchile != NULL) {
-							FindChildWnd(hchile, NULL, NULL, retstring, true, false,
-								process_name);
-						}
-					}
-				}
-				else {
-					if (retstringlen == 0) retstringlen = wcslen(retstring);
-					if (retstringlen > 1)
-						swprintf(retstring, L"%s,%d", retstring, p);
-					else
-						swprintf(retstring, L"%d", p);
-					bret = true;
-					HWND hchile = ::GetWindow(p, GW_CHILD);
-					if (hchile != NULL) {
-						FindChildWnd(hchile, NULL, NULL, retstring, true);
-					}
-				}
+				p = ::GetWindow(p, GW_HWNDNEXT);  //获取下一个窗口
 			}
-			p = ::GetWindow(p, GW_HWNDNEXT);  //获取下一个窗口
+			break;
 		}
-		break;
-	}
-	case 9:  // 1.窗口标题+8 : 匹配所有者窗口为0的窗口,即顶级窗口
-	{
-		if (wcslen(title) < 1) return false;
-		HWND p = ::GetWindow(parent, GW_CHILD);  //获取桌面窗口的子窗口
-		if (p == NULL) return false;
-		p = ::GetWindow(p, GW_HWNDFIRST);
-		while (p != NULL) {
-			if (::GetWindow(p, GW_OWNER) == 0) {
-				if (process_name)  // EnumWindowByProcess
-				{
-					DWORD pid = 0;
-					GetWindowThreadProcessId(p, &pid);
-					if (EnumProcessbyName(pid, process_name)) {
-						wchar_t WindowTitle[MAX_PATH] = {0};
-						::GetWindowText(p, WindowTitle, MAX_PATH);
-						if (wcslen(WindowTitle) > 1) {
-							wchar_t* strfind = wcsstr(WindowTitle, title);  //模糊匹配
-							if (strfind) {
-								if (retstringlen == 0) retstringlen = wcslen(retstring);
-								if (retstringlen > 1)
-									swprintf(retstring, L"%s,%d", retstring, p);
-								else
-									swprintf(retstring, L"%d", p);
-								bret = true;
-							}
-						}
-						HWND hchile = ::GetWindow(p, GW_CHILD);
-						if (hchile != NULL) {
-							FindChildWnd(hchile, title, NULL, retstring, true, false,
-								process_name);
-						}
-					}
-				}
-				else {
-					wchar_t WindowTitle[MAX_PATH] = {0};
-					::GetWindowText(p, WindowTitle, MAX_PATH);
-					if (wcslen(WindowTitle) > 1) {
-						wchar_t* strfind = wcsstr(WindowTitle, title);  //模糊匹配
-						if (strfind) {
-							if (retstringlen == 0) retstringlen = wcslen(retstring);
-							if (retstringlen > 1)
-								swprintf(retstring, L"%s,%d", retstring, p);
-							else
-								swprintf(retstring, L"%d", p);
-							bret = true;
-						}
-					}
-					HWND hchile = ::GetWindow(p, GW_CHILD);
-					if (hchile != NULL) {
-						FindChildWnd(hchile, title, NULL, retstring, true);
-					}
-				}
-			}
-			p = ::GetWindow(p, GW_HWNDNEXT);  //获取下一个窗口
-		}
-		break;
-	}
-	case 10:  // 2.窗口类名+8 : 匹配所有者窗口为0的窗口,即顶级窗口
-	{
-		if (wcslen(class_name) < 1) return false;
-		HWND p = ::GetWindow(parent, GW_CHILD);  //获取桌面窗口的子窗口
-		if (p == NULL) return false;
-		p = ::GetWindow(p, GW_HWNDFIRST);
-		while (p != NULL) {
-			if (::GetWindow(p, GW_OWNER) == 0) {
-				if (process_name)  // EnumWindowByProcess
-				{
-					DWORD pid = 0;
-					GetWindowThreadProcessId(p, &pid);
-					if (EnumProcessbyName(pid, process_name)) {
-						wchar_t WindowClassName[MAX_PATH] = {0};
-						::GetClassName(p, WindowClassName, MAX_PATH);
-						if (wcslen(WindowClassName) > 1) {
-							wchar_t* strfind =
-								wcsstr(WindowClassName, class_name);  //模糊匹配
-							if (strfind) {
-								if (retstringlen == 0) retstringlen = wcslen(retstring);
-								if (retstringlen > 1)
-									swprintf(retstring, L"%s,%d", retstring, p);
-								else
-									swprintf(retstring, L"%d", p);
-								bret = true;
-							}
-						}
-						HWND hchile = ::GetWindow(p, GW_CHILD);
-						if (hchile != NULL) {
-							FindChildWnd(hchile, NULL, class_name, retstring, true, false,
-								process_name);
-						}
-					}
-				}
-				else {
-					wchar_t WindowClassName[MAX_PATH] = {0};
-					::GetClassName(p, WindowClassName, MAX_PATH);
-					if (wcslen(WindowClassName) > 1) {
-						wchar_t* strfind =
-							wcsstr(WindowClassName, class_name);  //模糊匹配
-						if (strfind) {
-							if (retstringlen == 0) retstringlen = wcslen(retstring);
-							if (retstringlen > 1)
-								swprintf(retstring, L"%s,%d", retstring, p);
-							else
-								swprintf(retstring, L"%d", p);
-							bret = true;
-						}
-					}
-
-					HWND hchile = ::GetWindow(p, GW_CHILD);
-					if (hchile != NULL) {
-						FindChildWnd(hchile, NULL, class_name, retstring, true);
-					}
-				}
-			}
-			p = ::GetWindow(p, GW_HWNDNEXT);  //获取下一个窗口
-		}
-		break;
-	}
-	case 11:  ////1.窗口标题+2.窗口类名+8 : 匹配所有者窗口为0的窗口,即顶级窗口
-	{
-		if (wcslen(class_name) < 1 && wcslen(title) < 1) return false;
-		HWND p = ::GetWindow(parent, GW_CHILD);  //获取桌面窗口的子窗口
-		if (p == NULL) return false;
-		p = ::GetWindow(p, GW_HWNDFIRST);
-		while (p != NULL) {
-			if (::GetWindow(p, GW_OWNER) == 0) {
-				if (process_name)  // EnumWindowByProcess
-				{
-					DWORD pid = 0;
-					GetWindowThreadProcessId(p, &pid);
-					if (EnumProcessbyName(pid, process_name)) {
-						wchar_t WindowClassName[MAX_PATH] = {0};
-						::GetClassName(p, WindowClassName, MAX_PATH);
-						wchar_t WindowTitle[MAX_PATH] = {0};
-						::GetWindowText(p, WindowTitle, MAX_PATH);
-						if (wcslen(WindowClassName) > 1 && wcslen(WindowTitle) > 1) {
-							wchar_t* strfindclass =
-								wcsstr(WindowClassName, class_name);  //模糊匹配
-							wchar_t* strfindtitle = wcsstr(WindowTitle, title);  //模糊匹配
-							if (strfindclass && strfindtitle) {
-								if (retstringlen == 0) retstringlen = wcslen(retstring);
-								if (retstringlen > 1)
-									swprintf(retstring, L"%s,%d", retstring, p);
-								else
-									swprintf(retstring, L"%d", p);
-								bret = true;
-							}
-						}
-						HWND hchile = ::GetWindow(p, GW_CHILD);
-						if (hchile != NULL) {
-							FindChildWnd(hchile, title, class_name, retstring, true, false,
-								process_name);
-						}
-					}
-				}
-				else {
-					wchar_t WindowClassName[MAX_PATH] = {0};
-					::GetClassName(p, WindowClassName, MAX_PATH);
-					wchar_t WindowTitle[MAX_PATH] = {0};
-					::GetWindowText(p, WindowTitle, MAX_PATH);
-					if (wcslen(WindowClassName) > 1 && wcslen(WindowTitle) > 1) {
-						wchar_t* strfindclass =
-							wcsstr(WindowClassName, class_name);  //模糊匹配
-						wchar_t* strfindtitle = wcsstr(WindowTitle, title);  //模糊匹配
-						if (strfindclass && strfindtitle) {
-							if (retstringlen == 0) retstringlen = wcslen(retstring);
-							if (retstringlen > 1)
-								swprintf(retstring, L"%s,%d", retstring, p);
-							else
-								swprintf(retstring, L"%d", p);
-							bret = true;
-						}
-					}
-					HWND hchile = ::GetWindow(p, GW_CHILD);
-					if (hchile != NULL) {
-						FindChildWnd(hchile, title, class_name, retstring, true);
-					}
-				}
-			}
-			p = ::GetWindow(p, GW_HWNDNEXT);  //获取下一个窗口
-		}
-		break;
-	}
-	case 12:  // //4 : 只匹配指定父窗口的第一层孩子窗口+8 :
-		// 匹配所有者窗口为0的窗口,即顶级窗口
-	{
-		HWND p = ::GetWindow(parent, GW_CHILD);  //获取桌面窗口的子窗口
-		p = ::GetWindow(p, GW_HWNDFIRST);
-		while (p != NULL) {
-			if (::GetWindow(p, GW_OWNER) == 0) {
+		case 4:  // 4 : 只匹配指定父窗口的第一层孩子窗口
+		{
+			HWND p = ::GetWindow(parent, GW_CHILD);  //获取桌面窗口的子窗口
+			if (p == NULL) return false;
+			p = ::GetWindow(p, GW_HWNDFIRST);
+			while (p != NULL) {
 				if (process_name)  // EnumWindowByProcess
 				{
 					DWORD pid = 0;
@@ -922,8 +456,8 @@ bool WinApi::EnumWindow(HWND parent, const wchar_t* title,
 							bret = true;
 							HWND hchile = ::GetWindow(p, GW_CHILD);
 							if (hchile != NULL) {
-								FindChildWnd(hchile, NULL, NULL, retstring, true, false,
-									process_name);
+								FindChildWnd(hchile, NULL, NULL, retstring, false, false,
+											 process_name);
 							}
 						}
 					}
@@ -936,19 +470,18 @@ bool WinApi::EnumWindow(HWND parent, const wchar_t* title,
 						swprintf(retstring, L"%d", p);
 					bret = true;
 				}
+				p = ::GetWindow(p, GW_HWNDNEXT);  //获取下一个窗口
 			}
-			p = ::GetWindow(p, GW_HWNDNEXT);  //获取下一个窗口
+			break;
 		}
-		break;
-	}
-	case 13:  // 1.窗口标题+4 : 只匹配指定父窗口的第一层孩子窗口+8 :
-		// 匹配所有者窗口为0的窗口,即顶级窗口
-	{
-		if (wcslen(title) < 1) return false;
-		HWND p = ::GetWindow(parent, GW_CHILD);  //获取桌面窗口的子窗口
-		p = ::GetWindow(p, GW_HWNDFIRST);
-		while (p != NULL) {
-			if (::GetWindow(p, GW_OWNER) == 0) {
+		case 5:  // 1.匹配窗口标题+//4 : 只匹配指定父窗口的第一层孩子窗口
+		{
+			if (wcslen(title) < 1) return false;
+
+			HWND p = ::GetWindow(parent, GW_CHILD);  //获取桌面窗口的子窗口
+			if (p == NULL) return false;
+			p = ::GetWindow(p, GW_HWNDFIRST);
+			while (p != NULL) {
 				if (process_name)  // EnumWindowByProcess
 				{
 					DWORD pid = 0;
@@ -969,6 +502,226 @@ bool WinApi::EnumWindow(HWND parent, const wchar_t* title,
 							wchar_t WindowTitle[MAX_PATH] = {0};
 							::GetWindowText(p, WindowTitle, MAX_PATH);
 							if (wcslen(WindowTitle) > 1) {
+								if (wcsstr(WindowTitle, title)) {
+									if (retstringlen == 0) retstringlen = wcslen(retstring);
+									if (retstringlen > 1)
+										swprintf(retstring, L"%s,%d", retstring, p);
+									else
+										swprintf(retstring, L"%d", p);
+									bret = true;
+								}
+							}
+							HWND hchile = ::GetWindow(p, GW_CHILD);
+							if (hchile != NULL) {
+								FindChildWnd(hchile, title, NULL, retstring, false, false,
+											 process_name);
+							}
+						}
+					}
+
+				}
+				else {
+					wchar_t WindowTitle[MAX_PATH] = {0};
+					::GetWindowText(p, WindowTitle, MAX_PATH);
+					if (wcslen(WindowTitle) > 1) {
+						if (wcsstr(WindowTitle, title)) {
+							if (retstringlen == 0) retstringlen = wcslen(retstring);
+							if (retstringlen > 1)
+								swprintf(retstring, L"%s,%d", retstring, p);
+							else
+								swprintf(retstring, L"%d", p);
+							bret = true;
+						}
+					}
+				}
+
+				p = ::GetWindow(p, GW_HWNDNEXT);  //获取下一个窗口
+			}
+			break;
+		}
+		case 6:  // 2 : 匹配窗口类名+4 : 只匹配指定父窗口的第一层孩子窗口
+		{
+			if (wcslen(class_name) < 1) return false;
+			HWND p = ::GetWindow(parent, GW_CHILD);  //获取桌面窗口的子窗口
+			if (p == NULL) return false;
+			p = ::GetWindow(p, GW_HWNDFIRST);
+			while (p != NULL) {
+				if (process_name)  // EnumWindowByProcess
+				{
+					DWORD pid = 0;
+					GetWindowThreadProcessId(p, &pid);
+					if (EnumProcessbyName(pid, process_name)) {
+						if (indexpid < IsEuemprosuccess) {
+							indexpid++;
+							processpid = pid;
+							memset(retstring, 0, retstringlen);  //清空返回字符串
+							retstringlen = 0;
+						}
+					}
+					if (processpid == pid) {
+						wchar_t WindowClassName[MAX_PATH] = {0};
+						::GetClassName(p, WindowClassName, MAX_PATH);
+						if (wcslen(WindowClassName) > 1) {
+							if (wcsstr(WindowClassName, class_name)) {
+								if (retstringlen == 0) retstringlen = wcslen(retstring);
+								if (retstringlen > 1)
+									swprintf(retstring, L"%s,%d", retstring, p);
+								else
+									swprintf(retstring, L"%d", p);
+								bret = true;
+							}
+						}
+						HWND hchile = ::GetWindow(p, GW_CHILD);
+						if (hchile != NULL) {
+							FindChildWnd(hchile, NULL, class_name, retstring, false, false,
+										 process_name);
+						}
+					}
+				}
+				else {
+					wchar_t WindowClassName[MAX_PATH] = {0};
+					::GetClassName(p, WindowClassName, MAX_PATH);
+					if (wcslen(WindowClassName) > 1) {
+						if (wcsstr(WindowClassName, class_name)) {
+							if (retstringlen == 0) retstringlen = wcslen(retstring);
+							if (retstringlen > 1)
+								swprintf(retstring, L"%s,%d", retstring, p);
+							else
+								swprintf(retstring, L"%d", p);
+							bret = true;
+						}
+					}
+				}
+				p = ::GetWindow(p, GW_HWNDNEXT);  //获取下一个窗口
+			}
+			break;
+		}
+		case 7:  // 1.窗口标题+2.窗口类名+4 : 只匹配指定父窗口的第一层孩子窗口
+		{
+			if (wcslen(class_name) < 1 && wcslen(title) < 1) return false;
+			HWND p = ::GetWindow(parent, GW_CHILD);  //获取桌面窗口的子窗口
+			if (p == NULL) return false;
+			p = ::GetWindow(p, GW_HWNDFIRST);
+			while (p != NULL) {
+				if (process_name)  // EnumWindowByProcess
+				{
+					DWORD pid = 0;
+					GetWindowThreadProcessId(p, &pid);
+					if (EnumProcessbyName(pid, process_name)) {
+						if (indexpid < IsEuemprosuccess) {
+							indexpid++;
+							processpid = pid;
+							memset(retstring, 0, retstringlen);  //清空返回字符串
+							retstringlen = 0;
+						}
+					}
+					if (processpid == pid) {
+						wchar_t WindowClassName[MAX_PATH] = {0};
+						::GetClassName(p, WindowClassName, MAX_PATH);
+						wchar_t WindowTitle[MAX_PATH] = {0};
+						::GetWindowText(p, WindowTitle, MAX_PATH);
+						if (wcslen(WindowClassName) > 1 && wcslen(WindowTitle) > 1) {
+							wchar_t* strfindclass =
+								wcsstr(WindowClassName, class_name);  //模糊匹配
+							wchar_t* strfindtitle = wcsstr(WindowTitle, title);  //模糊匹配
+							if (strfindclass && strfindtitle) {
+								if (retstringlen == 0) retstringlen = wcslen(retstring);
+								if (retstringlen > 1)
+									swprintf(retstring, L"%s,%d", retstring, p);
+								else
+									swprintf(retstring, L"%d", p);
+								bret = true;
+							}
+						}
+						HWND hchile = ::GetWindow(p, GW_CHILD);
+						if (hchile != NULL) {
+							FindChildWnd(hchile, title, class_name, retstring, false, false,
+										 process_name);
+						}
+					}
+				}
+				else {
+					wchar_t WindowClassName[MAX_PATH] = {0};
+					::GetClassName(p, WindowClassName, MAX_PATH);
+					wchar_t WindowTitle[MAX_PATH] = {0};
+					::GetWindowText(p, WindowTitle, MAX_PATH);
+					if (wcslen(WindowClassName) > 1 && wcslen(WindowTitle) > 1) {
+						wchar_t* strfindclass =
+							wcsstr(WindowClassName, class_name);             //模糊匹配
+						wchar_t* strfindtitle = wcsstr(WindowTitle, title);  //模糊匹配
+						if (strfindclass && strfindtitle) {
+							if (retstringlen == 0) retstringlen = wcslen(retstring);
+							if (retstringlen > 1)
+								swprintf(retstring, L"%s,%d", retstring, p);
+							else
+								swprintf(retstring, L"%d", p);
+							bret = true;
+						}
+					}
+				}
+
+				p = ::GetWindow(p, GW_HWNDNEXT);  //获取下一个窗口
+			}
+			break;
+		}
+		case 8:  // 8 : 匹配所有者窗口为0的窗口,即顶级窗口
+		{
+			HWND p = ::GetWindow(parent, GW_CHILD);  //获取桌面窗口的子窗口
+			if (p == NULL) return false;
+			p = ::GetWindow(p, GW_HWNDFIRST);
+			while (p != NULL) {
+				if (::GetWindow(p, GW_OWNER) == 0) {
+					if (process_name)  // EnumWindowByProcess
+					{
+						DWORD pid = 0;
+						GetWindowThreadProcessId(p, &pid);
+						if (EnumProcessbyName(pid, process_name)) {
+							if (retstringlen == 0) retstringlen = wcslen(retstring);
+							if (retstringlen > 1)
+								swprintf(retstring, L"%s,%d", retstring, p);
+							else
+								swprintf(retstring, L"%d", p);
+							bret = true;
+							HWND hchile = ::GetWindow(p, GW_CHILD);
+							if (hchile != NULL) {
+								FindChildWnd(hchile, NULL, NULL, retstring, true, false,
+											 process_name);
+							}
+						}
+					}
+					else {
+						if (retstringlen == 0) retstringlen = wcslen(retstring);
+						if (retstringlen > 1)
+							swprintf(retstring, L"%s,%d", retstring, p);
+						else
+							swprintf(retstring, L"%d", p);
+						bret = true;
+						HWND hchile = ::GetWindow(p, GW_CHILD);
+						if (hchile != NULL) {
+							FindChildWnd(hchile, NULL, NULL, retstring, true);
+						}
+					}
+				}
+				p = ::GetWindow(p, GW_HWNDNEXT);  //获取下一个窗口
+			}
+			break;
+		}
+		case 9:  // 1.窗口标题+8 : 匹配所有者窗口为0的窗口,即顶级窗口
+		{
+			if (wcslen(title) < 1) return false;
+			HWND p = ::GetWindow(parent, GW_CHILD);  //获取桌面窗口的子窗口
+			if (p == NULL) return false;
+			p = ::GetWindow(p, GW_HWNDFIRST);
+			while (p != NULL) {
+				if (::GetWindow(p, GW_OWNER) == 0) {
+					if (process_name)  // EnumWindowByProcess
+					{
+						DWORD pid = 0;
+						GetWindowThreadProcessId(p, &pid);
+						if (EnumProcessbyName(pid, process_name)) {
+							wchar_t WindowTitle[MAX_PATH] = {0};
+							::GetWindowText(p, WindowTitle, MAX_PATH);
+							if (wcslen(WindowTitle) > 1) {
 								wchar_t* strfind = wcsstr(WindowTitle, title);  //模糊匹配
 								if (strfind) {
 									if (retstringlen == 0) retstringlen = wcslen(retstring);
@@ -982,56 +735,47 @@ bool WinApi::EnumWindow(HWND parent, const wchar_t* title,
 							HWND hchile = ::GetWindow(p, GW_CHILD);
 							if (hchile != NULL) {
 								FindChildWnd(hchile, title, NULL, retstring, true, false,
-									process_name);
+											 process_name);
 							}
 						}
 					}
-				}
-				else {
-					wchar_t WindowTitle[MAX_PATH] = {0};
-					::GetWindowText(p, WindowTitle, MAX_PATH);
-					if (wcslen(WindowTitle) > 1) {
-						wchar_t* strfind = wcsstr(WindowTitle, title);  //模糊匹配
-						if (strfind) {
-							if (retstringlen == 0) retstringlen = wcslen(retstring);
-							if (retstringlen > 1)
-								swprintf(retstring, L"%s,%d", retstring, p);
-							else
-								swprintf(retstring, L"%d", p);
-							bret = true;
+					else {
+						wchar_t WindowTitle[MAX_PATH] = {0};
+						::GetWindowText(p, WindowTitle, MAX_PATH);
+						if (wcslen(WindowTitle) > 1) {
+							wchar_t* strfind = wcsstr(WindowTitle, title);  //模糊匹配
+							if (strfind) {
+								if (retstringlen == 0) retstringlen = wcslen(retstring);
+								if (retstringlen > 1)
+									swprintf(retstring, L"%s,%d", retstring, p);
+								else
+									swprintf(retstring, L"%d", p);
+								bret = true;
+							}
+						}
+						HWND hchile = ::GetWindow(p, GW_CHILD);
+						if (hchile != NULL) {
+							FindChildWnd(hchile, title, NULL, retstring, true);
 						}
 					}
 				}
+				p = ::GetWindow(p, GW_HWNDNEXT);  //获取下一个窗口
 			}
-			p = ::GetWindow(p, GW_HWNDNEXT);  //获取下一个窗口
+			break;
 		}
-		break;
-	}
-	case 14:  // 2.窗口类名+4 : 只匹配指定父窗口的第一层孩子窗口+8 :
-		// 匹配所有者窗口为0的窗口,即顶级窗口
-	{
-		if (wcslen(class_name) < 1) return false;
-		HWND p = ::GetWindow(parent, GW_CHILD);  //获取桌面窗口的子窗口
-		p = ::GetWindow(p, GW_HWNDFIRST);
-		while (p != NULL) {
-			if (::GetWindow(p, GW_OWNER) == 0) {
-				if (process_name)  // EnumWindowByProcess
-				{
-					DWORD pid = 0;
-					GetWindowThreadProcessId(p, &pid);
-					if (EnumProcessbyName(pid, process_name)) {
-						if (processpid !=
-							pid)  //只匹配指定映像的所对应的第一个进程.
-							//可能有很多同映像名的进程，只匹配第一个进程的.
-						{
-							if (indexpid < IsEuemprosuccess) {
-								indexpid++;
-								processpid = pid;
-								memset(retstring, 0, retstringlen);  //清空返回字符串
-								retstringlen = 0;
-							}
-						}
-						if (processpid == pid) {
+		case 10:  // 2.窗口类名+8 : 匹配所有者窗口为0的窗口,即顶级窗口
+		{
+			if (wcslen(class_name) < 1) return false;
+			HWND p = ::GetWindow(parent, GW_CHILD);  //获取桌面窗口的子窗口
+			if (p == NULL) return false;
+			p = ::GetWindow(p, GW_HWNDFIRST);
+			while (p != NULL) {
+				if (::GetWindow(p, GW_OWNER) == 0) {
+					if (process_name)  // EnumWindowByProcess
+					{
+						DWORD pid = 0;
+						GetWindowThreadProcessId(p, &pid);
+						if (EnumProcessbyName(pid, process_name)) {
 							wchar_t WindowClassName[MAX_PATH] = {0};
 							::GetClassName(p, WindowClassName, MAX_PATH);
 							if (wcslen(WindowClassName) > 1) {
@@ -1049,217 +793,11 @@ bool WinApi::EnumWindow(HWND parent, const wchar_t* title,
 							HWND hchile = ::GetWindow(p, GW_CHILD);
 							if (hchile != NULL) {
 								FindChildWnd(hchile, NULL, class_name, retstring, true, false,
-									process_name);
+											 process_name);
 							}
 						}
 					}
-				}
-				else {
-					wchar_t WindowClassName[MAX_PATH] = {0};
-					::GetClassName(p, WindowClassName, MAX_PATH);
-					if (wcslen(WindowClassName) > 1) {
-						wchar_t* strfind =
-							wcsstr(WindowClassName, class_name);  //模糊匹配
-						if (strfind) {
-							if (retstringlen == 0) retstringlen = wcslen(retstring);
-							if (retstringlen > 1)
-								swprintf(retstring, L"%s,%d", retstring, p);
-							else
-								swprintf(retstring, L"%d", p);
-							bret = true;
-						}
-					}
-				}
-			}
-			p = ::GetWindow(p, GW_HWNDNEXT);  //获取下一个窗口
-		}
-		break;
-	}
-	case 15:  ////1.窗口标题+2.窗口类名+4 : 只匹配指定父窗口的第一层孩子窗口+8 :
-		///匹配所有者窗口为0的窗口,即顶级窗口
-	{
-		if (wcslen(class_name) < 1 && wcslen(title) < 1) return false;
-		HWND p = ::GetWindow(parent, GW_CHILD);  //获取桌面窗口的子窗口
-		p = ::GetWindow(p, GW_HWNDFIRST);
-		while (p != NULL) {
-			if (::GetWindow(p, GW_OWNER) == 0) {
-				if (process_name)  // EnumWindowByProcess
-				{
-					DWORD pid = 0;
-					GetWindowThreadProcessId(p, &pid);
-					if (EnumProcessbyName(pid, process_name)) {
-						if (processpid !=
-							pid)  //只匹配指定映像的所对应的第一个进程.
-							//可能有很多同映像名的进程，只匹配第一个进程的.
-						{
-							if (indexpid < IsEuemprosuccess) {
-								indexpid++;
-								processpid = pid;
-								memset(retstring, 0, retstringlen);  //清空返回字符串
-								retstringlen = 0;
-							}
-						}
-						if (processpid == pid) {
-							wchar_t WindowClassName[MAX_PATH] = {0};
-							::GetClassName(p, WindowClassName, MAX_PATH);
-							wchar_t WindowTitle[MAX_PATH] = {0};
-							::GetWindowText(p, WindowTitle, MAX_PATH);
-							if (wcslen(WindowClassName) > 1 && wcslen(WindowTitle) > 1) {
-								wchar_t* strfindclass =
-									wcsstr(WindowClassName, class_name);  //模糊匹配
-								wchar_t* strfindtitle =
-									wcsstr(WindowTitle, title);  //模糊匹配
-								if (strfindclass && strfindtitle) {
-									if (retstringlen == 0) retstringlen = wcslen(retstring);
-									if (retstringlen > 1)
-										swprintf(retstring, L"%s,%d", retstring, p);
-									else
-										swprintf(retstring, L"%d", p);
-									bret = true;
-								}
-							}
-							HWND hchile = ::GetWindow(p, GW_CHILD);
-							if (hchile != NULL) {
-								FindChildWnd(hchile, title, class_name, retstring, true,
-									false, process_name);
-							}
-						}
-					}
-				}
-				else {
-					wchar_t WindowClassName[MAX_PATH] = {0};
-					::GetClassName(p, WindowClassName, MAX_PATH);
-					wchar_t WindowTitle[MAX_PATH] = {0};
-					::GetWindowText(p, WindowTitle, MAX_PATH);
-					if (wcslen(WindowClassName) > 1 && wcslen(WindowTitle) > 1) {
-						wchar_t* strfindclass =
-							wcsstr(WindowClassName, class_name);  //模糊匹配
-						wchar_t* strfindtitle = wcsstr(WindowTitle, title);  //模糊匹配
-						if (strfindclass && strfindtitle) {
-							if (retstringlen == 0) retstringlen = wcslen(retstring);
-							if (retstringlen > 1)
-								swprintf(retstring, L"%s,%d", retstring, p);
-							else
-								swprintf(retstring, L"%d", p);
-							bret = true;
-						}
-					}
-				}
-			}
-			p = ::GetWindow(p, GW_HWNDNEXT);  //获取下一个窗口
-		}
-		break;
-	}
-	case 16:  //匹配可见的窗口
-	{
-		parent = GetDesktopWindow();
-		HWND p = ::GetWindow(parent, GW_CHILD);  //获取桌面窗口的子窗口
-		p = ::GetWindow(p, GW_HWNDFIRST);
-		while (p != NULL) {
-			if (::IsWindowVisible(p)) {
-				if (process_name)  // EnumWindowByProcess
-				{
-					DWORD pid = 0;
-					GetWindowThreadProcessId(p, &pid);
-					if (EnumProcessbyName(pid, process_name)) {
-						if (retstringlen == 0) retstringlen = wcslen(retstring);
-						if (retstringlen > 1)
-							swprintf(retstring, L"%s,%d", retstring, p);
-						else
-							swprintf(retstring, L"%d", p);
-						bret = true;
-						HWND hchile = ::GetWindow(p, GW_CHILD);
-						if (hchile != NULL) {
-							FindChildWnd(hchile, NULL, NULL, retstring, false, true,
-								process_name);
-						}
-					}
-				}
-				else {
-					if (retstringlen == 0) retstringlen = wcslen(retstring);
-					if (retstringlen > 1)
-						swprintf(retstring, L"%s,%d", retstring, p);
-					else
-						swprintf(retstring, L"%d", p);
-					bret = true;
-					HWND hchile = ::GetWindow(p, GW_CHILD);
-					if (hchile != NULL) {
-						FindChildWnd(hchile, NULL, NULL, retstring, false, true);
-					}
-				}
-			}
-			p = ::GetWindow(p, GW_HWNDNEXT);  //获取下一个窗口
-		}
-		break;
-	}
-	case 17:  // 1.窗口标题+//匹配可见的窗口
-	{
-		if (wcslen(title) < 1) return false;
-		HWND p = ::GetWindow(parent, GW_CHILD);  //获取桌面窗口的子窗口
-		p = ::GetWindow(p, GW_HWNDFIRST);
-		while (p != NULL) {
-			if (::IsWindowVisible(p)) {
-				if (process_name)  // EnumWindowByProcess
-				{
-					DWORD pid = 0;
-					GetWindowThreadProcessId(p, &pid);
-					if (EnumProcessbyName(pid, process_name)) {
-						wchar_t WindowTitle[MAX_PATH] = {0};
-						::GetWindowText(p, WindowTitle, MAX_PATH);
-						if (wcslen(WindowTitle) > 1) {
-							wchar_t* strfind = wcsstr(WindowTitle, title);  //模糊匹配
-							if (strfind) {
-								if (retstringlen == 0) retstringlen = wcslen(retstring);
-								if (retstringlen > 1)
-									swprintf(retstring, L"%s,%d", retstring, p);
-								else
-									swprintf(retstring, L"%d", p);
-								bret = true;
-							}
-						}
-						HWND hchile = ::GetWindow(p, GW_CHILD);
-						if (hchile != NULL) {
-							FindChildWnd(hchile, title, NULL, retstring, false, true,
-								process_name);
-						}
-					}
-				}
-				else {
-					wchar_t WindowTitle[MAX_PATH] = {0};
-					::GetWindowText(p, WindowTitle, MAX_PATH);
-					if (wcslen(WindowTitle) > 1) {
-						wchar_t* strfind = wcsstr(WindowTitle, title);  //模糊匹配
-						if (strfind) {
-							if (retstringlen == 0) retstringlen = wcslen(retstring);
-							if (retstringlen > 1)
-								swprintf(retstring, L"%s,%d", retstring, p);
-							else
-								swprintf(retstring, L"%d", p);
-							bret = true;
-						}
-					}
-					HWND hchile = ::GetWindow(p, GW_CHILD);
-					if (hchile != NULL) {
-						FindChildWnd(hchile, title, NULL, retstring, false, true);
-					}
-				}
-			}
-			p = ::GetWindow(p, GW_HWNDNEXT);  //获取下一个窗口
-		}
-		break;
-	}
-	case 18:  // 2.窗口类名+//匹配可见的窗口
-	{
-		if (wcslen(class_name) < 1) return false;
-		HWND p = ::GetWindow(parent, GW_CHILD);  //获取桌面窗口的子窗口
-		p = ::GetWindow(p, GW_HWNDFIRST);
-		while (p != NULL) {
-			if (::IsWindowVisible(p)) {
-				if (process_name)  // EnumWindowByProcess
-				{
-					DWORD pid = 0;
-					GetWindowThreadProcessId(p, &pid);
-					if (EnumProcessbyName(pid, process_name)) {
+					else {
 						wchar_t WindowClassName[MAX_PATH] = {0};
 						::GetClassName(p, WindowClassName, MAX_PATH);
 						if (wcslen(WindowClassName) > 1) {
@@ -1274,50 +812,55 @@ bool WinApi::EnumWindow(HWND parent, const wchar_t* title,
 								bret = true;
 							}
 						}
+
 						HWND hchile = ::GetWindow(p, GW_CHILD);
 						if (hchile != NULL) {
-							FindChildWnd(hchile, NULL, class_name, retstring, false, true,
-								process_name);
+							FindChildWnd(hchile, NULL, class_name, retstring, true);
 						}
 					}
 				}
-				else {
-					wchar_t WindowClassName[MAX_PATH] = {0};
-					::GetClassName(p, WindowClassName, MAX_PATH);
-					if (wcslen(WindowClassName) > 1) {
-						wchar_t* strfind =
-							wcsstr(WindowClassName, class_name);  //模糊匹配
-						if (strfind) {
-							if (retstringlen == 0) retstringlen = wcslen(retstring);
-							if (retstringlen > 1)
-								swprintf(retstring, L"%s,%d", retstring, p);
-							else
-								swprintf(retstring, L"%d", p);
-							bret = true;
-						}
-					}
-					HWND hchile = ::GetWindow(p, GW_CHILD);
-					if (hchile != NULL) {
-						FindChildWnd(hchile, NULL, class_name, retstring, false, true);
-					}
-				}
+				p = ::GetWindow(p, GW_HWNDNEXT);  //获取下一个窗口
 			}
-			p = ::GetWindow(p, GW_HWNDNEXT);  //获取下一个窗口
+			break;
 		}
-		break;
-	}
-	case 19:  ////1.窗口标题+2.窗口类名+匹配可见的窗口
-	{
-		if (wcslen(class_name) < 1 && wcslen(title) < 1) return false;
-		HWND p = ::GetWindow(parent, GW_CHILD);  //获取桌面窗口的子窗口
-		p = ::GetWindow(p, GW_HWNDFIRST);
-		while (p != NULL) {
-			if (::IsWindowVisible(p)) {
-				if (process_name)  // EnumWindowByProcess
-				{
-					DWORD pid = 0;
-					GetWindowThreadProcessId(p, &pid);
-					if (EnumProcessbyName(pid, process_name)) {
+		case 11:  ////1.窗口标题+2.窗口类名+8 : 匹配所有者窗口为0的窗口,即顶级窗口
+		{
+			if (wcslen(class_name) < 1 && wcslen(title) < 1) return false;
+			HWND p = ::GetWindow(parent, GW_CHILD);  //获取桌面窗口的子窗口
+			if (p == NULL) return false;
+			p = ::GetWindow(p, GW_HWNDFIRST);
+			while (p != NULL) {
+				if (::GetWindow(p, GW_OWNER) == 0) {
+					if (process_name)  // EnumWindowByProcess
+					{
+						DWORD pid = 0;
+						GetWindowThreadProcessId(p, &pid);
+						if (EnumProcessbyName(pid, process_name)) {
+							wchar_t WindowClassName[MAX_PATH] = {0};
+							::GetClassName(p, WindowClassName, MAX_PATH);
+							wchar_t WindowTitle[MAX_PATH] = {0};
+							::GetWindowText(p, WindowTitle, MAX_PATH);
+							if (wcslen(WindowClassName) > 1 && wcslen(WindowTitle) > 1) {
+								wchar_t* strfindclass =
+									wcsstr(WindowClassName, class_name);  //模糊匹配
+								wchar_t* strfindtitle = wcsstr(WindowTitle, title);  //模糊匹配
+								if (strfindclass && strfindtitle) {
+									if (retstringlen == 0) retstringlen = wcslen(retstring);
+									if (retstringlen > 1)
+										swprintf(retstring, L"%s,%d", retstring, p);
+									else
+										swprintf(retstring, L"%d", p);
+									bret = true;
+								}
+							}
+							HWND hchile = ::GetWindow(p, GW_CHILD);
+							if (hchile != NULL) {
+								FindChildWnd(hchile, title, class_name, retstring, true, false,
+											 process_name);
+							}
+						}
+					}
+					else {
 						wchar_t WindowClassName[MAX_PATH] = {0};
 						::GetClassName(p, WindowClassName, MAX_PATH);
 						wchar_t WindowTitle[MAX_PATH] = {0};
@@ -1337,62 +880,286 @@ bool WinApi::EnumWindow(HWND parent, const wchar_t* title,
 						}
 						HWND hchile = ::GetWindow(p, GW_CHILD);
 						if (hchile != NULL) {
-							FindChildWnd(hchile, title, class_name, retstring, false, true,
-								process_name);
+							FindChildWnd(hchile, title, class_name, retstring, true);
 						}
 					}
 				}
-				else {
-					wchar_t WindowClassName[MAX_PATH] = {0};
-					::GetClassName(p, WindowClassName, MAX_PATH);
-					wchar_t WindowTitle[MAX_PATH] = {0};
-					::GetWindowText(p, WindowTitle, MAX_PATH);
-					if (wcslen(WindowClassName) > 1 && wcslen(WindowTitle) > 1) {
-						wchar_t* strfindclass =
-							wcsstr(WindowClassName, class_name);  //模糊匹配
-						wchar_t* strfindtitle = wcsstr(WindowTitle, title);  //模糊匹配
-						if (strfindclass && strfindtitle) {
-							if (retstringlen == 0) retstringlen = wcslen(retstring);
-							if (retstringlen > 1)
-								swprintf(retstring, L"%s,%d", retstring, p);
-							else
-								swprintf(retstring, L"%d", p);
-							bret = true;
-						}
-					}
-					HWND hchile = ::GetWindow(p, GW_CHILD);
-					if (hchile != NULL) {
-						FindChildWnd(hchile, title, class_name, retstring, false, true);
-					}
-				}
+				p = ::GetWindow(p, GW_HWNDNEXT);  //获取下一个窗口
 			}
-			p = ::GetWindow(p, GW_HWNDNEXT);  //获取下一个窗口
+			break;
 		}
-		break;
-	}
-	case 20:  // 4 : 只匹配指定父窗口的第一层孩子窗口+匹配可见的窗口
-	{
-		HWND p = ::GetWindow(parent, GW_CHILD);  //获取桌面窗口的子窗口
-		p = ::GetWindow(p, GW_HWNDFIRST);
-		while (p != NULL) {
-			if (::IsWindowVisible(p)) {
-				if (process_name)  // EnumWindowByProcess
-				{
-					DWORD pid = 0;
-					GetWindowThreadProcessId(p, &pid);
-					if (EnumProcessbyName(pid, process_name)) {
-						if (processpid !=
-							pid)  //只匹配指定映像的所对应的第一个进程.
-							//可能有很多同映像名的进程，只匹配第一个进程的.
-						{
-							if (indexpid < IsEuemprosuccess) {
-								indexpid++;
-								processpid = pid;
-								memset(retstring, 0, retstringlen);  //清空返回字符串
-								retstringlen = 0;
+		case 12:  // //4 : 只匹配指定父窗口的第一层孩子窗口+8 :
+			// 匹配所有者窗口为0的窗口,即顶级窗口
+		{
+			HWND p = ::GetWindow(parent, GW_CHILD);  //获取桌面窗口的子窗口
+			p = ::GetWindow(p, GW_HWNDFIRST);
+			while (p != NULL) {
+				if (::GetWindow(p, GW_OWNER) == 0) {
+					if (process_name)  // EnumWindowByProcess
+					{
+						DWORD pid = 0;
+						GetWindowThreadProcessId(p, &pid);
+						if (EnumProcessbyName(pid, process_name)) {
+							if (processpid !=
+								pid)  //只匹配指定映像的所对应的第一个进程.
+								//可能有很多同映像名的进程，只匹配第一个进程的.
+							{
+								if (indexpid < IsEuemprosuccess) {
+									indexpid++;
+									processpid = pid;
+									memset(retstring, 0, retstringlen);  //清空返回字符串
+									retstringlen = 0;
+								}
+							}
+							if (processpid == pid) {
+								if (retstringlen == 0) retstringlen = wcslen(retstring);
+								if (retstringlen > 1)
+									swprintf(retstring, L"%s,%d", retstring, p);
+								else
+									swprintf(retstring, L"%d", p);
+								bret = true;
+								HWND hchile = ::GetWindow(p, GW_CHILD);
+								if (hchile != NULL) {
+									FindChildWnd(hchile, NULL, NULL, retstring, true, false,
+												 process_name);
+								}
 							}
 						}
-						if (processpid == pid) {
+					}
+					else {
+						if (retstringlen == 0) retstringlen = wcslen(retstring);
+						if (retstringlen > 1)
+							swprintf(retstring, L"%s,%d", retstring, p);
+						else
+							swprintf(retstring, L"%d", p);
+						bret = true;
+					}
+				}
+				p = ::GetWindow(p, GW_HWNDNEXT);  //获取下一个窗口
+			}
+			break;
+		}
+		case 13:  // 1.窗口标题+4 : 只匹配指定父窗口的第一层孩子窗口+8 :
+			// 匹配所有者窗口为0的窗口,即顶级窗口
+		{
+			if (wcslen(title) < 1) return false;
+			HWND p = ::GetWindow(parent, GW_CHILD);  //获取桌面窗口的子窗口
+			p = ::GetWindow(p, GW_HWNDFIRST);
+			while (p != NULL) {
+				if (::GetWindow(p, GW_OWNER) == 0) {
+					if (process_name)  // EnumWindowByProcess
+					{
+						DWORD pid = 0;
+						GetWindowThreadProcessId(p, &pid);
+						if (EnumProcessbyName(pid, process_name)) {
+							if (processpid !=
+								pid)  //只匹配指定映像的所对应的第一个进程.
+								//可能有很多同映像名的进程，只匹配第一个进程的.
+							{
+								if (indexpid < IsEuemprosuccess) {
+									indexpid++;
+									processpid = pid;
+									memset(retstring, 0, retstringlen);  //清空返回字符串
+									retstringlen = 0;
+								}
+							}
+							if (processpid == pid) {
+								wchar_t WindowTitle[MAX_PATH] = {0};
+								::GetWindowText(p, WindowTitle, MAX_PATH);
+								if (wcslen(WindowTitle) > 1) {
+									wchar_t* strfind = wcsstr(WindowTitle, title);  //模糊匹配
+									if (strfind) {
+										if (retstringlen == 0) retstringlen = wcslen(retstring);
+										if (retstringlen > 1)
+											swprintf(retstring, L"%s,%d", retstring, p);
+										else
+											swprintf(retstring, L"%d", p);
+										bret = true;
+									}
+								}
+								HWND hchile = ::GetWindow(p, GW_CHILD);
+								if (hchile != NULL) {
+									FindChildWnd(hchile, title, NULL, retstring, true, false,
+												 process_name);
+								}
+							}
+						}
+					}
+					else {
+						wchar_t WindowTitle[MAX_PATH] = {0};
+						::GetWindowText(p, WindowTitle, MAX_PATH);
+						if (wcslen(WindowTitle) > 1) {
+							wchar_t* strfind = wcsstr(WindowTitle, title);  //模糊匹配
+							if (strfind) {
+								if (retstringlen == 0) retstringlen = wcslen(retstring);
+								if (retstringlen > 1)
+									swprintf(retstring, L"%s,%d", retstring, p);
+								else
+									swprintf(retstring, L"%d", p);
+								bret = true;
+							}
+						}
+					}
+				}
+				p = ::GetWindow(p, GW_HWNDNEXT);  //获取下一个窗口
+			}
+			break;
+		}
+		case 14:  // 2.窗口类名+4 : 只匹配指定父窗口的第一层孩子窗口+8 :
+			// 匹配所有者窗口为0的窗口,即顶级窗口
+		{
+			if (wcslen(class_name) < 1) return false;
+			HWND p = ::GetWindow(parent, GW_CHILD);  //获取桌面窗口的子窗口
+			p = ::GetWindow(p, GW_HWNDFIRST);
+			while (p != NULL) {
+				if (::GetWindow(p, GW_OWNER) == 0) {
+					if (process_name)  // EnumWindowByProcess
+					{
+						DWORD pid = 0;
+						GetWindowThreadProcessId(p, &pid);
+						if (EnumProcessbyName(pid, process_name)) {
+							if (processpid !=
+								pid)  //只匹配指定映像的所对应的第一个进程.
+								//可能有很多同映像名的进程，只匹配第一个进程的.
+							{
+								if (indexpid < IsEuemprosuccess) {
+									indexpid++;
+									processpid = pid;
+									memset(retstring, 0, retstringlen);  //清空返回字符串
+									retstringlen = 0;
+								}
+							}
+							if (processpid == pid) {
+								wchar_t WindowClassName[MAX_PATH] = {0};
+								::GetClassName(p, WindowClassName, MAX_PATH);
+								if (wcslen(WindowClassName) > 1) {
+									wchar_t* strfind =
+										wcsstr(WindowClassName, class_name);  //模糊匹配
+									if (strfind) {
+										if (retstringlen == 0) retstringlen = wcslen(retstring);
+										if (retstringlen > 1)
+											swprintf(retstring, L"%s,%d", retstring, p);
+										else
+											swprintf(retstring, L"%d", p);
+										bret = true;
+									}
+								}
+								HWND hchile = ::GetWindow(p, GW_CHILD);
+								if (hchile != NULL) {
+									FindChildWnd(hchile, NULL, class_name, retstring, true, false,
+												 process_name);
+								}
+							}
+						}
+					}
+					else {
+						wchar_t WindowClassName[MAX_PATH] = {0};
+						::GetClassName(p, WindowClassName, MAX_PATH);
+						if (wcslen(WindowClassName) > 1) {
+							wchar_t* strfind =
+								wcsstr(WindowClassName, class_name);  //模糊匹配
+							if (strfind) {
+								if (retstringlen == 0) retstringlen = wcslen(retstring);
+								if (retstringlen > 1)
+									swprintf(retstring, L"%s,%d", retstring, p);
+								else
+									swprintf(retstring, L"%d", p);
+								bret = true;
+							}
+						}
+					}
+				}
+				p = ::GetWindow(p, GW_HWNDNEXT);  //获取下一个窗口
+			}
+			break;
+		}
+		case 15:  ////1.窗口标题+2.窗口类名+4 : 只匹配指定父窗口的第一层孩子窗口+8 :
+			///匹配所有者窗口为0的窗口,即顶级窗口
+		{
+			if (wcslen(class_name) < 1 && wcslen(title) < 1) return false;
+			HWND p = ::GetWindow(parent, GW_CHILD);  //获取桌面窗口的子窗口
+			p = ::GetWindow(p, GW_HWNDFIRST);
+			while (p != NULL) {
+				if (::GetWindow(p, GW_OWNER) == 0) {
+					if (process_name)  // EnumWindowByProcess
+					{
+						DWORD pid = 0;
+						GetWindowThreadProcessId(p, &pid);
+						if (EnumProcessbyName(pid, process_name)) {
+							if (processpid !=
+								pid)  //只匹配指定映像的所对应的第一个进程.
+								//可能有很多同映像名的进程，只匹配第一个进程的.
+							{
+								if (indexpid < IsEuemprosuccess) {
+									indexpid++;
+									processpid = pid;
+									memset(retstring, 0, retstringlen);  //清空返回字符串
+									retstringlen = 0;
+								}
+							}
+							if (processpid == pid) {
+								wchar_t WindowClassName[MAX_PATH] = {0};
+								::GetClassName(p, WindowClassName, MAX_PATH);
+								wchar_t WindowTitle[MAX_PATH] = {0};
+								::GetWindowText(p, WindowTitle, MAX_PATH);
+								if (wcslen(WindowClassName) > 1 && wcslen(WindowTitle) > 1) {
+									wchar_t* strfindclass =
+										wcsstr(WindowClassName, class_name);  //模糊匹配
+									wchar_t* strfindtitle =
+										wcsstr(WindowTitle, title);  //模糊匹配
+									if (strfindclass && strfindtitle) {
+										if (retstringlen == 0) retstringlen = wcslen(retstring);
+										if (retstringlen > 1)
+											swprintf(retstring, L"%s,%d", retstring, p);
+										else
+											swprintf(retstring, L"%d", p);
+										bret = true;
+									}
+								}
+								HWND hchile = ::GetWindow(p, GW_CHILD);
+								if (hchile != NULL) {
+									FindChildWnd(hchile, title, class_name, retstring, true,
+												 false, process_name);
+								}
+							}
+						}
+					}
+					else {
+						wchar_t WindowClassName[MAX_PATH] = {0};
+						::GetClassName(p, WindowClassName, MAX_PATH);
+						wchar_t WindowTitle[MAX_PATH] = {0};
+						::GetWindowText(p, WindowTitle, MAX_PATH);
+						if (wcslen(WindowClassName) > 1 && wcslen(WindowTitle) > 1) {
+							wchar_t* strfindclass =
+								wcsstr(WindowClassName, class_name);  //模糊匹配
+							wchar_t* strfindtitle = wcsstr(WindowTitle, title);  //模糊匹配
+							if (strfindclass && strfindtitle) {
+								if (retstringlen == 0) retstringlen = wcslen(retstring);
+								if (retstringlen > 1)
+									swprintf(retstring, L"%s,%d", retstring, p);
+								else
+									swprintf(retstring, L"%d", p);
+								bret = true;
+							}
+						}
+					}
+				}
+				p = ::GetWindow(p, GW_HWNDNEXT);  //获取下一个窗口
+			}
+			break;
+		}
+		case 16:  //匹配可见的窗口
+		{
+			parent = GetDesktopWindow();
+			HWND p = ::GetWindow(parent, GW_CHILD);  //获取桌面窗口的子窗口
+			p = ::GetWindow(p, GW_HWNDFIRST);
+			while (p != NULL) {
+				if (::IsWindowVisible(p)) {
+					if (process_name)  // EnumWindowByProcess
+					{
+						DWORD pid = 0;
+						GetWindowThreadProcessId(p, &pid);
+						if (EnumProcessbyName(pid, process_name)) {
 							if (retstringlen == 0) retstringlen = wcslen(retstring);
 							if (retstringlen > 1)
 								swprintf(retstring, L"%s,%d", retstring, p);
@@ -1402,48 +1169,39 @@ bool WinApi::EnumWindow(HWND parent, const wchar_t* title,
 							HWND hchile = ::GetWindow(p, GW_CHILD);
 							if (hchile != NULL) {
 								FindChildWnd(hchile, NULL, NULL, retstring, false, true,
-									process_name);
+											 process_name);
 							}
 						}
 					}
-				}
-				else {
-					if (retstringlen == 0) retstringlen = wcslen(retstring);
-					if (retstringlen > 1)
-						swprintf(retstring, L"%s,%d", retstring, p);
-					else
-						swprintf(retstring, L"%d", p);
-					bret = true;
-				}
-			}
-			p = ::GetWindow(p, GW_HWNDNEXT);  //获取下一个窗口
-		}
-		break;
-	}
-	case 21:  // 1.窗口标题+4 : 只匹配指定父窗口的第一层孩子窗口+匹配可见的窗口
-	{
-		if (wcslen(title) < 1) return false;
-		HWND p = ::GetWindow(parent, GW_CHILD);  //获取桌面窗口的子窗口
-		p = ::GetWindow(p, GW_HWNDFIRST);
-		while (p != NULL) {
-			if (::IsWindowVisible(p)) {
-				if (process_name)  // EnumWindowByProcess
-				{
-					DWORD pid = 0;
-					GetWindowThreadProcessId(p, &pid);
-					if (EnumProcessbyName(pid, process_name)) {
-						if (processpid !=
-							pid)  //只匹配指定映像的所对应的第一个进程.
-							//可能有很多同映像名的进程，只匹配第一个进程的.
-						{
-							if (indexpid < IsEuemprosuccess) {
-								indexpid++;
-								processpid = pid;
-								memset(retstring, 0, retstringlen);  //清空返回字符串
-								retstringlen = 0;
-							}
+					else {
+						if (retstringlen == 0) retstringlen = wcslen(retstring);
+						if (retstringlen > 1)
+							swprintf(retstring, L"%s,%d", retstring, p);
+						else
+							swprintf(retstring, L"%d", p);
+						bret = true;
+						HWND hchile = ::GetWindow(p, GW_CHILD);
+						if (hchile != NULL) {
+							FindChildWnd(hchile, NULL, NULL, retstring, false, true);
 						}
-						if (processpid == pid) {
+					}
+				}
+				p = ::GetWindow(p, GW_HWNDNEXT);  //获取下一个窗口
+			}
+			break;
+		}
+		case 17:  // 1.窗口标题+//匹配可见的窗口
+		{
+			if (wcslen(title) < 1) return false;
+			HWND p = ::GetWindow(parent, GW_CHILD);  //获取桌面窗口的子窗口
+			p = ::GetWindow(p, GW_HWNDFIRST);
+			while (p != NULL) {
+				if (::IsWindowVisible(p)) {
+					if (process_name)  // EnumWindowByProcess
+					{
+						DWORD pid = 0;
+						GetWindowThreadProcessId(p, &pid);
+						if (EnumProcessbyName(pid, process_name)) {
 							wchar_t WindowTitle[MAX_PATH] = {0};
 							::GetWindowText(p, WindowTitle, MAX_PATH);
 							if (wcslen(WindowTitle) > 1) {
@@ -1460,55 +1218,46 @@ bool WinApi::EnumWindow(HWND parent, const wchar_t* title,
 							HWND hchile = ::GetWindow(p, GW_CHILD);
 							if (hchile != NULL) {
 								FindChildWnd(hchile, title, NULL, retstring, false, true,
-									process_name);
+											 process_name);
 							}
 						}
 					}
-				}
-				else {
-					wchar_t WindowTitle[MAX_PATH] = {0};
-					::GetWindowText(p, WindowTitle, MAX_PATH);
-					if (wcslen(WindowTitle) > 1) {
-						wchar_t* strfind = wcsstr(WindowTitle, title);  //模糊匹配
-						if (strfind) {
-							if (retstringlen == 0) retstringlen = wcslen(retstring);
-							if (retstringlen > 1)
-								swprintf(retstring, L"%s,%d", retstring, p);
-							else
-								swprintf(retstring, L"%d", p);
-							bret = true;
+					else {
+						wchar_t WindowTitle[MAX_PATH] = {0};
+						::GetWindowText(p, WindowTitle, MAX_PATH);
+						if (wcslen(WindowTitle) > 1) {
+							wchar_t* strfind = wcsstr(WindowTitle, title);  //模糊匹配
+							if (strfind) {
+								if (retstringlen == 0) retstringlen = wcslen(retstring);
+								if (retstringlen > 1)
+									swprintf(retstring, L"%s,%d", retstring, p);
+								else
+									swprintf(retstring, L"%d", p);
+								bret = true;
+							}
+						}
+						HWND hchile = ::GetWindow(p, GW_CHILD);
+						if (hchile != NULL) {
+							FindChildWnd(hchile, title, NULL, retstring, false, true);
 						}
 					}
 				}
+				p = ::GetWindow(p, GW_HWNDNEXT);  //获取下一个窗口
 			}
-			p = ::GetWindow(p, GW_HWNDNEXT);  //获取下一个窗口
+			break;
 		}
-		break;
-	}
-	case 22:  // 2.窗口类名+4 : 只匹配指定父窗口的第一层孩子窗口+匹配可见的窗口
-	{
-		if (wcslen(class_name) < 1) return false;
-		HWND p = ::GetWindow(parent, GW_CHILD);  //获取桌面窗口的子窗口
-		p = ::GetWindow(p, GW_HWNDFIRST);
-		while (p != NULL) {
-			if (::IsWindowVisible(p)) {
-				if (process_name)  // EnumWindowByProcess
-				{
-					DWORD pid = 0;
-					GetWindowThreadProcessId(p, &pid);
-					if (EnumProcessbyName(pid, process_name)) {
-						if (processpid !=
-							pid)  //只匹配指定映像的所对应的第一个进程.
-							//可能有很多同映像名的进程，只匹配第一个进程的.
-						{
-							if (indexpid < IsEuemprosuccess) {
-								indexpid++;
-								processpid = pid;
-								memset(retstring, 0, retstringlen);  //清空返回字符串
-								retstringlen = 0;
-							}
-						}
-						if (processpid == pid) {
+		case 18:  // 2.窗口类名+//匹配可见的窗口
+		{
+			if (wcslen(class_name) < 1) return false;
+			HWND p = ::GetWindow(parent, GW_CHILD);  //获取桌面窗口的子窗口
+			p = ::GetWindow(p, GW_HWNDFIRST);
+			while (p != NULL) {
+				if (::IsWindowVisible(p)) {
+					if (process_name)  // EnumWindowByProcess
+					{
+						DWORD pid = 0;
+						GetWindowThreadProcessId(p, &pid);
+						if (EnumProcessbyName(pid, process_name)) {
 							wchar_t WindowClassName[MAX_PATH] = {0};
 							::GetClassName(p, WindowClassName, MAX_PATH);
 							if (wcslen(WindowClassName) > 1) {
@@ -1526,219 +1275,11 @@ bool WinApi::EnumWindow(HWND parent, const wchar_t* title,
 							HWND hchile = ::GetWindow(p, GW_CHILD);
 							if (hchile != NULL) {
 								FindChildWnd(hchile, NULL, class_name, retstring, false, true,
-									process_name);
+											 process_name);
 							}
 						}
 					}
-				}
-				else {
-					wchar_t WindowClassName[MAX_PATH] = {0};
-					::GetClassName(p, WindowClassName, MAX_PATH);
-					if (wcslen(WindowClassName) > 1) {
-						wchar_t* strfind =
-							wcsstr(WindowClassName, class_name);  //模糊匹配
-						if (strfind) {
-							if (retstringlen == 0) retstringlen = wcslen(retstring);
-							if (retstringlen > 1)
-								swprintf(retstring, L"%s,%d", retstring, p);
-							else
-								swprintf(retstring, L"%d", p);
-							bret = true;
-						}
-					}
-				}
-			}
-			p = ::GetWindow(p, GW_HWNDNEXT);  //获取下一个窗口
-		}
-		break;
-	}
-	case 23:  // 1.窗口标题+2.窗口类名+4 :
-		// 只匹配指定父窗口的第一层孩子窗口+匹配可见的窗口
-	{
-		if (wcslen(class_name) < 1 && wcslen(title) < 1) return false;
-		HWND p = ::GetWindow(parent, GW_CHILD);  //获取桌面窗口的子窗口
-		p = ::GetWindow(p, GW_HWNDFIRST);
-		while (p != NULL) {
-			if (::IsWindowVisible(p)) {
-				if (process_name)  // EnumWindowByProcess
-				{
-					DWORD pid = 0;
-					GetWindowThreadProcessId(p, &pid);
-					if (EnumProcessbyName(pid, process_name)) {
-						if (processpid !=
-							pid)  //只匹配指定映像的所对应的第一个进程.
-							//可能有很多同映像名的进程，只匹配第一个进程的.
-						{
-							if (indexpid < IsEuemprosuccess) {
-								indexpid++;
-								processpid = pid;
-								memset(retstring, 0, retstringlen);  //清空返回字符串
-								retstringlen = 0;
-							}
-						}
-						if (processpid == pid) {
-							wchar_t WindowClassName[MAX_PATH] = {0};
-							::GetClassName(p, WindowClassName, MAX_PATH);
-							wchar_t WindowTitle[MAX_PATH] = {0};
-							::GetWindowText(p, WindowTitle, MAX_PATH);
-							if (wcslen(WindowClassName) > 1 && wcslen(WindowTitle) > 1) {
-								wchar_t* strfindclass =
-									wcsstr(WindowClassName, class_name);  //模糊匹配
-								wchar_t* strfindtitle =
-									wcsstr(WindowTitle, title);  //模糊匹配
-								if (strfindclass && strfindtitle) {
-									if (retstringlen == 0) retstringlen = wcslen(retstring);
-									if (retstringlen > 1)
-										swprintf(retstring, L"%s,%d", retstring, p);
-									else
-										swprintf(retstring, L"%d", p);
-									bret = true;
-								}
-							}
-							HWND hchile = ::GetWindow(p, GW_CHILD);
-							if (hchile != NULL) {
-								FindChildWnd(hchile, title, class_name, retstring, false,
-									true, process_name);
-							}
-						}
-					}
-				}
-				else {
-					wchar_t WindowClassName[MAX_PATH] = {0};
-					::GetClassName(p, WindowClassName, MAX_PATH);
-					wchar_t WindowTitle[MAX_PATH] = {0};
-					::GetWindowText(p, WindowTitle, MAX_PATH);
-					if (wcslen(WindowClassName) > 1 && wcslen(WindowTitle) > 1) {
-						wchar_t* strfindclass =
-							wcsstr(WindowClassName, class_name);  //模糊匹配
-						wchar_t* strfindtitle = wcsstr(WindowTitle, title);  //模糊匹配
-						if (strfindclass && strfindtitle) {
-							if (retstringlen == 0) retstringlen = wcslen(retstring);
-							if (retstringlen > 1)
-								swprintf(retstring, L"%s,%d", retstring, p);
-							else
-								swprintf(retstring, L"%d", p);
-							bret = true;
-						}
-					}
-				}
-			}
-			p = ::GetWindow(p, GW_HWNDNEXT);  //获取下一个窗口
-		}
-		break;
-	}
-	case 24:  // 8 : 匹配所有者窗口为0的窗口,即顶级窗口+16.匹配可见的窗口
-	{
-		HWND p = ::GetWindow(parent, GW_CHILD);  //获取桌面窗口的子窗口
-		p = ::GetWindow(p, GW_HWNDFIRST);
-		while (p != NULL) {
-			if (::IsWindowVisible(p) && ::GetWindow(p, GW_OWNER) == 0) {
-				if (process_name)  // EnumWindowByProcess
-				{
-					DWORD pid = 0;
-					GetWindowThreadProcessId(p, &pid);
-					if (EnumProcessbyName(pid, process_name)) {
-						if (retstringlen == 0) retstringlen = wcslen(retstring);
-						if (retstringlen > 1)
-							swprintf(retstring, L"%s,%d", retstring, p);
-						else
-							swprintf(retstring, L"%d", p);
-						bret = true;
-						HWND hchile = ::GetWindow(p, GW_CHILD);
-						if (hchile != NULL) {
-							FindChildWnd(hchile, NULL, NULL, retstring, true, true,
-								process_name);
-						}
-					}
-				}
-				else {
-					if (retstringlen == 0) retstringlen = wcslen(retstring);
-					if (retstringlen > 1)
-						swprintf(retstring, L"%s,%d", retstring, p);
-					else
-						swprintf(retstring, L"%d", p);
-					bret = true;
-
-					HWND hchile = ::GetWindow(p, GW_CHILD);
-					if (hchile != NULL) {
-						FindChildWnd(hchile, NULL, NULL, retstring, true, true);
-					}
-				}
-			}
-			p = ::GetWindow(p, GW_HWNDNEXT);  //获取下一个窗口
-		}
-		break;
-	}
-	case 25:  // 1.窗口标题+
-		// 8:匹配所有者窗口为0的窗口,即顶级窗口+16.匹配可见的窗口
-	{
-		if (wcslen(title) < 1) return false;
-		HWND p = ::GetWindow(parent, GW_CHILD);  //获取桌面窗口的子窗口
-		p = ::GetWindow(p, GW_HWNDFIRST);
-		while (p != NULL) {
-			if (::IsWindowVisible(p) && ::GetWindow(p, GW_OWNER) == 0) {
-				if (process_name)  // EnumWindowByProcess
-				{
-					DWORD pid = 0;
-					GetWindowThreadProcessId(p, &pid);
-					if (EnumProcessbyName(pid, process_name)) {
-						wchar_t WindowTitle[MAX_PATH] = {0};
-						::GetWindowText(p, WindowTitle, MAX_PATH);
-						if (wcslen(WindowTitle) > 1) {
-							wchar_t* strfind = wcsstr(WindowTitle, title);  //模糊匹配
-							if (strfind) {
-								if (retstringlen == 0) retstringlen = wcslen(retstring);
-								if (retstringlen > 1)
-									swprintf(retstring, L"%s,%d", retstring, p);
-								else
-									swprintf(retstring, L"%d", p);
-								bret = true;
-							}
-						}
-						HWND hchile = ::GetWindow(p, GW_CHILD);
-						if (hchile != NULL) {
-							FindChildWnd(hchile, title, NULL, retstring, true, true,
-								process_name);
-						}
-					}
-				}
-				else {
-					wchar_t WindowTitle[MAX_PATH] = {0};
-					::GetWindowText(p, WindowTitle, MAX_PATH);
-					if (wcslen(WindowTitle) > 1) {
-						wchar_t* strfind = wcsstr(WindowTitle, title);  //模糊匹配
-						if (strfind) {
-							if (retstringlen == 0) retstringlen = wcslen(retstring);
-							if (retstringlen > 1)
-								swprintf(retstring, L"%s,%d", retstring, p);
-							else
-								swprintf(retstring, L"%d", p);
-							bret = true;
-						}
-					}
-					HWND hchile = ::GetWindow(p, GW_CHILD);
-					if (hchile != NULL) {
-						FindChildWnd(hchile, title, NULL, retstring, true, true);
-					}
-				}
-			}
-			p = ::GetWindow(p, GW_HWNDNEXT);  //获取下一个窗口
-		}
-		break;
-	}
-	case 26:  // 2.窗口类名+
-		// 8:匹配所有者窗口为0的窗口,即顶级窗口+16.匹配可见的窗口
-	{
-		if (wcslen(class_name) < 1) return false;
-		HWND p = ::GetWindow(parent, GW_CHILD);  //获取桌面窗口的子窗口
-		p = ::GetWindow(p, GW_HWNDFIRST);
-		while (p != NULL) {
-			if (::IsWindowVisible(p) && ::GetWindow(p, GW_OWNER) == 0) {
-				if (process_name)  // EnumWindowByProcess
-				{
-					DWORD pid = 0;
-					GetWindowThreadProcessId(p, &pid);
-					if (EnumProcessbyName(pid, process_name)) {
+					else {
 						wchar_t WindowClassName[MAX_PATH] = {0};
 						::GetClassName(p, WindowClassName, MAX_PATH);
 						if (wcslen(WindowClassName) > 1) {
@@ -1755,48 +1296,51 @@ bool WinApi::EnumWindow(HWND parent, const wchar_t* title,
 						}
 						HWND hchile = ::GetWindow(p, GW_CHILD);
 						if (hchile != NULL) {
-							FindChildWnd(hchile, NULL, class_name, retstring, true, true,
-								process_name);
+							FindChildWnd(hchile, NULL, class_name, retstring, false, true);
 						}
 					}
 				}
-				else {
-					wchar_t WindowClassName[MAX_PATH] = {0};
-					::GetClassName(p, WindowClassName, MAX_PATH);
-					if (wcslen(WindowClassName) > 1) {
-						wchar_t* strfind =
-							wcsstr(WindowClassName, class_name);  //模糊匹配
-						if (strfind) {
-							if (retstringlen == 0) retstringlen = wcslen(retstring);
-							if (retstringlen > 1)
-								swprintf(retstring, L"%s,%d", retstring, p);
-							else
-								swprintf(retstring, L"%d", p);
-							bret = true;
-						}
-					}
-					HWND hchile = ::GetWindow(p, GW_CHILD);
-					if (hchile != NULL) {
-						FindChildWnd(hchile, NULL, class_name, retstring, true, true);
-					}
-				}
+				p = ::GetWindow(p, GW_HWNDNEXT);  //获取下一个窗口
 			}
-			p = ::GetWindow(p, GW_HWNDNEXT);  //获取下一个窗口
+			break;
 		}
-		break;
-	}
-	case 27:  // 1.窗口标题+2.窗口类名+8:匹配所有者窗口为0的窗口,即顶级窗口+16.匹配可见的窗口
-	{
-		if (wcslen(class_name) < 1 && wcslen(title) < 1) return false;
-		HWND p = ::GetWindow(parent, GW_CHILD);  //获取桌面窗口的子窗口
-		p = ::GetWindow(p, GW_HWNDFIRST);
-		while (p != NULL) {
-			if (::IsWindowVisible(p) && ::GetWindow(p, GW_OWNER) == 0) {
-				if (process_name)  // EnumWindowByProcess
-				{
-					DWORD pid = 0;
-					GetWindowThreadProcessId(p, &pid);
-					if (EnumProcessbyName(pid, process_name)) {
+		case 19:  ////1.窗口标题+2.窗口类名+匹配可见的窗口
+		{
+			if (wcslen(class_name) < 1 && wcslen(title) < 1) return false;
+			HWND p = ::GetWindow(parent, GW_CHILD);  //获取桌面窗口的子窗口
+			p = ::GetWindow(p, GW_HWNDFIRST);
+			while (p != NULL) {
+				if (::IsWindowVisible(p)) {
+					if (process_name)  // EnumWindowByProcess
+					{
+						DWORD pid = 0;
+						GetWindowThreadProcessId(p, &pid);
+						if (EnumProcessbyName(pid, process_name)) {
+							wchar_t WindowClassName[MAX_PATH] = {0};
+							::GetClassName(p, WindowClassName, MAX_PATH);
+							wchar_t WindowTitle[MAX_PATH] = {0};
+							::GetWindowText(p, WindowTitle, MAX_PATH);
+							if (wcslen(WindowClassName) > 1 && wcslen(WindowTitle) > 1) {
+								wchar_t* strfindclass =
+									wcsstr(WindowClassName, class_name);  //模糊匹配
+								wchar_t* strfindtitle = wcsstr(WindowTitle, title);  //模糊匹配
+								if (strfindclass && strfindtitle) {
+									if (retstringlen == 0) retstringlen = wcslen(retstring);
+									if (retstringlen > 1)
+										swprintf(retstring, L"%s,%d", retstring, p);
+									else
+										swprintf(retstring, L"%d", p);
+									bret = true;
+								}
+							}
+							HWND hchile = ::GetWindow(p, GW_CHILD);
+							if (hchile != NULL) {
+								FindChildWnd(hchile, title, class_name, retstring, false, true,
+											 process_name);
+							}
+						}
+					}
+					else {
 						wchar_t WindowClassName[MAX_PATH] = {0};
 						::GetClassName(p, WindowClassName, MAX_PATH);
 						wchar_t WindowTitle[MAX_PATH] = {0};
@@ -1816,63 +1360,282 @@ bool WinApi::EnumWindow(HWND parent, const wchar_t* title,
 						}
 						HWND hchile = ::GetWindow(p, GW_CHILD);
 						if (hchile != NULL) {
-							FindChildWnd(hchile, title, class_name, retstring, true, true,
-								process_name);
+							FindChildWnd(hchile, title, class_name, retstring, false, true);
 						}
 					}
 				}
-				else {
-					wchar_t WindowClassName[MAX_PATH] = {0};
-					::GetClassName(p, WindowClassName, MAX_PATH);
-					wchar_t WindowTitle[MAX_PATH] = {0};
-					::GetWindowText(p, WindowTitle, MAX_PATH);
-					if (wcslen(WindowClassName) > 1 && wcslen(WindowTitle) > 1) {
-						wchar_t* strfindclass =
-							wcsstr(WindowClassName, class_name);  //模糊匹配
-						wchar_t* strfindtitle = wcsstr(WindowTitle, title);  //模糊匹配
-						if (strfindclass && strfindtitle) {
-							if (retstringlen == 0) retstringlen = wcslen(retstring);
-							if (retstringlen > 1)
-								swprintf(retstring, L"%s,%d", retstring, p);
-							else
-								swprintf(retstring, L"%d", p);
-							bret = true;
-						}
-					}
-					HWND hchile = ::GetWindow(p, GW_CHILD);
-					if (hchile != NULL) {
-						FindChildWnd(hchile, title, class_name, retstring, true, true);
-					}
-				}
+				p = ::GetWindow(p, GW_HWNDNEXT);  //获取下一个窗口
 			}
-			p = ::GetWindow(p, GW_HWNDNEXT);  //获取下一个窗口
+			break;
 		}
-		break;
-	}
-	case 28:  // 4 :
-		// 只匹配指定父窗口的第一层孩子窗口+8:匹配所有者窗口为0的窗口,即顶级窗口+16.匹配可见的窗口
-	{
-		HWND p = ::GetWindow(parent, GW_CHILD);  //获取桌面窗口的子窗口
-		p = ::GetWindow(p, GW_HWNDFIRST);
-		while (p != NULL) {
-			if (::IsWindowVisible(p) && ::GetWindow(p, GW_OWNER) == 0) {
-				if (process_name)  // EnumWindowByProcess
-				{
-					DWORD pid = 0;
-					GetWindowThreadProcessId(p, &pid);
-					if (EnumProcessbyName(pid, process_name)) {
-						if (processpid !=
-							pid)  //只匹配指定映像的所对应的第一个进程.
-							//可能有很多同映像名的进程，只匹配第一个进程的.
-						{
-							if (indexpid < IsEuemprosuccess) {
-								indexpid++;
-								processpid = pid;
-								memset(retstring, 0, retstringlen);  //清空返回字符串
-								retstringlen = 0;
+		case 20:  // 4 : 只匹配指定父窗口的第一层孩子窗口+匹配可见的窗口
+		{
+			HWND p = ::GetWindow(parent, GW_CHILD);  //获取桌面窗口的子窗口
+			p = ::GetWindow(p, GW_HWNDFIRST);
+			while (p != NULL) {
+				if (::IsWindowVisible(p)) {
+					if (process_name)  // EnumWindowByProcess
+					{
+						DWORD pid = 0;
+						GetWindowThreadProcessId(p, &pid);
+						if (EnumProcessbyName(pid, process_name)) {
+							if (processpid !=
+								pid)  //只匹配指定映像的所对应的第一个进程.
+								//可能有很多同映像名的进程，只匹配第一个进程的.
+							{
+								if (indexpid < IsEuemprosuccess) {
+									indexpid++;
+									processpid = pid;
+									memset(retstring, 0, retstringlen);  //清空返回字符串
+									retstringlen = 0;
+								}
+							}
+							if (processpid == pid) {
+								if (retstringlen == 0) retstringlen = wcslen(retstring);
+								if (retstringlen > 1)
+									swprintf(retstring, L"%s,%d", retstring, p);
+								else
+									swprintf(retstring, L"%d", p);
+								bret = true;
+								HWND hchile = ::GetWindow(p, GW_CHILD);
+								if (hchile != NULL) {
+									FindChildWnd(hchile, NULL, NULL, retstring, false, true,
+												 process_name);
+								}
 							}
 						}
-						if (processpid == pid) {
+					}
+					else {
+						if (retstringlen == 0) retstringlen = wcslen(retstring);
+						if (retstringlen > 1)
+							swprintf(retstring, L"%s,%d", retstring, p);
+						else
+							swprintf(retstring, L"%d", p);
+						bret = true;
+					}
+				}
+				p = ::GetWindow(p, GW_HWNDNEXT);  //获取下一个窗口
+			}
+			break;
+		}
+		case 21:  // 1.窗口标题+4 : 只匹配指定父窗口的第一层孩子窗口+匹配可见的窗口
+		{
+			if (wcslen(title) < 1) return false;
+			HWND p = ::GetWindow(parent, GW_CHILD);  //获取桌面窗口的子窗口
+			p = ::GetWindow(p, GW_HWNDFIRST);
+			while (p != NULL) {
+				if (::IsWindowVisible(p)) {
+					if (process_name)  // EnumWindowByProcess
+					{
+						DWORD pid = 0;
+						GetWindowThreadProcessId(p, &pid);
+						if (EnumProcessbyName(pid, process_name)) {
+							if (processpid !=
+								pid)  //只匹配指定映像的所对应的第一个进程.
+								//可能有很多同映像名的进程，只匹配第一个进程的.
+							{
+								if (indexpid < IsEuemprosuccess) {
+									indexpid++;
+									processpid = pid;
+									memset(retstring, 0, retstringlen);  //清空返回字符串
+									retstringlen = 0;
+								}
+							}
+							if (processpid == pid) {
+								wchar_t WindowTitle[MAX_PATH] = {0};
+								::GetWindowText(p, WindowTitle, MAX_PATH);
+								if (wcslen(WindowTitle) > 1) {
+									wchar_t* strfind = wcsstr(WindowTitle, title);  //模糊匹配
+									if (strfind) {
+										if (retstringlen == 0) retstringlen = wcslen(retstring);
+										if (retstringlen > 1)
+											swprintf(retstring, L"%s,%d", retstring, p);
+										else
+											swprintf(retstring, L"%d", p);
+										bret = true;
+									}
+								}
+								HWND hchile = ::GetWindow(p, GW_CHILD);
+								if (hchile != NULL) {
+									FindChildWnd(hchile, title, NULL, retstring, false, true,
+												 process_name);
+								}
+							}
+						}
+					}
+					else {
+						wchar_t WindowTitle[MAX_PATH] = {0};
+						::GetWindowText(p, WindowTitle, MAX_PATH);
+						if (wcslen(WindowTitle) > 1) {
+							wchar_t* strfind = wcsstr(WindowTitle, title);  //模糊匹配
+							if (strfind) {
+								if (retstringlen == 0) retstringlen = wcslen(retstring);
+								if (retstringlen > 1)
+									swprintf(retstring, L"%s,%d", retstring, p);
+								else
+									swprintf(retstring, L"%d", p);
+								bret = true;
+							}
+						}
+					}
+				}
+				p = ::GetWindow(p, GW_HWNDNEXT);  //获取下一个窗口
+			}
+			break;
+		}
+		case 22:  // 2.窗口类名+4 : 只匹配指定父窗口的第一层孩子窗口+匹配可见的窗口
+		{
+			if (wcslen(class_name) < 1) return false;
+			HWND p = ::GetWindow(parent, GW_CHILD);  //获取桌面窗口的子窗口
+			p = ::GetWindow(p, GW_HWNDFIRST);
+			while (p != NULL) {
+				if (::IsWindowVisible(p)) {
+					if (process_name)  // EnumWindowByProcess
+					{
+						DWORD pid = 0;
+						GetWindowThreadProcessId(p, &pid);
+						if (EnumProcessbyName(pid, process_name)) {
+							if (processpid !=
+								pid)  //只匹配指定映像的所对应的第一个进程.
+								//可能有很多同映像名的进程，只匹配第一个进程的.
+							{
+								if (indexpid < IsEuemprosuccess) {
+									indexpid++;
+									processpid = pid;
+									memset(retstring, 0, retstringlen);  //清空返回字符串
+									retstringlen = 0;
+								}
+							}
+							if (processpid == pid) {
+								wchar_t WindowClassName[MAX_PATH] = {0};
+								::GetClassName(p, WindowClassName, MAX_PATH);
+								if (wcslen(WindowClassName) > 1) {
+									wchar_t* strfind =
+										wcsstr(WindowClassName, class_name);  //模糊匹配
+									if (strfind) {
+										if (retstringlen == 0) retstringlen = wcslen(retstring);
+										if (retstringlen > 1)
+											swprintf(retstring, L"%s,%d", retstring, p);
+										else
+											swprintf(retstring, L"%d", p);
+										bret = true;
+									}
+								}
+								HWND hchile = ::GetWindow(p, GW_CHILD);
+								if (hchile != NULL) {
+									FindChildWnd(hchile, NULL, class_name, retstring, false, true,
+												 process_name);
+								}
+							}
+						}
+					}
+					else {
+						wchar_t WindowClassName[MAX_PATH] = {0};
+						::GetClassName(p, WindowClassName, MAX_PATH);
+						if (wcslen(WindowClassName) > 1) {
+							wchar_t* strfind =
+								wcsstr(WindowClassName, class_name);  //模糊匹配
+							if (strfind) {
+								if (retstringlen == 0) retstringlen = wcslen(retstring);
+								if (retstringlen > 1)
+									swprintf(retstring, L"%s,%d", retstring, p);
+								else
+									swprintf(retstring, L"%d", p);
+								bret = true;
+							}
+						}
+					}
+				}
+				p = ::GetWindow(p, GW_HWNDNEXT);  //获取下一个窗口
+			}
+			break;
+		}
+		case 23:  // 1.窗口标题+2.窗口类名+4 :
+			// 只匹配指定父窗口的第一层孩子窗口+匹配可见的窗口
+		{
+			if (wcslen(class_name) < 1 && wcslen(title) < 1) return false;
+			HWND p = ::GetWindow(parent, GW_CHILD);  //获取桌面窗口的子窗口
+			p = ::GetWindow(p, GW_HWNDFIRST);
+			while (p != NULL) {
+				if (::IsWindowVisible(p)) {
+					if (process_name)  // EnumWindowByProcess
+					{
+						DWORD pid = 0;
+						GetWindowThreadProcessId(p, &pid);
+						if (EnumProcessbyName(pid, process_name)) {
+							if (processpid !=
+								pid)  //只匹配指定映像的所对应的第一个进程.
+								//可能有很多同映像名的进程，只匹配第一个进程的.
+							{
+								if (indexpid < IsEuemprosuccess) {
+									indexpid++;
+									processpid = pid;
+									memset(retstring, 0, retstringlen);  //清空返回字符串
+									retstringlen = 0;
+								}
+							}
+							if (processpid == pid) {
+								wchar_t WindowClassName[MAX_PATH] = {0};
+								::GetClassName(p, WindowClassName, MAX_PATH);
+								wchar_t WindowTitle[MAX_PATH] = {0};
+								::GetWindowText(p, WindowTitle, MAX_PATH);
+								if (wcslen(WindowClassName) > 1 && wcslen(WindowTitle) > 1) {
+									wchar_t* strfindclass =
+										wcsstr(WindowClassName, class_name);  //模糊匹配
+									wchar_t* strfindtitle =
+										wcsstr(WindowTitle, title);  //模糊匹配
+									if (strfindclass && strfindtitle) {
+										if (retstringlen == 0) retstringlen = wcslen(retstring);
+										if (retstringlen > 1)
+											swprintf(retstring, L"%s,%d", retstring, p);
+										else
+											swprintf(retstring, L"%d", p);
+										bret = true;
+									}
+								}
+								HWND hchile = ::GetWindow(p, GW_CHILD);
+								if (hchile != NULL) {
+									FindChildWnd(hchile, title, class_name, retstring, false,
+												 true, process_name);
+								}
+							}
+						}
+					}
+					else {
+						wchar_t WindowClassName[MAX_PATH] = {0};
+						::GetClassName(p, WindowClassName, MAX_PATH);
+						wchar_t WindowTitle[MAX_PATH] = {0};
+						::GetWindowText(p, WindowTitle, MAX_PATH);
+						if (wcslen(WindowClassName) > 1 && wcslen(WindowTitle) > 1) {
+							wchar_t* strfindclass =
+								wcsstr(WindowClassName, class_name);  //模糊匹配
+							wchar_t* strfindtitle = wcsstr(WindowTitle, title);  //模糊匹配
+							if (strfindclass && strfindtitle) {
+								if (retstringlen == 0) retstringlen = wcslen(retstring);
+								if (retstringlen > 1)
+									swprintf(retstring, L"%s,%d", retstring, p);
+								else
+									swprintf(retstring, L"%d", p);
+								bret = true;
+							}
+						}
+					}
+				}
+				p = ::GetWindow(p, GW_HWNDNEXT);  //获取下一个窗口
+			}
+			break;
+		}
+		case 24:  // 8 : 匹配所有者窗口为0的窗口,即顶级窗口+16.匹配可见的窗口
+		{
+			HWND p = ::GetWindow(parent, GW_CHILD);  //获取桌面窗口的子窗口
+			p = ::GetWindow(p, GW_HWNDFIRST);
+			while (p != NULL) {
+				if (::IsWindowVisible(p) && ::GetWindow(p, GW_OWNER) == 0) {
+					if (process_name)  // EnumWindowByProcess
+					{
+						DWORD pid = 0;
+						GetWindowThreadProcessId(p, &pid);
+						if (EnumProcessbyName(pid, process_name)) {
 							if (retstringlen == 0) retstringlen = wcslen(retstring);
 							if (retstringlen > 1)
 								swprintf(retstring, L"%s,%d", retstring, p);
@@ -1882,49 +1645,41 @@ bool WinApi::EnumWindow(HWND parent, const wchar_t* title,
 							HWND hchile = ::GetWindow(p, GW_CHILD);
 							if (hchile != NULL) {
 								FindChildWnd(hchile, NULL, NULL, retstring, true, true,
-									process_name);
+											 process_name);
 							}
 						}
 					}
-				}
-				else {
-					if (retstringlen == 0) retstringlen = wcslen(retstring);
-					if (retstringlen > 1)
-						swprintf(retstring, L"%s,%d", retstring, p);
-					else
-						swprintf(retstring, L"%d", p);
-					bret = true;
-				}
-			}
-			p = ::GetWindow(p, GW_HWNDNEXT);  //获取下一个窗口
-		}
-		break;
-	}
-	case 29:  ////1.窗口标题+4 :
-		///只匹配指定父窗口的第一层孩子窗口+8:匹配所有者窗口为0的窗口,即顶级窗口+16.匹配可见的窗口
-	{
-		if (wcslen(title) < 1) return false;
-		HWND p = ::GetWindow(parent, GW_CHILD);  //获取桌面窗口的子窗口
-		p = ::GetWindow(p, GW_HWNDFIRST);
-		while (p != NULL) {
-			if (::IsWindowVisible(p) && ::GetWindow(p, GW_OWNER) == 0) {
-				if (process_name)  // EnumWindowByProcess
-				{
-					DWORD pid = 0;
-					GetWindowThreadProcessId(p, &pid);
-					if (EnumProcessbyName(pid, process_name)) {
-						if (processpid !=
-							pid)  //只匹配指定映像的所对应的第一个进程.
-							//可能有很多同映像名的进程，只匹配第一个进程的.
-						{
-							if (indexpid < IsEuemprosuccess) {
-								indexpid++;
-								processpid = pid;
-								memset(retstring, 0, retstringlen);  //清空返回字符串
-								retstringlen = 0;
-							}
+					else {
+						if (retstringlen == 0) retstringlen = wcslen(retstring);
+						if (retstringlen > 1)
+							swprintf(retstring, L"%s,%d", retstring, p);
+						else
+							swprintf(retstring, L"%d", p);
+						bret = true;
+
+						HWND hchile = ::GetWindow(p, GW_CHILD);
+						if (hchile != NULL) {
+							FindChildWnd(hchile, NULL, NULL, retstring, true, true);
 						}
-						if (processpid == pid) {
+					}
+				}
+				p = ::GetWindow(p, GW_HWNDNEXT);  //获取下一个窗口
+			}
+			break;
+		}
+		case 25:  // 1.窗口标题+
+			// 8:匹配所有者窗口为0的窗口,即顶级窗口+16.匹配可见的窗口
+		{
+			if (wcslen(title) < 1) return false;
+			HWND p = ::GetWindow(parent, GW_CHILD);  //获取桌面窗口的子窗口
+			p = ::GetWindow(p, GW_HWNDFIRST);
+			while (p != NULL) {
+				if (::IsWindowVisible(p) && ::GetWindow(p, GW_OWNER) == 0) {
+					if (process_name)  // EnumWindowByProcess
+					{
+						DWORD pid = 0;
+						GetWindowThreadProcessId(p, &pid);
+						if (EnumProcessbyName(pid, process_name)) {
 							wchar_t WindowTitle[MAX_PATH] = {0};
 							::GetWindowText(p, WindowTitle, MAX_PATH);
 							if (wcslen(WindowTitle) > 1) {
@@ -1941,56 +1696,47 @@ bool WinApi::EnumWindow(HWND parent, const wchar_t* title,
 							HWND hchile = ::GetWindow(p, GW_CHILD);
 							if (hchile != NULL) {
 								FindChildWnd(hchile, title, NULL, retstring, true, true,
-									process_name);
+											 process_name);
 							}
 						}
 					}
-				}
-				else {
-					wchar_t WindowTitle[MAX_PATH] = {0};
-					::GetWindowText(p, WindowTitle, MAX_PATH);
-					if (wcslen(WindowTitle) > 1) {
-						wchar_t* strfind = wcsstr(WindowTitle, title);  //模糊匹配
-						if (strfind) {
-							if (retstringlen == 0) retstringlen = wcslen(retstring);
-							if (retstringlen > 1)
-								swprintf(retstring, L"%s,%d", retstring, p);
-							else
-								swprintf(retstring, L"%d", p);
-							bret = true;
+					else {
+						wchar_t WindowTitle[MAX_PATH] = {0};
+						::GetWindowText(p, WindowTitle, MAX_PATH);
+						if (wcslen(WindowTitle) > 1) {
+							wchar_t* strfind = wcsstr(WindowTitle, title);  //模糊匹配
+							if (strfind) {
+								if (retstringlen == 0) retstringlen = wcslen(retstring);
+								if (retstringlen > 1)
+									swprintf(retstring, L"%s,%d", retstring, p);
+								else
+									swprintf(retstring, L"%d", p);
+								bret = true;
+							}
+						}
+						HWND hchile = ::GetWindow(p, GW_CHILD);
+						if (hchile != NULL) {
+							FindChildWnd(hchile, title, NULL, retstring, true, true);
 						}
 					}
 				}
+				p = ::GetWindow(p, GW_HWNDNEXT);  //获取下一个窗口
 			}
-			p = ::GetWindow(p, GW_HWNDNEXT);  //获取下一个窗口
+			break;
 		}
-		break;
-	}
-	case 30:  // 2.窗口类名+4 :
-		// 只匹配指定父窗口的第一层孩子窗口+8:匹配所有者窗口为0的窗口,即顶级窗口+16.匹配可见的窗口
-	{
-		if (wcslen(class_name) < 1) return false;
-		HWND p = ::GetWindow(parent, GW_CHILD);  //获取桌面窗口的子窗口
-		p = ::GetWindow(p, GW_HWNDFIRST);
-		while (p != NULL) {
-			if (::IsWindowVisible(p) && ::GetWindow(p, GW_OWNER) == 0) {
-				if (process_name)  // EnumWindowByProcess
-				{
-					DWORD pid = 0;
-					GetWindowThreadProcessId(p, &pid);
-					if (EnumProcessbyName(pid, process_name)) {
-						if (processpid !=
-							pid)  //只匹配指定映像的所对应的第一个进程.
-							//可能有很多同映像名的进程，只匹配第一个进程的.
-						{
-							if (indexpid < IsEuemprosuccess) {
-								indexpid++;
-								processpid = pid;
-								memset(retstring, 0, retstringlen);  //清空返回字符串
-								retstringlen = 0;
-							}
-						}
-						if (processpid == pid) {
+		case 26:  // 2.窗口类名+
+			// 8:匹配所有者窗口为0的窗口,即顶级窗口+16.匹配可见的窗口
+		{
+			if (wcslen(class_name) < 1) return false;
+			HWND p = ::GetWindow(parent, GW_CHILD);  //获取桌面窗口的子窗口
+			p = ::GetWindow(p, GW_HWNDFIRST);
+			while (p != NULL) {
+				if (::IsWindowVisible(p) && ::GetWindow(p, GW_OWNER) == 0) {
+					if (process_name)  // EnumWindowByProcess
+					{
+						DWORD pid = 0;
+						GetWindowThreadProcessId(p, &pid);
+						if (EnumProcessbyName(pid, process_name)) {
 							wchar_t WindowClassName[MAX_PATH] = {0};
 							::GetClassName(p, WindowClassName, MAX_PATH);
 							if (wcslen(WindowClassName) > 1) {
@@ -2008,57 +1754,47 @@ bool WinApi::EnumWindow(HWND parent, const wchar_t* title,
 							HWND hchile = ::GetWindow(p, GW_CHILD);
 							if (hchile != NULL) {
 								FindChildWnd(hchile, NULL, class_name, retstring, true, true,
-									process_name);
+											 process_name);
 							}
 						}
 					}
-				}
-				else {
-					wchar_t WindowClassName[MAX_PATH] = {0};
-					::GetClassName(p, WindowClassName, MAX_PATH);
-					if (wcslen(WindowClassName) > 1) {
-						wchar_t* strfind =
-							wcsstr(WindowClassName, class_name);  //模糊匹配
-						if (strfind) {
-							if (retstringlen == 0) retstringlen = wcslen(retstring);
-							if (retstringlen > 1)
-								swprintf(retstring, L"%s,%d", retstring, p);
-							else
-								swprintf(retstring, L"%d", p);
-							bret = true;
+					else {
+						wchar_t WindowClassName[MAX_PATH] = {0};
+						::GetClassName(p, WindowClassName, MAX_PATH);
+						if (wcslen(WindowClassName) > 1) {
+							wchar_t* strfind =
+								wcsstr(WindowClassName, class_name);  //模糊匹配
+							if (strfind) {
+								if (retstringlen == 0) retstringlen = wcslen(retstring);
+								if (retstringlen > 1)
+									swprintf(retstring, L"%s,%d", retstring, p);
+								else
+									swprintf(retstring, L"%d", p);
+								bret = true;
+							}
+						}
+						HWND hchile = ::GetWindow(p, GW_CHILD);
+						if (hchile != NULL) {
+							FindChildWnd(hchile, NULL, class_name, retstring, true, true);
 						}
 					}
 				}
+				p = ::GetWindow(p, GW_HWNDNEXT);  //获取下一个窗口
 			}
-			p = ::GetWindow(p, GW_HWNDNEXT);  //获取下一个窗口
+			break;
 		}
-		break;
-	}
-	case 31:  // 1.窗口标题+2.窗口类名+4 :
-		// 只匹配指定父窗口的第一层孩子窗口+8:匹配所有者窗口为0的窗口,即顶级窗口+16.匹配可见的窗口
-	{
-		if (wcslen(class_name) < 1 && wcslen(title) < 1) return false;
-		HWND p = ::GetWindow(parent, GW_CHILD);  //获取桌面窗口的子窗口
-		p = ::GetWindow(p, GW_HWNDFIRST);
-		while (p != NULL) {
-			if (::IsWindowVisible(p) && ::GetWindow(p, GW_OWNER) == 0) {
-				if (process_name)  // EnumWindowByProcess
-				{
-					DWORD pid = 0;
-					GetWindowThreadProcessId(p, &pid);
-					if (EnumProcessbyName(pid, process_name)) {
-						if (processpid !=
-							pid)  //只匹配指定映像的所对应的第一个进程.
-							//可能有很多同映像名的进程，只匹配第一个进程的.
-						{
-							if (indexpid < IsEuemprosuccess) {
-								indexpid++;
-								processpid = pid;
-								memset(retstring, 0, retstringlen);  //清空返回字符串
-								retstringlen = 0;
-							}
-						}
-						if (processpid == pid) {
+		case 27:  // 1.窗口标题+2.窗口类名+8:匹配所有者窗口为0的窗口,即顶级窗口+16.匹配可见的窗口
+		{
+			if (wcslen(class_name) < 1 && wcslen(title) < 1) return false;
+			HWND p = ::GetWindow(parent, GW_CHILD);  //获取桌面窗口的子窗口
+			p = ::GetWindow(p, GW_HWNDFIRST);
+			while (p != NULL) {
+				if (::IsWindowVisible(p) && ::GetWindow(p, GW_OWNER) == 0) {
+					if (process_name)  // EnumWindowByProcess
+					{
+						DWORD pid = 0;
+						GetWindowThreadProcessId(p, &pid);
+						if (EnumProcessbyName(pid, process_name)) {
 							wchar_t WindowClassName[MAX_PATH] = {0};
 							::GetClassName(p, WindowClassName, MAX_PATH);
 							wchar_t WindowTitle[MAX_PATH] = {0};
@@ -2066,8 +1802,7 @@ bool WinApi::EnumWindow(HWND parent, const wchar_t* title,
 							if (wcslen(WindowClassName) > 1 && wcslen(WindowTitle) > 1) {
 								wchar_t* strfindclass =
 									wcsstr(WindowClassName, class_name);  //模糊匹配
-								wchar_t* strfindtitle =
-									wcsstr(WindowTitle, title);  //模糊匹配
+								wchar_t* strfindtitle = wcsstr(WindowTitle, title);  //模糊匹配
 								if (strfindclass && strfindtitle) {
 									if (retstringlen == 0) retstringlen = wcslen(retstring);
 									if (retstringlen > 1)
@@ -2080,45 +1815,308 @@ bool WinApi::EnumWindow(HWND parent, const wchar_t* title,
 							HWND hchile = ::GetWindow(p, GW_CHILD);
 							if (hchile != NULL) {
 								FindChildWnd(hchile, title, class_name, retstring, true, true,
-									process_name);
+											 process_name);
+							}
+						}
+					}
+					else {
+						wchar_t WindowClassName[MAX_PATH] = {0};
+						::GetClassName(p, WindowClassName, MAX_PATH);
+						wchar_t WindowTitle[MAX_PATH] = {0};
+						::GetWindowText(p, WindowTitle, MAX_PATH);
+						if (wcslen(WindowClassName) > 1 && wcslen(WindowTitle) > 1) {
+							wchar_t* strfindclass =
+								wcsstr(WindowClassName, class_name);  //模糊匹配
+							wchar_t* strfindtitle = wcsstr(WindowTitle, title);  //模糊匹配
+							if (strfindclass && strfindtitle) {
+								if (retstringlen == 0) retstringlen = wcslen(retstring);
+								if (retstringlen > 1)
+									swprintf(retstring, L"%s,%d", retstring, p);
+								else
+									swprintf(retstring, L"%d", p);
+								bret = true;
+							}
+						}
+						HWND hchile = ::GetWindow(p, GW_CHILD);
+						if (hchile != NULL) {
+							FindChildWnd(hchile, title, class_name, retstring, true, true);
+						}
+					}
+				}
+				p = ::GetWindow(p, GW_HWNDNEXT);  //获取下一个窗口
+			}
+			break;
+		}
+		case 28:  // 4 :
+			// 只匹配指定父窗口的第一层孩子窗口+8:匹配所有者窗口为0的窗口,即顶级窗口+16.匹配可见的窗口
+		{
+			HWND p = ::GetWindow(parent, GW_CHILD);  //获取桌面窗口的子窗口
+			p = ::GetWindow(p, GW_HWNDFIRST);
+			while (p != NULL) {
+				if (::IsWindowVisible(p) && ::GetWindow(p, GW_OWNER) == 0) {
+					if (process_name)  // EnumWindowByProcess
+					{
+						DWORD pid = 0;
+						GetWindowThreadProcessId(p, &pid);
+						if (EnumProcessbyName(pid, process_name)) {
+							if (processpid !=
+								pid)  //只匹配指定映像的所对应的第一个进程.
+								//可能有很多同映像名的进程，只匹配第一个进程的.
+							{
+								if (indexpid < IsEuemprosuccess) {
+									indexpid++;
+									processpid = pid;
+									memset(retstring, 0, retstringlen);  //清空返回字符串
+									retstringlen = 0;
+								}
+							}
+							if (processpid == pid) {
+								if (retstringlen == 0) retstringlen = wcslen(retstring);
+								if (retstringlen > 1)
+									swprintf(retstring, L"%s,%d", retstring, p);
+								else
+									swprintf(retstring, L"%d", p);
+								bret = true;
+								HWND hchile = ::GetWindow(p, GW_CHILD);
+								if (hchile != NULL) {
+									FindChildWnd(hchile, NULL, NULL, retstring, true, true,
+												 process_name);
+								}
+							}
+						}
+					}
+					else {
+						if (retstringlen == 0) retstringlen = wcslen(retstring);
+						if (retstringlen > 1)
+							swprintf(retstring, L"%s,%d", retstring, p);
+						else
+							swprintf(retstring, L"%d", p);
+						bret = true;
+					}
+				}
+				p = ::GetWindow(p, GW_HWNDNEXT);  //获取下一个窗口
+			}
+			break;
+		}
+		case 29:  ////1.窗口标题+4 :
+			///只匹配指定父窗口的第一层孩子窗口+8:匹配所有者窗口为0的窗口,即顶级窗口+16.匹配可见的窗口
+		{
+			if (wcslen(title) < 1) return false;
+			HWND p = ::GetWindow(parent, GW_CHILD);  //获取桌面窗口的子窗口
+			p = ::GetWindow(p, GW_HWNDFIRST);
+			while (p != NULL) {
+				if (::IsWindowVisible(p) && ::GetWindow(p, GW_OWNER) == 0) {
+					if (process_name)  // EnumWindowByProcess
+					{
+						DWORD pid = 0;
+						GetWindowThreadProcessId(p, &pid);
+						if (EnumProcessbyName(pid, process_name)) {
+							if (processpid !=
+								pid)  //只匹配指定映像的所对应的第一个进程.
+								//可能有很多同映像名的进程，只匹配第一个进程的.
+							{
+								if (indexpid < IsEuemprosuccess) {
+									indexpid++;
+									processpid = pid;
+									memset(retstring, 0, retstringlen);  //清空返回字符串
+									retstringlen = 0;
+								}
+							}
+							if (processpid == pid) {
+								wchar_t WindowTitle[MAX_PATH] = {0};
+								::GetWindowText(p, WindowTitle, MAX_PATH);
+								if (wcslen(WindowTitle) > 1) {
+									wchar_t* strfind = wcsstr(WindowTitle, title);  //模糊匹配
+									if (strfind) {
+										if (retstringlen == 0) retstringlen = wcslen(retstring);
+										if (retstringlen > 1)
+											swprintf(retstring, L"%s,%d", retstring, p);
+										else
+											swprintf(retstring, L"%d", p);
+										bret = true;
+									}
+								}
+								HWND hchile = ::GetWindow(p, GW_CHILD);
+								if (hchile != NULL) {
+									FindChildWnd(hchile, title, NULL, retstring, true, true,
+												 process_name);
+								}
+							}
+						}
+					}
+					else {
+						wchar_t WindowTitle[MAX_PATH] = {0};
+						::GetWindowText(p, WindowTitle, MAX_PATH);
+						if (wcslen(WindowTitle) > 1) {
+							wchar_t* strfind = wcsstr(WindowTitle, title);  //模糊匹配
+							if (strfind) {
+								if (retstringlen == 0) retstringlen = wcslen(retstring);
+								if (retstringlen > 1)
+									swprintf(retstring, L"%s,%d", retstring, p);
+								else
+									swprintf(retstring, L"%d", p);
+								bret = true;
 							}
 						}
 					}
 				}
-				else {
-					wchar_t WindowClassName[MAX_PATH] = {0};
-					::GetClassName(p, WindowClassName, MAX_PATH);
-					wchar_t WindowTitle[MAX_PATH] = {0};
-					::GetWindowText(p, WindowTitle, MAX_PATH);
-					if (wcslen(WindowClassName) > 1 && wcslen(WindowTitle) > 1) {
-						wchar_t* strfindclass =
-							wcsstr(WindowClassName, class_name);  //模糊匹配
-						wchar_t* strfindtitle = wcsstr(WindowTitle, title);  //模糊匹配
-						if (strfindclass && strfindtitle) {
-							if (retstringlen == 0) retstringlen = wcslen(retstring);
-							if (retstringlen > 1)
-								swprintf(retstring, L"%s,%d", retstring, p);
-							else
-								swprintf(retstring, L"%d", p);
-							bret = true;
+				p = ::GetWindow(p, GW_HWNDNEXT);  //获取下一个窗口
+			}
+			break;
+		}
+		case 30:  // 2.窗口类名+4 :
+			// 只匹配指定父窗口的第一层孩子窗口+8:匹配所有者窗口为0的窗口,即顶级窗口+16.匹配可见的窗口
+		{
+			if (wcslen(class_name) < 1) return false;
+			HWND p = ::GetWindow(parent, GW_CHILD);  //获取桌面窗口的子窗口
+			p = ::GetWindow(p, GW_HWNDFIRST);
+			while (p != NULL) {
+				if (::IsWindowVisible(p) && ::GetWindow(p, GW_OWNER) == 0) {
+					if (process_name)  // EnumWindowByProcess
+					{
+						DWORD pid = 0;
+						GetWindowThreadProcessId(p, &pid);
+						if (EnumProcessbyName(pid, process_name)) {
+							if (processpid !=
+								pid)  //只匹配指定映像的所对应的第一个进程.
+								//可能有很多同映像名的进程，只匹配第一个进程的.
+							{
+								if (indexpid < IsEuemprosuccess) {
+									indexpid++;
+									processpid = pid;
+									memset(retstring, 0, retstringlen);  //清空返回字符串
+									retstringlen = 0;
+								}
+							}
+							if (processpid == pid) {
+								wchar_t WindowClassName[MAX_PATH] = {0};
+								::GetClassName(p, WindowClassName, MAX_PATH);
+								if (wcslen(WindowClassName) > 1) {
+									wchar_t* strfind =
+										wcsstr(WindowClassName, class_name);  //模糊匹配
+									if (strfind) {
+										if (retstringlen == 0) retstringlen = wcslen(retstring);
+										if (retstringlen > 1)
+											swprintf(retstring, L"%s,%d", retstring, p);
+										else
+											swprintf(retstring, L"%d", p);
+										bret = true;
+									}
+								}
+								HWND hchile = ::GetWindow(p, GW_CHILD);
+								if (hchile != NULL) {
+									FindChildWnd(hchile, NULL, class_name, retstring, true, true,
+												 process_name);
+								}
+							}
+						}
+					}
+					else {
+						wchar_t WindowClassName[MAX_PATH] = {0};
+						::GetClassName(p, WindowClassName, MAX_PATH);
+						if (wcslen(WindowClassName) > 1) {
+							wchar_t* strfind =
+								wcsstr(WindowClassName, class_name);  //模糊匹配
+							if (strfind) {
+								if (retstringlen == 0) retstringlen = wcslen(retstring);
+								if (retstringlen > 1)
+									swprintf(retstring, L"%s,%d", retstring, p);
+								else
+									swprintf(retstring, L"%d", p);
+								bret = true;
+							}
 						}
 					}
 				}
+				p = ::GetWindow(p, GW_HWNDNEXT);  //获取下一个窗口
 			}
-			p = ::GetWindow(p, GW_HWNDNEXT);  //获取下一个窗口
+			break;
 		}
-		break;
-	}
-	default:
-		return bret;
+		case 31:  // 1.窗口标题+2.窗口类名+4 :
+			// 只匹配指定父窗口的第一层孩子窗口+8:匹配所有者窗口为0的窗口,即顶级窗口+16.匹配可见的窗口
+		{
+			if (wcslen(class_name) < 1 && wcslen(title) < 1) return false;
+			HWND p = ::GetWindow(parent, GW_CHILD);  //获取桌面窗口的子窗口
+			p = ::GetWindow(p, GW_HWNDFIRST);
+			while (p != NULL) {
+				if (::IsWindowVisible(p) && ::GetWindow(p, GW_OWNER) == 0) {
+					if (process_name)  // EnumWindowByProcess
+					{
+						DWORD pid = 0;
+						GetWindowThreadProcessId(p, &pid);
+						if (EnumProcessbyName(pid, process_name)) {
+							if (processpid !=
+								pid)  //只匹配指定映像的所对应的第一个进程.
+								//可能有很多同映像名的进程，只匹配第一个进程的.
+							{
+								if (indexpid < IsEuemprosuccess) {
+									indexpid++;
+									processpid = pid;
+									memset(retstring, 0, retstringlen);  //清空返回字符串
+									retstringlen = 0;
+								}
+							}
+							if (processpid == pid) {
+								wchar_t WindowClassName[MAX_PATH] = {0};
+								::GetClassName(p, WindowClassName, MAX_PATH);
+								wchar_t WindowTitle[MAX_PATH] = {0};
+								::GetWindowText(p, WindowTitle, MAX_PATH);
+								if (wcslen(WindowClassName) > 1 && wcslen(WindowTitle) > 1) {
+									wchar_t* strfindclass =
+										wcsstr(WindowClassName, class_name);  //模糊匹配
+									wchar_t* strfindtitle =
+										wcsstr(WindowTitle, title);  //模糊匹配
+									if (strfindclass && strfindtitle) {
+										if (retstringlen == 0) retstringlen = wcslen(retstring);
+										if (retstringlen > 1)
+											swprintf(retstring, L"%s,%d", retstring, p);
+										else
+											swprintf(retstring, L"%d", p);
+										bret = true;
+									}
+								}
+								HWND hchile = ::GetWindow(p, GW_CHILD);
+								if (hchile != NULL) {
+									FindChildWnd(hchile, title, class_name, retstring, true, true,
+												 process_name);
+								}
+							}
+						}
+					}
+					else {
+						wchar_t WindowClassName[MAX_PATH] = {0};
+						::GetClassName(p, WindowClassName, MAX_PATH);
+						wchar_t WindowTitle[MAX_PATH] = {0};
+						::GetWindowText(p, WindowTitle, MAX_PATH);
+						if (wcslen(WindowClassName) > 1 && wcslen(WindowTitle) > 1) {
+							wchar_t* strfindclass =
+								wcsstr(WindowClassName, class_name);  //模糊匹配
+							wchar_t* strfindtitle = wcsstr(WindowTitle, title);  //模糊匹配
+							if (strfindclass && strfindtitle) {
+								if (retstringlen == 0) retstringlen = wcslen(retstring);
+								if (retstringlen > 1)
+									swprintf(retstring, L"%s,%d", retstring, p);
+								else
+									swprintf(retstring, L"%d", p);
+								bret = true;
+							}
+						}
+					}
+				}
+				p = ::GetWindow(p, GW_HWNDNEXT);  //获取下一个窗口
+			}
+			break;
+		}
+		default:
+			return bret;
 	}
 
 	return bret;
 }
 
 bool WinApi::EnumWindowSuper(wchar_t* spec1, LONG flag1, LONG type1,
-	wchar_t* spec2, LONG flag2, LONG type2, LONG sort,
-	wchar_t* retstring) {
+							 wchar_t* spec2, LONG flag2, LONG type2, LONG sort,
+							 wchar_t* retstring) {
 	bool bret = false;
 	wchar_t findhwnd1[MAX_PATH * 100] = {0};
 	wchar_t findhwnd2[MAX_PATH * 100] = {0};
@@ -2218,15 +2216,15 @@ long WinApi::FindWindow(const wchar_t* class_name, const wchar_t* title) {
 }
 
 long WinApi::FindWindowEx(long parent, const wchar_t* class_name,
-	const wchar_t* title) {
+						  const wchar_t* title) {
 	if (class_name[0] == L'\0') class_name = nullptr;
 	if (title[0] == L'\0') title = nullptr;
 	return (long)::FindWindowExW((HWND)parent, NULL, class_name, title);
 }
 
 bool WinApi::FindWindowByProcess(const wchar_t* class_name,
-	const wchar_t* title, LONG& rethwnd,
-	const wchar_t* process_name, DWORD Pid) {
+								 const wchar_t* title, LONG& rethwnd,
+								 const wchar_t* process_name, DWORD Pid) {
 	bool bret = false;
 	rethwnd = 0;
 	if (process_name) {
@@ -2271,7 +2269,7 @@ bool WinApi::FindWindowByProcess(const wchar_t* class_name,
 							if (wcslen(class_name) > 0) classname = class_name;
 							if (wcslen(title) > 0) titles = titles;
 							DWORD dret = FindChildWnd(hchile, titles, classname, NULL, false,
-								false, process_name);
+													  false, process_name);
 							if (dret > 0) {
 								rethwnd = (LONG)dret;
 								bret = true;
@@ -2320,7 +2318,7 @@ bool WinApi::FindWindowByProcess(const wchar_t* class_name,
 							if (wcslen(class_name) > 0) classname = class_name;
 							if (wcslen(title) > 0) titles = titles;
 							DWORD dret = FindChildWnd(hchile, titles, classname, NULL, false,
-								false, process_name);
+													  false, process_name);
 							if (dret > 0) {
 								rethwnd = (LONG)dret;
 								bret = true;
@@ -2458,7 +2456,7 @@ double WinApi::get_cpu_usage(DWORD ProcessID)  //获取指定进程CPU使用率
 	HANDLE hProcess = NULL;
 
 	hProcess = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE,
-		ProcessID);
+						   ProcessID);
 
 	if (!hProcess) {
 		return -1;
@@ -2481,7 +2479,7 @@ double WinApi::get_cpu_usage(DWORD ProcessID)  //获取指定进程CPU使用率
 	// false, ProcessID);
 
 	hProcess = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE,
-		ProcessID);
+						   ProcessID);
 
 	if (!hProcess) {
 		return -1;
@@ -2498,7 +2496,7 @@ double WinApi::get_cpu_usage(DWORD ProcessID)  //获取指定进程CPU使用率
 	CloseHandle(hProcess);
 
 	cpu = ((double)(system_time - last_system_time_) /
-		(double)(time - last_time_)) *
+		   (double)(time - last_time_)) *
 		100;
 	return cpu;
 }
@@ -2510,7 +2508,7 @@ DWORD WinApi::GetMemoryInfo(DWORD ProcessID) {
 	HANDLE hProcess = NULL;
 
 	hProcess = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE,
-		ProcessID);
+						   ProcessID);
 
 	if (GetProcessMemoryInfo(hProcess, &pmc, sizeof(pmc))) {
 		// memoryInK = pmc.WorkingSetSize/1024;		//单位为k
@@ -2556,7 +2554,7 @@ bool WinApi::GetProcesspath(DWORD ProcessID, wchar_t* process_path) {
 	HANDLE hProcess = NULL;
 
 	hProcess = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE,
-		ProcessID);
+						   ProcessID);
 
 	HMODULE hMods = NULL;
 	DWORD cbNeededModule = 0;
@@ -2682,7 +2680,7 @@ bool WinApi::SetWindowSize(LONG hwnd, LONG width, LONG hight, int type) {
 			GetSystemMetrics(SM_CXSCREEN) / 2 - nWidth / 2;  //居中处理
 		int showToScreeny = GetSystemMetrics(SM_CYSCREEN) / 2 - nHeiht / 2;
 		bret = ::MoveWindow(hWnd, showToScreenx, showToScreeny, rectProgram.right,
-			rectProgram.bottom, false);
+							rectProgram.bottom, false);
 	}
 	else  // SetWindowSize
 	{
@@ -2690,7 +2688,7 @@ bool WinApi::SetWindowSize(LONG hwnd, LONG width, LONG hight, int type) {
 		HWND hWnd = (HWND)hwnd;
 		::GetWindowRect(hWnd, &rectClient);  //获得程序窗口位于屏幕坐标
 		bret = ::MoveWindow(hWnd, rectClient.left, rectClient.top, width, hight,
-			false);
+							false);
 	}
 	return bret;
 }
@@ -2725,7 +2723,7 @@ bool WinApi::SetWindowState(LONG hwnd, LONG flag, LONG rethwnd) {
 	}
 	else if (flag == 8)  //置顶指定窗口
 		::SetWindowPos(hWnd, HWND_TOPMOST, 0, 0, 0, 0,
-			SWP_NOMOVE | SWP_NOSIZE);  //窗口置顶
+					   SWP_NOMOVE | SWP_NOSIZE);  //窗口置顶
 	else if (flag == 9)                         // 9 : 取消置顶指定窗口
 		::SetWindowPos(hWnd, HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
 	else if (flag == 10)  //禁止指定窗口

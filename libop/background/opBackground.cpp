@@ -1,4 +1,4 @@
-﻿//#include "stdafx.h"
+﻿
 #include <algorithm>
 #include "./core/globalVar.h"
 #include "./core/helpfunc.h"
@@ -11,7 +11,8 @@
 
 #include "./keypad/winkeypad.h"
 #include "./mouse/opMouseDx.h"
-opBackground::opBackground() : _hwnd(0), _is_bind(0), _pbkdisplay(nullptr), _bkmouse(new opMouseWin), _keypad(new winkeypad) {
+opBackground::opBackground() : _hwnd(0), _is_bind(0),
+_pbkdisplay(nullptr), _bkmouse(new opMouseWin), _keypad(new winkeypad) {
 	_display_method = std::make_pair<wstring, wstring>(L"screen", L"");
 }
 
@@ -30,7 +31,8 @@ opBackground::~opBackground() {
 	SAFE_DELETE(_keypad);
 }
 
-long opBackground::BindWindow(long hwnd, const wstring& sdisplay, const wstring& smouse, const wstring& skeypad, long mode) {
+long opBackground::BindWindow(long hwnd, const wstring& sdisplay, const wstring& smouse,
+							  const wstring& skeypad, long mode) {
 	//step 1.避免重复绑定
 	UnBindWindow();
 
@@ -202,8 +204,6 @@ long opBackground::GetDisplay() {
 //	}
 //		return nullptr;
 //}
-//
-//
 //}
 
 void opBackground::lock_data() {
@@ -233,7 +233,7 @@ long opBackground::get_height() {
 		auto ptr = (byte*)_wtoi64(strPtr.data());
 #else
 		auto ptr = (byte*)_wtoi(strPtr.data());
-#endif //
+#endif
 
 		auto bih = (BITMAPINFOHEADER*)(ptr + sizeof(BITMAPFILEHEADER));
 		return bih->biHeight < 0 ? -bih->biHeight : bih->biHeight;
@@ -254,7 +254,7 @@ long opBackground::get_width() {
 		auto ptr = (byte*)_wtoi64(strPtr.data());
 #else
 		auto ptr = (byte*)_wtoi(strPtr.data());
-#endif //
+#endif
 
 		auto bih = (BITMAPINFOHEADER*)(ptr + sizeof(BITMAPFILEHEADER));
 		return bih->biWidth;
@@ -305,16 +305,16 @@ long opBackground::get_image_type() {
 	}
 	else {
 		switch (GET_RENDER_TYPE(_display)) {
-		case RENDER_TYPE::NORMAL:
-			return -2;
-		case RENDER_TYPE::GDI:
-			return -1;
-		case RENDER_TYPE::DX:
-			return 0;
-		case RENDER_TYPE::OPENGL:
-			return -1;
-		default:
-			return 0;
+			case RENDER_TYPE::NORMAL:
+				return -2;
+			case RENDER_TYPE::GDI:
+				return -1;
+			case RENDER_TYPE::DX:
+				return 0;
+			case RENDER_TYPE::OPENGL:
+				return -1;
+			default:
+				return 0;
 		}
 	}
 }
@@ -363,7 +363,7 @@ long opBackground::set_display_method(const wstring& method) {
 			auto ptr = (byte*)_wtoi64(strPtr.data());
 #else
 			auto ptr = (byte*)_wtoi(strPtr.data());
-#endif //
+#endif
 
 			if (ptr == nullptr) {
 				return 0;
@@ -389,8 +389,8 @@ long opBackground::set_display_method(const wstring& method) {
 				_pic.create(bih.biWidth, h);
 				for (int i = 0; i < h; i++) {
 					memcpy(_pic.ptr<uchar>(i),
-						ptr + sizeof(bfh) + sizeof(bih) + (h - 1 - i) * bih.biWidth * 4,
-						bih.biWidth * 4);
+						   ptr + sizeof(bfh) + sizeof(bih) + (h - 1 - i) * bih.biWidth * 4,
+						   bih.biWidth * 4);
 				}
 			}
 			_display_method.first = L"mem";

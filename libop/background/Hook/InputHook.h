@@ -3,16 +3,14 @@
 
 #include "../../core/globalVar.h"
 
-struct opMouseState
-{
+struct opMouseState {
 	LONG lAxisX;
 	LONG lAxisY;
 	BYTE abButtons[3];
 	BYTE bPadding; // Structure must be DWORD multiple in size.
 };
 
-class InputHook
-{
+class InputHook {
 public:
 	/*target window hwnd*/
 	static HWND input_hwnd;
@@ -20,7 +18,7 @@ public:
 	/*name of ...*/
 	static wchar_t shared_res_name[256];
 	static wchar_t mutex_name[256];
-	static void *old_address;
+	static void* old_address;
 	static bool is_hooked;
 	//
 	static int setup(HWND hwnd_, int input_type_);

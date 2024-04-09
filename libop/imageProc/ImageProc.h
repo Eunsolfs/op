@@ -19,7 +19,7 @@ public:
 
 	ImageProc();
 	~ImageProc();
-	//
+
 	long Capture(const std::wstring& file);
 
 	long CmpColor(long x, long y, const std::wstring& scolor, double sim);
@@ -31,9 +31,9 @@ public:
 	long FindMultiColor(const wstring& first_color, const wstring& offset_color, double sim, long dir, long& x, long& y);
 
 	long FindMultiColorEx(const wstring& first_color, const wstring& offset_color, double sim, long dir, wstring& retstr);
-	//图形定位
+
 	long FindPic(const std::wstring& files, const wstring& delta_colors, double sim, long dir, long& x, long& y);
-	//
+
 	long FindPicEx(const std::wstring& files, const wstring& delta_colors, double sim, long dir, wstring& retstr, bool returnID = true);
 
 	long FindColorBlock(const wstring& color, double sim, long count, long height, long width, long& x, long& y);

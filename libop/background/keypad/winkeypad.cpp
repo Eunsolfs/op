@@ -1,10 +1,10 @@
-//#include "stdafx.h"
+
 #include "winkeypad.h"
 #include "./core/globalVar.h"
 #include "./core/helpfunc.h"
 
 static uint oem_code(uint key) {
-	short code[256] = { 0 };
+	short code[256] = {0};
 	code['q'] = 0x10; code['a'] = 0x1e;
 	code['w'] = 0x11; code['s'] = 0x1f;
 	code['e'] = 0x12; code['d'] = 0x20;
@@ -24,16 +24,12 @@ static uint oem_code(uint key) {
 	code['n'] = 0x31;
 	code['m'] = 0x32;
 	return code[key & 0xffu];
-
 }
 
-winkeypad::winkeypad():bkkeypad()
-{
-}
+winkeypad::winkeypad() :bkkeypad() {}
 
 
-winkeypad::~winkeypad()
-{
+winkeypad::~winkeypad() {
 	//UnBind();
 }
 
@@ -61,79 +57,80 @@ long winkeypad::KeyDown(long vk_code) {
 	// vk_code = toupper(vk_code);
 
 	switch (_mode) {
-	case INPUT_TYPE::IN_NORMAL:
-	{
-	
-		INPUT Input = { 0 };
-		Input.type = INPUT_KEYBOARD;
-		Input.ki.wVk = (WORD)vk_code;
-		Input.ki.wScan = 0;
-		Input.ki.dwFlags = 0;
+		case INPUT_TYPE::IN_NORMAL:
+		{
 
-		/*The function returns the number of events that it successfully inserted into the keyboard or mouse input stream.
-		If the function returns zero, the input was already blocked by another thread.
-		To get extended error information, call GetLastError.
-		This function fails when it is blocked by UIPI.
-		Note that neither GetLastError nor the return value will indicate the failure was caused by UIPI blocking.
-		*/
-		ret = ::SendInput(1, &Input, sizeof(INPUT));
-		break;
-	}
-	case INPUT_TYPE::IN_NORMAL2:
-	{
-		INPUT Input = { 0 };
-		Input.type = INPUT_KEYBOARD;
-		Input.ki.wVk = 0;
-		Input.ki.wScan = MapVirtualKey(vk_code, MAPVK_VK_TO_VSC);
-		Input.ki.dwFlags = KEYEVENTF_SCANCODE;
-		ret = ::SendInput(1, &Input, sizeof(INPUT));
-		if (ret == 0)
-			setlog("op:IN_NORMAL2 erro code:%s", GetLastErrorAsString().c_str());
-		break;
-	}
-	case INPUT_TYPE::IN_WINDOWS: {
-		/*Specification of WM_KEYDOWN :*/
+			INPUT Input = {0};
+			Input.type = INPUT_KEYBOARD;
+			Input.ki.wVk = (WORD)vk_code;
+			Input.ki.wScan = 0;
+			Input.ki.dwFlags = 0;
 
-		/*wParam
+			/*The function returns the number of events that it successfully inserted into the keyboard or mouse input stream.
+			If the function returns zero, the input was already blocked by another thread.
+			To get extended error information, call GetLastError.
+			This function fails when it is blocked by UIPI.
+			Note that neither GetLastError nor the return value will indicate the failure was caused by UIPI blocking.
+			*/
+			ret = ::SendInput(1, &Input, sizeof(INPUT));
+			break;
+		}
+		case INPUT_TYPE::IN_NORMAL2:
+		{
+			INPUT Input = {0};
+			Input.type = INPUT_KEYBOARD;
+			Input.ki.wVk = 0;
+			Input.ki.wScan = MapVirtualKey(vk_code, MAPVK_VK_TO_VSC);
+			Input.ki.dwFlags = KEYEVENTF_SCANCODE;
+			ret = ::SendInput(1, &Input, sizeof(INPUT));
+			if (ret == 0)
+				setlog("op:IN_NORMAL2 erro code:%s", GetLastErrorAsString().c_str());
+			break;
+		}
+		case INPUT_TYPE::IN_WINDOWS:
+		{
+			/*Specification of WM_KEYDOWN :*/
 
-			Specifies the virtual - key code of the nonsystem key.
-		lParam
-			Specifies the repeat count, scan code, extended - key flag, context code,
-			previous key - state flag,
-			and transition - state flag, as shown in the following table.
-			0 - 15
-			Specifies the repeat count for the current message.The value is
-			the number of times the keystroke is
-			autorepeated as a result of the user holding down the key.If the
-			keystroke is held long enough, multiple messages are sent.However,
-			the repeat count is not cumulative.
-			16 - 23
-			Specifies the scan code.The value depends on the OEM.
-			24
-			Specifies whether the key is an extended key, such as the
-			right - hand ALT and CTRL keys that
-			appear on an enhanced 101 - or 102 - key keyboard.The value
-			is 1 if it is an extended key; otherwise, it is 0.
-			25 - 28
-			Reserved; do not use.
-			29
-			Specifies the context code.The value is always 0 for a WM_KEYDOWN message.
-			30
-			Specifies the previous key state.The value is 1 if the key
-			is down before the message is sent, or it is zero if the key is up.
-			31
-			Specifies the transition state.The value is always zero for a WM_KEYDOWN message.*/
+			/*wParam
 
-        DWORD dwVKFkeyData;
-		WORD dwScanCode = MapVirtualKey(vk_code, 0);
-		dwVKFkeyData = 1;
-		dwVKFkeyData |= dwScanCode << 16;
-		dwVKFkeyData |= 0 << 24;
-		dwVKFkeyData |= 0 << 29;
-		ret = ::SendMessageTimeout(_hwnd, WM_KEYDOWN, vk_code, dwVKFkeyData, SMTO_BLOCK, 2000, nullptr);
-		if (ret == 0)setlog("error code=%d", GetLastError());
-		break;
-	}
+				Specifies the virtual - key code of the nonsystem key.
+			lParam
+				Specifies the repeat count, scan code, extended - key flag, context code,
+				previous key - state flag,
+				and transition - state flag, as shown in the following table.
+				0 - 15
+				Specifies the repeat count for the current message.The value is
+				the number of times the keystroke is
+				autorepeated as a result of the user holding down the key.If the
+				keystroke is held long enough, multiple messages are sent.However,
+				the repeat count is not cumulative.
+				16 - 23
+				Specifies the scan code.The value depends on the OEM.
+				24
+				Specifies whether the key is an extended key, such as the
+				right - hand ALT and CTRL keys that
+				appear on an enhanced 101 - or 102 - key keyboard.The value
+				is 1 if it is an extended key; otherwise, it is 0.
+				25 - 28
+				Reserved; do not use.
+				29
+				Specifies the context code.The value is always 0 for a WM_KEYDOWN message.
+				30
+				Specifies the previous key state.The value is 1 if the key
+				is down before the message is sent, or it is zero if the key is up.
+				31
+				Specifies the transition state.The value is always zero for a WM_KEYDOWN message.*/
+
+			DWORD dwVKFkeyData;
+			WORD dwScanCode = MapVirtualKey(vk_code, 0);
+			dwVKFkeyData = 1;
+			dwVKFkeyData |= dwScanCode << 16;
+			dwVKFkeyData |= 0 << 24;
+			dwVKFkeyData |= 0 << 29;
+			ret = ::SendMessageTimeout(_hwnd, WM_KEYDOWN, vk_code, dwVKFkeyData, SMTO_BLOCK, 2000, nullptr);
+			if (ret == 0)setlog("error code=%d", GetLastError());
+			break;
+		}
 	}
 
 
@@ -144,73 +141,74 @@ long winkeypad::KeyUp(long vk_code) {
 	long ret = 0;
 	// vk_code = toupper(vk_code);
 	switch (_mode) {
-	case INPUT_TYPE::IN_NORMAL:
-	{
-		
-		INPUT Input = { 0 };
-		Input.type = INPUT_KEYBOARD;
-		Input.ki.wVk = vk_code;
-		Input.ki.wScan =0;
-		Input.ki.dwFlags = KEYEVENTF_KEYUP;
+		case INPUT_TYPE::IN_NORMAL:
+		{
 
-		/*The function returns the number of events that it successfully inserted into the keyboard or mouse input stream.
-		If the function returns zero, the input was already blocked by another thread.
-		To get extended error information, call GetLastError.
-		This function fails when it is blocked by UIPI.
-		Note that neither GetLastError nor the return value will indicate the failure was caused by UIPI blocking.
-		*/
-		ret = ::SendInput(1, &Input, sizeof(INPUT));
-		break;
-	}
-	case INPUT_TYPE::IN_NORMAL2:
-	{
-		INPUT Input = { 0 };
-		Input.type = INPUT_KEYBOARD;
-		Input.ki.wVk = 0;
-		Input.ki.wScan = MapVirtualKey(vk_code, MAPVK_VK_TO_VSC);
-		Input.ki.dwFlags = KEYEVENTF_SCANCODE | KEYEVENTF_KEYUP;
-		ret = ::SendInput(1, &Input, sizeof(INPUT));
-		if (ret == 0)
-			setlog("op:IN_NORMAL2 erro code:%s", GetLastErrorAsString().c_str());
-		break;
-	}
+			INPUT Input = {0};
+			Input.type = INPUT_KEYBOARD;
+			Input.ki.wVk = vk_code;
+			Input.ki.wScan = 0;
+			Input.ki.dwFlags = KEYEVENTF_KEYUP;
 
-	case INPUT_TYPE::IN_WINDOWS: {
-		/*Specification of WM_KEYUP
-		wParam
-			Specifies the virtual - key code of the nonsystem key.
-			lParam
-			Specifies the repeat count, scan code, extended - key flag, context code,
-			previous key - state flag, and transition - state flag, as shown in the following table.
-			0 - 15
-			Specifies the repeat count for the current message.The value is the number of times the keystroke is
-			autorepeated as a result of the user holding down the key.
-			The repeat count is always one for a WM_KEYUP message.
-			16 - 23
-			Specifies the scan code.The value depends on the OEM.
-			24
-			Specifies whether the key is an extended key, such as the right - hand ALT and CTRL keys that
-			appear on an enhanced 101 - or 102 - key keyboard.The value is 1 if it is an extended key; otherwise, it is 0.
-			25 - 28
-			Reserved; do not use.
-			29
-			Specifies the context code.The value is always 0 for a WM_KEYUP message.
-			30
-			Specifies the previous key state.The value is always 1 for a WM_KEYUP message.
-			31
-			Specifies the transition state.The value is always 1 for a WM_KEYUP message.*/
-			//ret = ::SendMessageW(_hwnd, WM_KEYUP, vk_code, 0);
-		DWORD dwVKFkeyData;
-		WORD dwScanCode = MapVirtualKey(vk_code, 0);
-		dwVKFkeyData = 1;
-		dwVKFkeyData |= dwScanCode << 16;
-		dwVKFkeyData |= 0 << 24;
-		dwVKFkeyData |= 0 << 29;
-		dwVKFkeyData |= 3 << 30;
-	    ret = ::SendMessageTimeout(_hwnd, WM_KEYUP, vk_code, dwVKFkeyData, SMTO_BLOCK, 2000, nullptr);
-		if (ret == 0)setlog("error code=%d", GetLastError());
-		break;
-	}
+			/*The function returns the number of events that it successfully inserted into the keyboard or mouse input stream.
+			If the function returns zero, the input was already blocked by another thread.
+			To get extended error information, call GetLastError.
+			This function fails when it is blocked by UIPI.
+			Note that neither GetLastError nor the return value will indicate the failure was caused by UIPI blocking.
+			*/
+			ret = ::SendInput(1, &Input, sizeof(INPUT));
+			break;
+		}
+		case INPUT_TYPE::IN_NORMAL2:
+		{
+			INPUT Input = {0};
+			Input.type = INPUT_KEYBOARD;
+			Input.ki.wVk = 0;
+			Input.ki.wScan = MapVirtualKey(vk_code, MAPVK_VK_TO_VSC);
+			Input.ki.dwFlags = KEYEVENTF_SCANCODE | KEYEVENTF_KEYUP;
+			ret = ::SendInput(1, &Input, sizeof(INPUT));
+			if (ret == 0)
+				setlog("op:IN_NORMAL2 erro code:%s", GetLastErrorAsString().c_str());
+			break;
+		}
+
+		case INPUT_TYPE::IN_WINDOWS:
+		{
+			/*Specification of WM_KEYUP
+			wParam
+				Specifies the virtual - key code of the nonsystem key.
+				lParam
+				Specifies the repeat count, scan code, extended - key flag, context code,
+				previous key - state flag, and transition - state flag, as shown in the following table.
+				0 - 15
+				Specifies the repeat count for the current message.The value is the number of times the keystroke is
+				autorepeated as a result of the user holding down the key.
+				The repeat count is always one for a WM_KEYUP message.
+				16 - 23
+				Specifies the scan code.The value depends on the OEM.
+				24
+				Specifies whether the key is an extended key, such as the right - hand ALT and CTRL keys that
+				appear on an enhanced 101 - or 102 - key keyboard.The value is 1 if it is an extended key; otherwise, it is 0.
+				25 - 28
+				Reserved; do not use.
+				29
+				Specifies the context code.The value is always 0 for a WM_KEYUP message.
+				30
+				Specifies the previous key state.The value is always 1 for a WM_KEYUP message.
+				31
+				Specifies the transition state.The value is always 1 for a WM_KEYUP message.*/
+				//ret = ::SendMessageW(_hwnd, WM_KEYUP, vk_code, 0);
+			DWORD dwVKFkeyData;
+			WORD dwScanCode = MapVirtualKey(vk_code, 0);
+			dwVKFkeyData = 1;
+			dwVKFkeyData |= dwScanCode << 16;
+			dwVKFkeyData |= 0 << 24;
+			dwVKFkeyData |= 0 << 29;
+			dwVKFkeyData |= 3 << 30;
+			ret = ::SendMessageTimeout(_hwnd, WM_KEYUP, vk_code, dwVKFkeyData, SMTO_BLOCK, 2000, nullptr);
+			if (ret == 0)setlog("error code=%d", GetLastError());
+			break;
+		}
 	}
 
 
@@ -229,19 +227,22 @@ long winkeypad::WaitKey(long vk_code, unsigned long time_out) {
 
 long winkeypad::KeyPress(long vk_code) {
 	KeyDown(vk_code);
-   	switch (_mode) {
-	case INPUT_TYPE::IN_NORMAL: {
-		::Delay(KEYPAD_NORMAL_DELAY);
-		break;
-	}
-	case INPUT_TYPE::IN_NORMAL2: {
-		::Delay(KEYPAD_NORMAL2_DELAY);
-		break;
-	}
-	case INPUT_TYPE::IN_WINDOWS: {
-		::Delay(KEYPAD_WINDOWS_DELAY);
-		break;
-	}
+	switch (_mode) {
+		case INPUT_TYPE::IN_NORMAL:
+		{
+			::Delay(KEYPAD_NORMAL_DELAY);
+			break;
+		}
+		case INPUT_TYPE::IN_NORMAL2:
+		{
+			::Delay(KEYPAD_NORMAL2_DELAY);
+			break;
+		}
+		case INPUT_TYPE::IN_WINDOWS:
+		{
+			::Delay(KEYPAD_WINDOWS_DELAY);
+			break;
+		}
 	}
 	return KeyUp(vk_code);
 }

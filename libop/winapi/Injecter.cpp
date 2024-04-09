@@ -1,5 +1,4 @@
-﻿//#include "stdafx.h"
-#include "Injecter.h"
+﻿#include "Injecter.h"
 
 
 Injecter::Injecter() {}

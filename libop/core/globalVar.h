@@ -7,8 +7,7 @@
 		CloseHandle(h); \
 	h = NULL;
 template <class Type>
-void SAFE_DELETE(Type *&ptr)
-{
+void SAFE_DELETE(Type*& ptr) {
 	delete ptr;
 	ptr = nullptr;
 }
@@ -28,8 +27,7 @@ void SAFE_DELETE(Type *&ptr)
 
 #define DLL_API extern "C" _declspec(dllexport)
 //normal windows,gdi;,dx;opengl;
-enum RENDER_TYPE
-{
+enum RENDER_TYPE {
 	NORMAL = 0,
 	GDI = 1,
 	DX = 2,
@@ -59,8 +57,7 @@ constexpr int RDT_GL_NOX = MAKE_RENDER(OPENGL, 2);
 constexpr int RDT_GL_ES = MAKE_RENDER(OPENGL, 3);
 constexpr int RDT_GL_FI = MAKE_RENDER(OPENGL, 4); //glFinish
 
-enum INPUT_TYPE
-{
+enum INPUT_TYPE {
 	IN_NORMAL = 0,
 	IN_NORMAL2 = 1,
 	IN_WINDOWS = 2,

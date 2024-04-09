@@ -1,5 +1,4 @@
-﻿//#include "stdafx.h"
-#include "MemoryEx.h"
+﻿#include "MemoryEx.h"
 #include "./core/helpfunc.h"
 #define push(s,x)s.push_back(x)
 #define pop(s) s.back();s.pop_back()

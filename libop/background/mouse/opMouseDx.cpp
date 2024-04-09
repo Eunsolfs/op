@@ -1,4 +1,4 @@
-﻿//#include "stdafx.h"
+﻿
 #include "opMouseDx.h"
 #include "../core/globalVar.h"
 #include "../core/helpfunc.h"
@@ -6,8 +6,7 @@
 #include "BlackBone/Process/RPC/RemoteFunction.hpp"
 #include "../core/opEnv.h"
 #include "../HOOK/opMessage.h"
-opMouseDx::opMouseDx()
-	: _hwnd(NULL), _mode(0), _x(0), _y(0), _dpi(getDPI()) {}
+opMouseDx::opMouseDx() : _hwnd(NULL), _mode(0), _x(0), _y(0), _dpi(getDPI()) {}
 
 opMouseDx::~opMouseDx() {
 	_hwnd = NULL;
