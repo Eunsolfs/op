@@ -37,6 +37,12 @@
     <Filter Include="libop\imageProc\compute">
       <UniqueIdentifier>{72c1611e-21c7-4ccc-ae19-6d1db32c4e11}</UniqueIdentifier>
     </Filter>
+    <Filter Include="om">
+      <UniqueIdentifier>{069a83c7-c1d2-41f2-a7cc-cd03f773bb95}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="om\struct">
+      <UniqueIdentifier>{cbefba79-9efc-475c-8ca4-881986010ee2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="libop\algorithm\AStar.hpp">
@@ -161,6 +167,18 @@
     </ClInclude>
     <ClInclude Include="libop\include\sharedmem.h">
       <Filter>libop\include</Filter>
+    </ClInclude>
+    <ClInclude Include="libop\om\struct\fc.hpp">
+      <Filter>om\struct</Filter>
+    </ClInclude>
+    <ClInclude Include="libop\om\struct\fmc.hpp">
+      <Filter>om\struct</Filter>
+    </ClInclude>
+    <ClInclude Include="libop\om\struct\point.hpp">
+      <Filter>om\struct</Filter>
+    </ClInclude>
+    <ClInclude Include="libop\om\struct\rect.hpp">
+      <Filter>om\struct</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

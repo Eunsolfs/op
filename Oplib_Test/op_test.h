@@ -10,6 +10,7 @@
 #define op_check(name, express)                                        \
   std::cout << "check interface:'" << #name << "' condition:" << #express \
             << ((express) ? "\npass\n" : "\nfailed\n");++total_cnt;pass_cnt+=express
+
 using namespace std;
 class test {
 public:

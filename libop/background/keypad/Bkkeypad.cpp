@@ -1,4 +1,3 @@
-//#include "stdafx.h"
 #include "Bkkeypad.h"
 //#include "globalVar.h"
 //#include "helpfunc.h"

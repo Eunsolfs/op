@@ -2,9 +2,10 @@
 
 #ifndef __FRAME_INFO_H_
 #define __FRAME_INFO_H_
-#pragma pack(1)
 
 #pragma warning(disable : 4244)
+
+#pragma pack(1)
 
 struct FrameInfo {
 	unsigned __int64 hwnd;

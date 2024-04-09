@@ -1,11 +1,11 @@
-﻿//#include "stdafx.h"
-#include "ImageProc.h"
+﻿#include "ImageProc.h"
 #include "../core/helpfunc.h"
 #include <fstream>
 #include <bitset>
 #include <algorithm>
 #include <sstream>
 //#include "OcrWrapper.h"
+
 ImageProc::ImageProc() {
 	_curr_idx = 0;
 	_enable_cache = 1;
@@ -260,7 +260,6 @@ void ImageProc::str2colors(const wstring& color, std::vector<color_t>& vcolor) {
 }
 
 long ImageProc::LoadPic(const wstring& files) {
-	//std::vector<wstring>vstr, vstr2;
 	std::vector<wstring> vstr;
 	int loaded = 0;
 	split(files, vstr, L"|");
@@ -478,8 +477,8 @@ long ImageProc::FindLine(const wstring& color, double sim, wstring& retStr) {
 	if (sim < 0. || sim > 1.)
 		sim = 1.;
 
-	_src.write(L"_src.bmp");
-	_gray.write(L"gray.bmp");
-	_binary.write(L"_binary.bmp");
+	//_src.write(L"_src.bmp");
+	//_gray.write(L"gray.bmp");
+	//_binary.write(L"_binary.bmp");
 	return ImageBase::FindLine(sim, retStr);
 }

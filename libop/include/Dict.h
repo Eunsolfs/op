@@ -14,11 +14,8 @@
 #include "bitfunc.h"
 #include "Image.hpp"
 #include "../core/helpfunc.h"
-//#define SET_BIT(x, idx) x |= 1u << (idx)
 
-//#define GET_BIT(x, idx) (((x )>> (idx)) & 1u)
 const int op_dict_version = 2;
-
 
 /*
 第 0 代字库
@@ -40,7 +37,6 @@ struct word_info_t {
 
 };
 struct word_t {
-
 
 	//32 bit a col
 	using cline_t = unsigned __int32;
@@ -66,7 +62,7 @@ struct word_t {
 		int i = 0;
 		auto hex2bin = [](wchar_t c) {
 			return c <= L'9' ? c - L'0' : c - L'A' + 10;
-			};
+		};
 		while (i < ct) {
 
 			bin[i / 2] = (hex2bin(str[i]) << 4) | (hex2bin(str[i + 1]));
@@ -133,16 +129,11 @@ struct word1_t {
 		}
 	}
 
-
-
 	void init() {
 		data.resize((info.w * info.h + 7) / 8);
 		std::fill(data.begin(), data.end(), 0);
 	}
 };
-
-
-
 
 struct Dict {
 	//v0 v1
@@ -338,12 +329,12 @@ struct Dict {
 	void sort_dict() {
 		//sort dict(size: big --> small ,cnt: small -->big)
 		std::stable_sort(words.begin(), words.end(),
-			[](const word1_t& lhs, const word1_t& rhs) {
-				int dh = lhs.info.h - rhs.info.h;
-				int dw = lhs.info.w - rhs.info.w;
-				return dh > 0 || (dh == 0 && dw > 0) ||
-					(dh == 0 && dw == 0 && lhs.info.bit_cnt < rhs.info.bit_cnt);
-			});
+						 [](const word1_t& lhs, const word1_t& rhs) {
+			int dh = lhs.info.h - rhs.info.h;
+			int dw = lhs.info.w - rhs.info.w;
+			return dh > 0 || (dh == 0 && dw > 0) ||
+				(dh == 0 && dw == 0 && lhs.info.bit_cnt < rhs.info.bit_cnt);
+		});
 	}
 
 	void add_word(const word1_t& word) {

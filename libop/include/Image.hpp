@@ -4,38 +4,36 @@
 #include <vector>
 
 #include <atlimage.h>
-struct Image
-{
+struct Image {
 	using iterator = unsigned __int32*;
-	Image() :width(0), height(0), pdata(nullptr) {
-	}
+	Image() :width(0), height(0), pdata(nullptr) {}
 	Image(int w, int h) :pdata(nullptr) {
-		
+
 		create(w, h);
 	}
 	//copy ctr
 	Image(const Image& rhs) :pdata(nullptr) {
-		
+
 		if (rhs.empty()) {
 			this->clear();
 		}
 		else {
 			this->create(rhs.width, rhs.height);
-			memcpy(this->pdata, rhs.pdata, width*height * 4);
+			memcpy(this->pdata, rhs.pdata, width * height * 4);
 		}
 
 	}
 	~Image() {
 		release();
 	}
-	
+
 	void create(int w, int h) {
 		width = w, height = h;
 		if (!pdata) {
-			pdata = (unsigned char*)malloc(w*h * 4);
+			pdata = (unsigned char*)malloc(w * h * 4);
 		}
 		else {
-			pdata = (unsigned char*)realloc(pdata, w*h * 4);
+			pdata = (unsigned char*)realloc(pdata, w * h * 4);
 		}
 		if (pdata == nullptr)throw("memory not enough");
 	}
@@ -62,7 +60,7 @@ struct Image
 		}
 		else if (this != &rhs) {
 			this->create(rhs.width, rhs.height);
-			memcpy(this->pdata, rhs.pdata, width*height * 4);
+			memcpy(this->pdata, rhs.pdata, width * height * 4);
 		}
 		return *this;
 	}
@@ -82,9 +80,8 @@ struct Image
 	bool read(void* pMemData, long  len) {
 		clear();
 		ATL::CImage img;
-		auto hGlobal =  GlobalAlloc(GMEM_MOVEABLE | GMEM_ZEROINIT, len);
-		if (hGlobal)
-		{
+		auto hGlobal = GlobalAlloc(GMEM_MOVEABLE | GMEM_ZEROINIT, len);
+		if (hGlobal) {
 			void* pData = GlobalLock(hGlobal);
 			memcpy_s(pData, len, pMemData, len);
 			GlobalUnlock(hGlobal);
@@ -92,7 +89,7 @@ struct Image
 		else {
 			return false;
 		}
-		
+
 		IStream* pStream = NULL;
 		if (CreateStreamOnHGlobal(hGlobal, TRUE, &pStream) != S_OK) {
 			GlobalFree(hGlobal);
@@ -121,7 +118,7 @@ struct Image
 		if (empty())
 			return false;
 		ATL::CImage img;
-		
+
 		img.Create(width, height, 32);
 		auto pdst = (unsigned char*)img.GetBits();
 		auto psrc = pdata;
@@ -177,11 +174,11 @@ struct Image
 	}
 	template<typename Tp>
 	Tp at(int y, int x)const {
-		return ((Tp*)pdata)[y*width + x];
+		return ((Tp*)pdata)[y * width + x];
 	}
 	template<typename Tp>
 	Tp& at(int y, int x) {
-		return ((Tp*)pdata)[y*width + x];
+		return ((Tp*)pdata)[y * width + x];
 	}
 	template<typename Tp>
 	Tp* ptr(int y) {
@@ -210,10 +207,10 @@ struct Image
 	void fill(unsigned int val) {
 		std::fill(begin(), end(), val);
 	}
-	void fill(int row,int col,int h,int w,unsigned int val) {
+	void fill(int row, int col, int h, int w, unsigned int val) {
 		for (int i = 0; i < h; ++i) {
-			auto p = ptr<unsigned int>(row + i)+col;
-			std::fill(p,p + w,val);
+			auto p = ptr<unsigned int>(row + i) + col;
+			std::fill(p, p + w, val);
 		}
 	}
 	int width, height;
@@ -230,13 +227,13 @@ struct ImageBin {
 	}
 	void create(int w, int h) {
 		width = w, height = h;
-		pixels.resize(w*h);
+		pixels.resize(w * h);
 	}
 	void clear() {
 		width = height = 0;
 	}
 	int size()const {
-		return width*height;
+		return width * height;
 	}
 	bool empty()const {
 		return width == 0;
@@ -250,18 +247,18 @@ struct ImageBin {
 		this->pixels = rhs.pixels;
 		return *this;
 	}
-	unsigned char at(int y,int x)const {
-		return pixels[y*width + x];
+	unsigned char at(int y, int x)const {
+		return pixels[y * width + x];
 	}
 	unsigned char& at(int y, int x) {
-		return pixels[y*width + x];
+		return pixels[y * width + x];
 	}
 
 	unsigned char* ptr(int y) {
 		return pixels.data() + y * width;
 	}
 
-	unsigned char const* ptr(int y) const{
+	unsigned char const* ptr(int y) const {
 		return pixels.data() + y * width;
 	}
 
@@ -289,9 +286,9 @@ struct ImageBin {
 			for (int j = 0; j < width; ++j) {
 				//((int*)pdst)[j] = ((int*)psrc)[j];
 				uchar v = psrc[j] == 1 ? 0xff : 0;
-				pdst[j*4] = pdst[j*4 + 1] = pdst[j*4 + 2] =v;
+				pdst[j * 4] = pdst[j * 4 + 1] = pdst[j * 4 + 2] = v;
 				pdst[j * 4 + 3] = 0xff;
-			
+
 			}
 			pdst += pitch;
 			psrc += width;
@@ -314,6 +311,6 @@ using inputimg = const Image&;
 using outputimg = Image&;
 
 using inputbin = const ImageBin&;
-using outputbin = ImageBin & ;
+using outputbin = ImageBin&;
 
 #endif

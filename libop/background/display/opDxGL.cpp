@@ -1,5 +1,5 @@
 ﻿
-//#include "stdafx.h"
+
 
 #include "opDxGL.h"
 #include "./core/globalVar.h"
@@ -12,12 +12,9 @@
 #include "./include/Image.hpp"
 
 #include <sstream>
-opDxGL::opDxGL() :IDisplay(),m_opPath(opEnv::getBasePath())
-{
-}
+opDxGL::opDxGL() :IDisplay(), m_opPath(opEnv::getBasePath()) {}
 
-opDxGL::~opDxGL()
-{
+opDxGL::~opDxGL() {
 	//do clear
 	UnBindEx();
 }
@@ -42,14 +39,11 @@ long opDxGL::BindEx(HWND hwnd, long render_type) {
 		DWORD id;
 		::GetWindowThreadProcessId(_hwnd, &id);
 
-
-
 		//attach 进程
 		blackbone::Process proc;
 		NTSTATUS hr;
 
 		hr = proc.Attach(id);
-
 
 		if (NT_SUCCESS(hr)) {
 			wstring dllname = opEnv::getOpName();
@@ -75,7 +69,6 @@ long opDxGL::BindEx(HWND hwnd, long render_type) {
 				else {
 					setlog(L"file:<%s> not exists!", opFile.data());
 				}
-
 			}
 			if (injected) {
 				//setlog("before MakeRemoteFunction");
@@ -99,7 +92,7 @@ long opDxGL::BindEx(HWND hwnd, long render_type) {
 		else {
 			setlog(L"attach false.");
 		}
-		
+
 		proc.Detach();
 		//setlog("after Detach");
 	}
@@ -130,7 +123,7 @@ long opDxGL::UnBindEx() {
 	hr = proc.Attach(id);
 
 	if (NT_SUCCESS(hr)) {
-		wstring dllname =  opEnv::getOpName();
+		wstring dllname = opEnv::getOpName();
 		//检查是否与插件相同的32/64位,如果不同，则使用另一种dll
 		BOOL is64 = proc.modules().GetMainModule()->type == blackbone::eModType::mt_mod64;
 		if (is64 != OP64) {
@@ -170,15 +163,11 @@ long opDxGL::BindNox(HWND hwnd, long render_type) {
 	_height = rc.bottom - rc.top;
 	//bind_init();
 
-
-
 	//attach 进程
 	blackbone::Process proc;
 	NTSTATUS hr = -1;
 
-
 	wstring dllname = L"op_x64.dll";
-
 
 	hr = proc.Attach(L"NoxVMHandle.exe");
 
@@ -269,12 +258,12 @@ bool opDxGL::requestCapture(int x1, int y1, int w, int h, Image& img) {
 	uchar* const ppixels = _shmem->data<byte>() + sizeof(FrameInfo);
 	FrameInfo* pInfo = (FrameInfo*)_shmem->data<byte>();
 	static bool first = true;
-	if (first&&(pInfo->width != _width || pInfo->height != _height)) {
+	if (first && (pInfo->width != _width || pInfo->height != _height)) {
 		first = false;
 		std::wstringstream ss(std::wstringstream::in | std::wstringstream::out);
 		ss << (*pInfo);
 		setlog(L"error pInfo->width != _width || pInfo->height != _height\nframe info:\n%s", ss.str().data());
-	
+
 	}
 
 

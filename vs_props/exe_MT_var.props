@@ -15,14 +15,14 @@
     <!--ClCompile-->
     <EXE_Debug_RuntimeLibrary>MultiThreadedDebug</EXE_Debug_RuntimeLibrary>
     <EXE_Release_RuntimeLibrary>MultiThreaded</EXE_Release_RuntimeLibrary>
-    <EXE_ProgramDataBaseFileName>$(EXE_IntDir)$(TargetName).pdb</EXE_ProgramDataBaseFileName>
+    <EXE_ProgramDataBaseFileName>$(EXE_IntDir)$(EXE_TargetName).pdb</EXE_ProgramDataBaseFileName>
     <EXE_PrecompiledHeaderFile>pch.h</EXE_PrecompiledHeaderFile>
     <EXE_PrecompiledHeader>NotUsing</EXE_PrecompiledHeader>
     <EXE_LanguageStandard>stdcpp17</EXE_LanguageStandard>
     <EXE_LanguageStandard_C>stdc11</EXE_LanguageStandard_C>
     <!--Link-->
-    <EXE_ProgramDatabaseFile>$(EXE_IntDir)$(TargetName).pdb</EXE_ProgramDatabaseFile>
+    <EXE_ProgramDatabaseFile>$(EXE_IntDir)$(EXE_TargetName).pdb</EXE_ProgramDatabaseFile>
     <!--ResourceCompile-->
-    <EXE_ResourceOutputFileName>$(EXE_IntDir)%(Filename).res</EXE_ResourceOutputFileName>
+    <EXE_ResourceOutputFileName>$(EXE_IntDir)%(EXE_TargetName).res</EXE_ResourceOutputFileName>
   </PropertyGroup>
 </Project>

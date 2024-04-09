@@ -19,9 +19,6 @@
       <PrecompiledHeaderFile>$(LIB_PrecompiledHeaderFile)</PrecompiledHeaderFile>
       <PrecompiledHeader>$(LIB_PrecompiledHeader)</PrecompiledHeader>
     </ClCompile>
-    <Link>
-      <ProgramDatabaseFile>$(LIB_ProgramDatabaseFile)</ProgramDatabaseFile>
-    </Link>
     <ResourceCompile>
       <ResourceOutputFileName>$(LIB_ResourceOutputFileName)</ResourceOutputFileName>
     </ResourceCompile>

@@ -1,28 +1,25 @@
 #pragma once
 
-
 #pragma warning(disable : 4244)
 
-
 #include "core/optype.h"
-class opMouseWin
-{
+class opMouseWin {
 public:
 	static float getDPI();
 	opMouseWin();
 	virtual ~opMouseWin();
 
-	virtual long Bind(HWND h,int mode);
+	virtual long Bind(HWND h, int mode);
 
 	virtual long UnBind();
 
-	virtual long GetCursorPos(long&x, long& y);
+	virtual long GetCursorPos(long& x, long& y);
 
 	virtual long MoveR(int rx, int ry);
 
 	virtual long MoveTo(int x, int y);
 
-	virtual long MoveToEx(int x, int y,int w,int h);
+	virtual long MoveToEx(int x, int y, int w, int h);
 
 	virtual long LeftClick();
 
@@ -50,7 +47,7 @@ public:
 private:
 	HWND _hwnd;
 	int _mode;
-	int _x,_y;
+	int _x, _y;
 	float _dpi;//screen dpi
 };
 

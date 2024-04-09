@@ -14,33 +14,27 @@
 //this code ref https://www.jianshu.com/p/e775b0f45376
 using namespace winrt::Windows::Graphics::Capture;
 using namespace winrt::Windows::Graphics::DirectX::Direct3D11;
-class opWGC:public IDisplay
-{
+class opWGC :public IDisplay {
 public:
-    opWGC();
-    ~opWGC();
-    //绑定
-    long BindEx(HWND _hwnd, long render_type) override;
-    //解绑
-    long UnBindEx() override;
+	opWGC();
+	~opWGC();
+	//绑定
+	long BindEx(HWND _hwnd, long render_type) override;
+	//解绑
+	long UnBindEx() override;
 
-    virtual bool requestCapture(int x1, int y1, int w, int h, Image& img)override;
+	virtual bool requestCapture(int x1, int y1, int w, int h, Image& img)override;
 
-    bool Init(HWND _hwnd);
-
-
-
-
-
+	bool Init(HWND _hwnd);
 private:
 	ID3D11Device* d3dDevice_;
 	ID3D11DeviceContext* d3dDeviceContext_;
-    IDirect3DDevice device_{nullptr};
-    GraphicsCaptureItem item_{ nullptr };
-    Direct3D11CaptureFramePool framePool_{ nullptr };
-    GraphicsCaptureSession session_{ nullptr };
-    FrameInfo m_frameInfo;
-    void fmtFrameInfo(void* dst, HWND hwnd, int w, int h, bool inc=true);
+	IDirect3DDevice device_{nullptr};
+	GraphicsCaptureItem item_{nullptr};
+	Direct3D11CaptureFramePool framePool_{nullptr};
+	GraphicsCaptureSession session_{nullptr};
+	FrameInfo m_frameInfo;
+	void fmtFrameInfo(void* dst, HWND hwnd, int w, int h, bool inc = true);
 };
 
 
@@ -67,18 +61,15 @@ private:
 
 
 template<class T> class ComPtr {
-
 protected:
 	T* ptr;
 
-	inline void Kill()
-	{
+	inline void Kill() {
 		if (ptr)
 			ptr->Release();
 	}
 
-	inline void Replace(T* p)
-	{
+	inline void Replace(T* p) {
 		if (ptr != p) {
 			if (p)
 				p->AddRef();
@@ -90,45 +81,37 @@ protected:
 
 public:
 	inline ComPtr() : ptr(nullptr) {}
-	inline ComPtr(T* p) : ptr(p)
-	{
+	inline ComPtr(T* p) : ptr(p) {
 		if (ptr)
 			ptr->AddRef();
 	}
-	inline ComPtr(const ComPtr<T>& c) : ptr(c.ptr)
-	{
+	inline ComPtr(const ComPtr<T>& c) : ptr(c.ptr) {
 		if (ptr)
 			ptr->AddRef();
 	}
 	inline ComPtr(ComPtr<T>&& c) noexcept : ptr(c.ptr) { c.ptr = nullptr; }
 	template<class U>
-	inline ComPtr(ComPtr<U>&& c) noexcept : ptr(c.Detach())
-	{
-	}
+	inline ComPtr(ComPtr<U>&& c) noexcept : ptr(c.Detach()) {}
 	inline ~ComPtr() { Kill(); }
 
-	inline void Clear()
-	{
+	inline void Clear() {
 		if (ptr) {
 			ptr->Release();
 			ptr = nullptr;
 		}
 	}
 
-	inline ComPtr<T>& operator=(T* p)
-	{
+	inline ComPtr<T>& operator=(T* p) {
 		Replace(p);
 		return *this;
 	}
 
-	inline ComPtr<T>& operator=(const ComPtr<T>& c)
-	{
+	inline ComPtr<T>& operator=(const ComPtr<T>& c) {
 		Replace(c.ptr);
 		return *this;
 	}
 
-	inline ComPtr<T>& operator=(ComPtr<T>&& c) noexcept
-	{
+	inline ComPtr<T>& operator=(ComPtr<T>&& c) noexcept {
 		if (&ptr != &c.ptr) {
 			Kill();
 			ptr = c.ptr;
@@ -138,23 +121,20 @@ public:
 		return *this;
 	}
 
-	template<class U> inline ComPtr<T>& operator=(ComPtr<U>&& c) noexcept
-	{
+	template<class U> inline ComPtr<T>& operator=(ComPtr<U>&& c) noexcept {
 		Kill();
 		ptr = c.Detach();
 
 		return *this;
 	}
 
-	inline T* Detach()
-	{
+	inline T* Detach() {
 		T* out = ptr;
 		ptr = nullptr;
 		return out;
 	}
 
-	inline void CopyTo(T** out)
-	{
+	inline void CopyTo(T** out) {
 		if (out) {
 			if (ptr)
 				ptr->AddRef();
@@ -162,8 +142,7 @@ public:
 		}
 	}
 
-	inline ULONG Release()
-	{
+	inline ULONG Release() {
 		ULONG ref;
 
 		if (!ptr)
@@ -173,13 +152,11 @@ public:
 		return ref;
 	}
 
-	inline T** Assign()
-	{
+	inline T** Assign() {
 		Clear();
 		return &ptr;
 	}
-	inline void Set(T* p)
-	{
+	inline void Set(T* p) {
 		Kill();
 		ptr = p;
 	}
@@ -200,13 +177,12 @@ public:
 struct __declspec(uuid("A9B3D012-3DF2-4EE3-B8D1-8695F457D3C1"))
 	IDirect3DDxgiInterfaceAccess : ::IUnknown {
 	virtual HRESULT __stdcall GetInterface(GUID const& id,
-		void** object) = 0;
+										   void** object) = 0;
 };
 
 template<typename T>
 static winrt::com_ptr<T> GetDXGIInterfaceFromObject(
-	winrt::Windows::Foundation::IInspectable const& object)
-{
+	winrt::Windows::Foundation::IInspectable const& object) {
 	auto access = object.as<IDirect3DDxgiInterfaceAccess>();
 	winrt::com_ptr<T> result;
 	winrt::check_hresult(

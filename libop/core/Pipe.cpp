@@ -1,22 +1,16 @@
-//#include "stdafx.h"
 #include "Pipe.h"
 #include <iostream>
 #include<chrono>
 #include  "globalVar.h"
 #include "helpfunc.h"
-Pipe::Pipe()
-{
+Pipe::Pipe() {
 	_hread = _hwrite = _hread2 = _hwrite2 = nullptr;
 	_hprocess = nullptr;
 	_reading = 0;
 	_pthread = nullptr;
 }
 
-
-
-
-Pipe::~Pipe()
-{
+Pipe::~Pipe() {
 	close();
 }
 
@@ -56,10 +50,7 @@ int Pipe::close() {
 		else {
 
 		}
-
 		_pthread->join();
-
-
 	}
 	SAFE_DELETE(_pthread);
 	SAFE_CLOSE(_hread);

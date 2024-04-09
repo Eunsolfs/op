@@ -1,4 +1,4 @@
-﻿//#include "stdafx.h"
+﻿
 #include "opGDI.h"
 
 #include <atlimage.h>
@@ -154,7 +154,7 @@ bool opGDI::requestCapture(int x1, int y1, int w, int h, Image& img) {
 		uchar* pshare = _shmem->data<byte>();
 		fmtFrameInfo(pshare, _hwnd, w, h);
 		GetDIBits(_hmdc, _hbmpscreen, 0L, (DWORD)h, pshare + sizeof(FrameInfo),
-			(LPBITMAPINFO)&_bih, (DWORD)DIB_RGB_COLORS);
+				  (LPBITMAPINFO)&_bih, (DWORD)DIB_RGB_COLORS);
 
 		//_pmutex->unlock();
 		if (_hbmpscreen) DeleteObject(_hbmpscreen);
@@ -164,7 +164,7 @@ bool opGDI::requestCapture(int x1, int y1, int w, int h, Image& img) {
 
 		for (int i = 0; i < h; i++) {
 			memcpy(img.ptr<uchar>(i), _shmem->data<byte>() + sizeof(FrameInfo) + (h - 1 - i) * 4 * w,
-				4 * w);
+				   4 * w);
 		}
 	}
 	else if (RDT_GDI_DX2 == _render_type) {
@@ -217,7 +217,7 @@ bool opGDI::requestCapture(int x1, int y1, int w, int h, Image& img) {
 		uchar* pshare = _shmem->data<byte>();
 		fmtFrameInfo(pshare, _hwnd, w, h);
 		GetDIBits(_hmdc, _hbmpscreen, 0L, (DWORD)wh, pshare + sizeof(FrameInfo),
-			(LPBITMAPINFO)&_bih, (DWORD)DIB_RGB_COLORS);
+				  (LPBITMAPINFO)&_bih, (DWORD)DIB_RGB_COLORS);
 
 		if (_hbmpscreen) DeleteObject(_hbmpscreen);
 		_hbmpscreen = NULL;
@@ -226,8 +226,8 @@ bool opGDI::requestCapture(int x1, int y1, int w, int h, Image& img) {
 		auto ppixels = _shmem->data<byte>() + sizeof(FrameInfo);
 		for (int i = 0; i < h; i++) {
 			memcpy(img.ptr<uchar>(i),
-				ppixels + (wh - 1 - i - y1 - dy_) * 4 * ww + (x1 + dx_) * 4,
-				4 * w);
+				   ppixels + (wh - 1 - i - y1 - dy_) * 4 * ww + (x1 + dx_) * 4,
+				   4 * w);
 		}
 	}
 	return 1;

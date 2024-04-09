@@ -1,5 +1,4 @@
-﻿//#include "stdafx.h"
-#include "helpfunc.h"
+﻿#include "helpfunc.h"
 #include <algorithm>
 #include <fstream>
 #include <iostream>
@@ -10,7 +9,6 @@
 #include <shlwapi.h>
 #include "globalVar.h"
 #include "opEnv.h"
-//#define USE_BOOST_STACK_TRACE
 #ifdef USE_BOOST_STACK_TRACE
 #include <boost/stacktrace.hpp>
 #endif
@@ -107,9 +105,9 @@ long setlog(const char* format, ...) {
 	GetLocalTime(&sys);
 	char tm[128];
 	sprintf(tm, "[%4d/%02d/%02d %02d:%02d:%02d.%03d]",
-		sys.wYear, sys.wMonth, sys.wDay,
-		sys.wHour, sys.wMinute, sys.wSecond,
-		sys.wMilliseconds);
+			sys.wYear, sys.wMonth, sys.wDay,
+			sys.wHour, sys.wMinute, sys.wSecond,
+			sys.wMilliseconds);
 	va_start(args, format);
 	vsprintf(buf, format, args);
 	va_end(args);
@@ -252,7 +250,7 @@ std::string GetLastErrorAsString() {
 	//Ask Win32 to give us the string version of that message ID.
 	//The parameters we pass in, tell Win32 to create the buffer that holds the message for us (because we don't yet know how long the message string will be).
 	size_t size = FormatMessageA(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
-		NULL, errorMessageID, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPSTR)&messageBuffer, 0, NULL);
+								 NULL, errorMessageID, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPSTR)&messageBuffer, 0, NULL);
 
 	//Copy the error message into a std::string.
 	std::string message(messageBuffer, size);
