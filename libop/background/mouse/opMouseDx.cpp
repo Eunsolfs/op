@@ -135,8 +135,9 @@ long opMouseDx::MoveR(int rx, int ry) {
 }
 
 long opMouseDx::MoveTo(int x, int y) {
-	x = x * _dpi;
-	y = y * _dpi;
+	// 启用DPI感知后，不需要在进行坐标处理
+	// x = x * _dpi;
+	// y = y * _dpi;
 	long ret = 0;
 	ret = ::SendMessage(_hwnd, OP_WM_MOUSEMOVE, 0, MAKELPARAM(x, y)) == 0 ? 1 : 0;
 

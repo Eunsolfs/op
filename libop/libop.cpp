@@ -38,6 +38,9 @@ struct op_context {
 };
 
 libop::libop() :m_context(nullptr) {
+	// 将进程默认 DPI 感知设置为系统 DPI 感知
+	::SetProcessDPIAware();
+
 	m_context = new op_context;
 	m_context->screen_data_mode = SC_DATA_TOP;
 
